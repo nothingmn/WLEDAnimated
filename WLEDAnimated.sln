@@ -12,6 +12,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.gitignore = .gitignore
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WLEDAnimated.API", "WLEDAnimated.API\WLEDAnimated.API.csproj", "{C0C94B64-3A53-4392-8874-F4980F40D7E2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -26,6 +28,10 @@ Global
 		{F02DC2FF-E718-4E09-BB89-52129814FEFE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F02DC2FF-E718-4E09-BB89-52129814FEFE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F02DC2FF-E718-4E09-BB89-52129814FEFE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C0C94B64-3A53-4392-8874-F4980F40D7E2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C0C94B64-3A53-4392-8874-F4980F40D7E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C0C94B64-3A53-4392-8874-F4980F40D7E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C0C94B64-3A53-4392-8874-F4980F40D7E2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

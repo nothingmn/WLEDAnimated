@@ -1,6 +1,6 @@
 ﻿using SixLabors.ImageSharp;
 
-namespace WLEDAnimated;
+namespace WLEDAnimated.Interfaces;
 
 public interface IImageConverter
 {
