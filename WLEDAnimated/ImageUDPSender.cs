@@ -25,8 +25,8 @@ public class ImageUDPSender : IImageSender
                 foreach (var frame in payload)
                 {
                     udpClient.Send(frame, frame.Length, ipAddress, port);
-                    //foreach (var b in frame) Console.Write($"{b} ");
-                    //Console.WriteLine($"\nSent {frame.Length} bytes to {ipAddress}:{port}");
+                    foreach (var b in frame) Console.Write($"{b} ");
+                    Console.WriteLine($"\nSent {frame.Length} bytes to {ipAddress}:{port}");
                     Thread.Sleep(pauseBetweenFrames);
                 }
             }

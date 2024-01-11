@@ -16,6 +16,36 @@ public class WeatherController : ControllerBase
         _assetManager = assetManager;
     }
 
+    [HttpGet("change", Name = "change")]
+    public async Task<IActionResult> Change(string ipAddress, int port = 21324, int width = 32, int height = 8, string conditions = "sunny")
+    {
+        _logger.LogInformation("UpdateImage called");
+
+        var file = _assetManager.GetFileByAssetTypeAndResolutionAndName(AssetTypes.Weather, width, height, conditions);
+
+        if (file == null)
+        {
+            return BadRequest($"No weather animation on file for: {conditions} for the dimensions of {height}x{width}.");
+        }
+        var filePath = System.IO.Path.Combine(Path.GetTempPath(), file.Name);
+        file.CopyTo(filePath);
+
+        var sender = new ImageUDPSender();
+
+        sender.Send(
+            ipAddress,
+            port,
+            filePath,
+            new Size(width, height),
+            0,
+            (byte)1,
+            500,
+            1
+        );
+        // TODO: Process the file here
+        return Ok(conditions);
+    }
+
     [HttpGet("sunny", Name = "sunny")]
     public async Task<IActionResult> Sunny(string ipAddress, int port = 21324, int width = 32, int height = 8)
     {

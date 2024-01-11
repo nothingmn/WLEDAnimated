@@ -22,7 +22,7 @@
     <None Update="Assets\test\8x32\8x32.test.gif">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Assets\weather\8x32\1sunny.gif">
+    <None Update="Assets\weather\8x32\snowing.gif">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="Assets\weather\8x32\sunny.gif">
