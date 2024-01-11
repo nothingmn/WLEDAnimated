@@ -18,4 +18,16 @@
     <ProjectReference Include="..\WLEDAnimated\WLEDAnimated.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Assets\test\8x32\8x32.test.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Assets\weather\8x32\1sunny.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Assets\weather\8x32\sunny.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

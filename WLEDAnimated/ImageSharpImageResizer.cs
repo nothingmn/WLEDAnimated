@@ -22,13 +22,27 @@ public class ImageSharpImageResizer : IImageResizer
         var resizedFile = $"{file.Name}-{id}{file.Extension}";
         using (Image image = Image.Load(File.ReadAllBytes(path)))
         {
-            //Console.WriteLine($"Dimensions: {dimensions.Width}x{dimensions.Height}");
-            //Console.WriteLine($"Image: {image.Width}x{image.Height}");
+            var widthOffset = image.Width - dimensions.Width;
+            var heightOffset = image.Height - dimensions.Height;
 
             var scaleWidthI = (int)dimensions.Width;
             var scaleHeightI = (int)dimensions.Height;
 
-            //Console.WriteLine($"Final: {scaleWidthI}x{scaleHeightI}");
+            if (widthOffset > heightOffset)
+            {
+                var scaleRatio = (double)dimensions.Width / image.Width;
+                scaleHeightI = (int)(image.Height * scaleRatio);
+            }
+            else
+            {
+                var scaleRatio = (double)dimensions.Height / image.Height;
+                scaleWidthI = (int)(image.Width * scaleRatio);
+            }
+
+            Console.WriteLine($"Dimensions: {dimensions.Width}x{dimensions.Height}");
+            Console.WriteLine($"Image: {image.Width}x{image.Height}");
+
+            Console.WriteLine($"Final: {scaleWidthI}x{scaleHeightI}");
             image.Mutate(x => x.Resize(scaleWidthI, scaleHeightI));
             image.Save(resizedFile);
         }
