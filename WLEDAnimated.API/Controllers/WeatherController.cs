@@ -16,7 +16,7 @@ public class WeatherController : ControllerBase
         _assetManager = assetManager;
     }
 
-    [HttpGet("[controller]/weather/sunny", Name = "sunny")]
+    [HttpGet("sunny", Name = "sunny")]
     public async Task<IActionResult> Sunny(string ipAddress, int port = 21324, int width = 32, int height = 8)
     {
         _logger.LogInformation("UpdateImage called");
