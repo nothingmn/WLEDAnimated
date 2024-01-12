@@ -46,6 +46,7 @@ public class WLEDApiManager : IWLEDApiManager
         if (speed <= 0 && request.Segments[0].EffectSpeed.HasValue) speed = request.Segments[0].EffectSpeed.Value;
         if (speed <= 0 || speed > 255) speed = 128;
 
+        //https://github.com/Aircoookie/WLED/blob/24b60a25d5f7d944f0d41ee9feb0537fe4c6ef42/wled00/FX.h#L250
         request.Segments[0].EffectId = 122;
         request.Segments[0].EffectSpeed = speed;
         request.Segments[0].Name = text;
