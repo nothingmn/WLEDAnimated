@@ -1,15 +1,16 @@
 ﻿using System.Drawing;
 using Kevsoft.WLED;
+using WLEDAnimated.Interfaces;
 
 namespace WLEDAnimated;
 
-public class WLEDApiManager
+public class WLEDApiManager : IWLEDApiManager
 {
-    private readonly System.Uri _host;
+    private System.Uri _host;
     private WLedClient _client;
     private WLedRootResponse _wledDevice;
 
-    public WLEDApiManager(string ipAddress)
+    public async Task Connect(string ipAddress)
     {
         var host = ipAddress;
         //default to http
@@ -18,10 +19,6 @@ public class WLEDApiManager
             host = $"http://{host}";
         }
         System.Uri.TryCreate(host, UriKind.RelativeOrAbsolute, out _host);
-    }
-
-    public async Task Connect()
-    {
         // Code to establish connection to the WLED API using the _host
         _client = new WLedClient(_host.AbsoluteUri);
         _wledDevice = await _client.Get();

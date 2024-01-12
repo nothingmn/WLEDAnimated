@@ -4,7 +4,6 @@ using SixLabors.ImageSharp;
 namespace WLEDAnimated.API.Controllers;
 
 [ApiController]
-[Route("[controller]")]
 public class TestController : ControllerBase
 {
     private readonly ILogger<UploadImageController> _logger;

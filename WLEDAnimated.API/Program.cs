@@ -1,3 +1,5 @@
+using WLEDAnimated.Interfaces;
+
 namespace WLEDAnimated.API
 {
     public class Program
@@ -13,6 +15,11 @@ namespace WLEDAnimated.API
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
             builder.Services.AddSingleton<AssetManager>();
+            builder.Services.AddTransient<WLEDApiManager>();
+            builder.Services.AddTransient<ImageUDPSender>();
+            builder.Services.AddTransient<IImageConverter, ImageToDNRGBConverter>();
+            builder.Services.AddTransient<IImageResizer, ImageSharpImageResizer>();
+            builder.Services.AddTransient<IWLEDApiManager, WLEDApiManager>();
 
             var app = builder.Build();
 
