@@ -21,6 +21,9 @@ namespace WLEDAnimated.API
             builder.Services.AddTransient<IImageResizer, ImageSharpImageResizer>();
             builder.Services.AddTransient<IWLEDApiManager, WLEDApiManager>();
 
+            builder.Services.AddTransient<DeviceDiscovery>();
+            builder.Services.AddSingleton<WledDeviceDiscovery>();
+
             var app = builder.Build();
 
             //            if (app.Environment.IsDevelopment())
@@ -40,6 +43,10 @@ namespace WLEDAnimated.API
             app.MapControllers();
 
             app.UseDefaultFiles();
+
+            var dd = app.Services.GetService<WledDeviceDiscovery>();
+            var discover = app.Services.GetService<DeviceDiscovery>();
+            dd.Start(discover);
 
             app.Run();
         }
