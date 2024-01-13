@@ -31,7 +31,7 @@ public class DeviceDiscovery
 
     private async void OnServiceAdded(object sender, ServiceAnnouncementEventArgs e)
     {
-        WLEDDevice toAdd = new WLEDDevice();
+        var toAdd = new WLEDDevice();
         foreach (var addr in e.Announcement.Addresses)
         {
             toAdd.NetworkAddress = addr.ToString(); break; //only get first address

@@ -8,7 +8,11 @@ public class WLEDApiManager : IWLEDApiManager
 {
     private System.Uri _host;
     private WLedClient _client;
-    private WLedRootResponse _wledDevice;
+    public WLedRootResponse WledDevice { get; set; }
+
+    public int Width { get; set; }
+    public int Height { get; set; }
+    public bool Is2D { get; set; }
 
     public async Task Connect(string ipAddress)
     {
@@ -21,27 +25,27 @@ public class WLEDApiManager : IWLEDApiManager
         System.Uri.TryCreate(host, UriKind.RelativeOrAbsolute, out _host);
         // Code to establish connection to the WLED API using the _host
         _client = new WLedClient(_host.AbsoluteUri);
-        _wledDevice = await _client.Get();
+        WledDevice = await _client.Get();
     }
 
     public void Disconnect()
     {
         // Code to disconnect from the WLED API
-        _wledDevice = null;
+        WledDevice = null;
         _client = null;
     }
 
     public async Task SetBrightness(int brightness)
     {
         // Code to set the brightness of the WLED device
-        _wledDevice.State.Brightness = (byte)brightness;
-        await _client.Post(_wledDevice.State);
+        WledDevice.State.Brightness = (byte)brightness;
+        await _client.Post(WledDevice.State);
     }
 
     public async Task ScrollingText(string text, int speed = -0)
     {
-        _wledDevice.State.Segments[0].Name = text;
-        var request = StateRequest.From(_wledDevice.State);
+        WledDevice.State.Segments[0].Name = text;
+        var request = StateRequest.From(WledDevice.State);
 
         if (speed <= 0 && request.Segments[0].EffectSpeed.HasValue) speed = request.Segments[0].EffectSpeed.Value;
         if (speed <= 0 || speed > 255) speed = 128;
@@ -57,18 +61,18 @@ public class WLEDApiManager : IWLEDApiManager
     public async Task On(int brightness = -1)
     {
         // Code to set the brightness of the WLED device
-        _wledDevice.State.On = true;
+        WledDevice.State.On = true;
         if (brightness >= 0)
         {
-            _wledDevice.State.Brightness = (byte)brightness;
+            WledDevice.State.Brightness = (byte)brightness;
         }
-        await _client.Post(_wledDevice.State);
+        await _client.Post(WledDevice.State);
     }
 
     public async Task Off()
     {
         // Code to set the brightness of the WLED device
-        _wledDevice.State.On = false;
-        await _client.Post(_wledDevice.State);
+        WledDevice.State.On = false;
+        await _client.Post(WledDevice.State);
     }
 }

@@ -27,8 +27,21 @@ public sealed class WLedClient
         var message = await _client.GetAsync("json");
 
         message.EnsureSuccessStatusCode();
+        WLedRootResponse response = null;
+        var json = await message.Content.ReadAsStringAsync();
+        if (json.StartsWith("{"))
+        {
+            try
+            {
+                response = JsonSerializer.Deserialize<WLedRootResponse>(json);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
 
-        return (await message.Content.ReadFromJsonAsync<WLedRootResponse>())!;
+        return response;
     }
 
     public async Task<StateResponse> GetState()

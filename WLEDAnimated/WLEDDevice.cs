@@ -12,6 +12,8 @@ public class WLEDDevice
         {
             ApiClient = new WLEDApiManager();
             await ApiClient.Connect(NetworkAddress);
+            
+            
             return true;
         }
         catch (Exception e)

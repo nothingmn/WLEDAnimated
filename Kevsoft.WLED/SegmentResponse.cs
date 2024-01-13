@@ -29,6 +29,18 @@ public sealed class SegmentResponse
     public int Stop { get; set; }
 
     /// <summary>
+    /// Start row from top-left corner of a matrix. (available since 0.14.0)
+    /// </summary>
+    [JsonPropertyName("startY")]
+    public int StartY { get; set; }
+
+    /// <summary>
+    /// Stop row from top-left corner of matrix. (available since 0.14.0)
+    /// </summary>
+    [JsonPropertyName("stopY")]
+    public int StopY { get; set; }
+
+    /// <summary>
     /// Length of the segment (stop - start). stop has preference, so if it is included, len is ignored.
     /// </summary>
     [JsonPropertyName("len")]
@@ -73,6 +85,24 @@ public sealed class SegmentResponse
     [JsonPropertyName("ix")]
     public int EffectIntensity { get; set; }
 
+    [JsonPropertyName("c1")]
+    public int EffectCustomSlider1 { get; set; }
+
+    [JsonPropertyName("c2")]
+    public int EffectCustomSlider2 { get; set; }
+
+    [JsonPropertyName("c3")]
+    public int EffectCustomSlider3 { get; set; }
+
+    [JsonPropertyName("o1")]
+    public bool EffectOption1 { get; set; }
+
+    [JsonPropertyName("o2")]
+    public bool EffectOption2 { get; set; }
+
+    [JsonPropertyName("o3")]
+    public bool EffectOption { get; set; }
+
     /// <summary>
     /// ID of the color palette
     /// </summary>
@@ -90,6 +120,12 @@ public sealed class SegmentResponse
     /// </summary>
     [JsonPropertyName("rev")]
     public bool Reverse { get; set; }
+
+    /// <summary>
+    /// Flips the 2D segment in vertical dimension. (available since 0.14.0)
+    /// </summary>
+    [JsonPropertyName("ry")]
+    public bool Flip2D { get; set; }
 
     /// <summary>
     /// Turns on and off the individual segment. (available since 0.10.0)

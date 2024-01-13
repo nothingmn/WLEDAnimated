@@ -1,4 +1,4 @@
-namespace WLEDAnimated.API;
+namespace WLEDAnimated;
 
 public class WledDeviceDiscovery
 {

@@ -19,16 +19,16 @@ internal class Program
 
         await APIBasicOnOffBrightness(ipAddress);
 
-        var apiManager = new WLEDApiManager(ipAddress);
-        await apiManager.Connect();
+        var apiManager = new WLEDApiManager();
+        await apiManager.Connect(ipAddress);
         await apiManager.On(10);
         await apiManager.ScrollingText(DateTime.UtcNow.ToLongDateString());
     }
 
     private static async Task APIBasicOnOffBrightness(string ipAddress)
     {
-        var apiManager = new WLEDApiManager(ipAddress);
-        await apiManager.Connect();
+        var apiManager = new WLEDApiManager();
+        await apiManager.Connect(ipAddress);
         await apiManager.On(1);
 
         for (int x = 1; x <= 30; x += 10)

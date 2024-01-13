@@ -47,6 +47,24 @@ public sealed class InformationResponse
     public bool Live { get; set; }
 
     /// <summary>
+    /// Info about the realtime data source
+    /// </summary>
+    [JsonPropertyName("lm")]
+    public string? LiveSource { get; set; }
+
+    /// <summary>
+    /// If true, the software is currently receiving realtime data via UDP or E1.31.
+    /// </summary>
+    [JsonPropertyName("lip")]
+    public string? LiveIP { get; set; }
+
+    /// <summary>
+    /// Number of currently connected WebSockets clients. -1 indicates that WS is unsupported in this build.
+    /// </summary>
+    [JsonPropertyName("ws")]
+    public int WebSocketClients { get; set; }
+
+    /// <summary>
     /// Number of effects included.
     /// </summary>
     [JsonPropertyName("fxcount")]
@@ -57,6 +75,12 @@ public sealed class InformationResponse
     /// </summary>
     [JsonPropertyName("palcount")]
     public ushort PalettesCount { get; set; }
+
+    /// <summary>
+    /// Info about current signal strength
+    /// </summary>
+    [JsonPropertyName("wifi")]
+    public Wifi Wifi { get; set; }
 
     /// <summary>
     /// Name of the platform.
@@ -117,4 +141,58 @@ public sealed class InformationResponse
     /// </summary>
     [JsonPropertyName("ip")]
     public string NetworkAddress { get; set; } = null!;
+}
+
+public class Wifi
+{
+    /// <summary>
+    /// The BSSID of the currently connected network.
+    /// </summary>
+    [JsonPropertyName("bssid")]
+    public string? WifiBSSID { get; set; }
+
+    /// <summary>
+    /// Relative signal quality of the current connection.
+    /// </summary>
+    [JsonPropertyName("signal")]
+    public double? WifiSignalStrength { get; set; }
+
+    /// <summary>
+    /// Info about current signal strength
+    /// </summary>
+    [JsonPropertyName("channel")]
+    public int WifiChannel { get; set; }
+}
+
+public class Leds
+{
+    [JsonPropertyName("count")]
+    public int Count { get; set; }
+
+    [JsonPropertyName("pwr")]
+    public int Pwr { get; set; }
+
+    [JsonPropertyName("fps")]
+    public int fps { get; set; }
+
+    [JsonPropertyName("maxpwr")]
+    public int maxpwr { get; set; }
+
+    [JsonPropertyName("maxseg")]
+    public int maxseg { get; set; }
+
+    //[JsonPropertyName("seclc")]
+    //public int seclc { get; set; }
+
+    [JsonPropertyName("lc")]
+    public int lc { get; set; }
+
+    [JsonPropertyName("rgbw")]
+    public int rgbw { get; set; }
+
+    [JsonPropertyName("wv")]
+    public int wv { get; set; }
+
+    [JsonPropertyName("cct")]
+    public int cct { get; set; }
 }
