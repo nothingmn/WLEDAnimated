@@ -1,0 +1,15 @@
+{
+  "TypeName": "LinearAnimation",
+  "Name": "Animation Sample",
+  "Transitions": [
+    {
+      "Duration": 1,
+      "StartDelay": 10,
+      "InterTransitionDelay": 100,
+      "ToStep": {
+        "TypeName": "SimpleStep",
+        "Description": "Step 1",
+      }
+    }
+  ]
+}

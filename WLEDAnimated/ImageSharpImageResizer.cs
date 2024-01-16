@@ -1,5 +1,6 @@
 ﻿using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Processing;
+using SixLabors.ImageSharp.Processing.Processors.Transforms;
 using WLEDAnimated.Interfaces;
 
 namespace WLEDAnimated;
@@ -16,46 +17,42 @@ public class ImageSharpImageResizer : IImageResizer
     {
         if (dimensions.Height == 0 && dimensions.Width == 0) return path;
 
-        var id = Guid.NewGuid().ToString();
         var file = new System.IO.FileInfo(path);
         if (!file.Exists) throw new FileNotFoundException("File not found", path);
-        var resizedFile = $"{file.Name}-{id}{file.Extension}";
-        using (Image image = Image.Load(File.ReadAllBytes(path)))
+        var resizedFile = System.IO.Path.Combine($"{file.Name}-{dimensions.Height}x{dimensions.Width}{file.Extension}");
+
+        if (!System.IO.File.Exists(resizedFile))
         {
-            var widthOffset = image.Width - dimensions.Width;
-            var heightOffset = image.Height - dimensions.Height;
-
-            var scaleWidthI = (int)dimensions.Width;
-            var scaleHeightI = (int)dimensions.Height;
-
-            if (widthOffset > heightOffset)
+            using (Image image = Image.Load(File.ReadAllBytes(path)))
             {
-                var scaleRatio = (double)dimensions.Width / image.Width;
-                scaleHeightI = (int)(image.Height * scaleRatio);
+                var (scaledWidth, scaledHeight) =
+                    GetScaledDimensions(image.Width, image.Height, dimensions.Width, dimensions.Height);
+
+                if (dimensions.Width == image.Width && dimensions.Height == image.Height) return path;
+
+                Console.WriteLine($"Dimensions: {dimensions.Width}x{dimensions.Height}");
+                Console.WriteLine($"Image: {image.Width}x{image.Height}");
+
+                Console.WriteLine($"Final: {scaledWidth}x{scaledHeight}");
+                image.Mutate(x => x.Resize(scaledWidth, scaledHeight, new BoxResampler()));
+                image.Save(resizedFile);
             }
-            else
-            {
-                var scaleRatio = (double)dimensions.Height / image.Height;
-                scaleWidthI = (int)(image.Width * scaleRatio);
-            }
-
-            Console.WriteLine($"Dimensions: {dimensions.Width}x{dimensions.Height}");
-            Console.WriteLine($"Image: {image.Width}x{image.Height}");
-
-            Console.WriteLine($"Final: {scaleWidthI}x{scaleHeightI}");
-            image.Mutate(x => x.Resize(scaleWidthI, scaleHeightI));
-            image.Save(resizedFile);
         }
 
-        try
-        {
-            System.IO.File.Delete(path);
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-            throw;
-        }
         return resizedFile;
     }
+
+    public static (int, int) GetScaledDimensions(int originalWidth, int originalHeight, int maxWidth, int maxHeight)
+    {
+        double widthRatio = (double)maxWidth / originalWidth;
+        double heightRatio = (double)maxHeight / originalHeight;
+        double ratio = Math.Min(widthRatio, heightRatio);
+
+        int newWidth = (int)(originalWidth * ratio);
+        int newHeight = (int)(originalHeight * ratio);
+
+        return (newWidth, newHeight);
+    }
+
+    // Usage example
 }

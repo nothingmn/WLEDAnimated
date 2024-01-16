@@ -8,10 +8,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\AnimationCore\AnimationCore.csproj" />
     <ProjectReference Include="..\WLEDAnimated\WLEDAnimated.csproj" />
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="8x32.test.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="blue-8x32.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

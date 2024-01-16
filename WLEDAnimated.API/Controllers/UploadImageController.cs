@@ -1,3 +1,4 @@
+using System.Net;
 using System.Runtime.InteropServices.Marshalling;
 using Microsoft.AspNetCore.Mvc;
 using SixLabors.ImageSharp;
@@ -5,7 +6,7 @@ using SixLabors.ImageSharp;
 namespace WLEDAnimated.API.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("image")]
 public class UploadImageController : ControllerBase
 {
     private readonly ILogger<UploadImageController> _logger;
@@ -15,7 +16,7 @@ public class UploadImageController : ControllerBase
         _logger = logger;
     }
 
-    [HttpPost(Name = "UpdateImage")]
+    [HttpPost(Name = "UploadImage")]
     public async Task<IActionResult> Post(IFormFile file, string ipAddress, int port = 21324, int width = 32, int height = 8, int wait = 1, int pauseBetweenFrames = 100, int iterations = 1)
     {
         _logger.LogInformation("UpdateImage called");

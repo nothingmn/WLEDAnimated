@@ -14,7 +14,7 @@ public class WLEDApiManager : IWLEDApiManager
     public int Height { get; set; }
     public bool Is2D { get; set; }
 
-    public async Task Connect(string ipAddress)
+    public async Task<WLedRootResponse> Connect(string ipAddress)
     {
         var host = ipAddress;
         //default to http
@@ -26,6 +26,7 @@ public class WLEDApiManager : IWLEDApiManager
         // Code to establish connection to the WLED API using the _host
         _client = new WLedClient(_host.AbsoluteUri);
         WledDevice = await _client.Get();
+        return WledDevice;
     }
 
     public void Disconnect()
@@ -55,6 +56,12 @@ public class WLEDApiManager : IWLEDApiManager
         request.Segments[0].EffectSpeed = speed;
         request.Segments[0].Name = text;
 
+        await _client.Post(request);
+    }
+
+    public async Task SetState(StateResponse state)
+    {
+        var request = StateRequest.From(state);
         await _client.Post(request);
     }
 

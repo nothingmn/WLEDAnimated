@@ -65,15 +65,6 @@ public class ImageToDNRGBConverter : IImageConverter
             }
         }
 
-        try
-        {
-            File.Delete(resizedFile);
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-        }
-
         return frames;
     }
 }
