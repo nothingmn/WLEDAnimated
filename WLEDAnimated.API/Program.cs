@@ -1,3 +1,4 @@
+using WLEDAnimated.Animation;
 using WLEDAnimated.Interfaces;
 
 namespace WLEDAnimated.API
@@ -23,6 +24,9 @@ namespace WLEDAnimated.API
 
             builder.Services.AddTransient<DeviceDiscovery>();
             builder.Services.AddSingleton<WledDeviceDiscovery>();
+
+            builder.Services.AddTransient<WLEDAnimationLoader>();
+            builder.Services.AddTransient<AnimationManager>();
 
             var app = builder.Build();
 

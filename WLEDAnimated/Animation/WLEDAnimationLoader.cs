@@ -1,29 +1,18 @@
 ﻿using AnimationCore;
 using AnimationCore.Interfaces;
 using Newtonsoft.Json;
+using System.IO;
 using System.Runtime.Intrinsics.X86;
 
 namespace WLEDAnimated.Animation;
 
 public class WLEDAnimationLoader
 {
-    public Task<IAnimation> LoadAnimation(string path)
+    public Task<IAnimation> LoadAnimation(System.IO.DirectoryInfo animationFolder)
     {
-        string jsonPath = path;
-        var fileInfo = new FileInfo(jsonPath);
-        var directory = fileInfo.Directory;
+        var jsonPath = new FileInfo(Path.Combine(animationFolder.FullName, "Animation.json"));
 
-        if (path.EndsWith("wled", StringComparison.InvariantCultureIgnoreCase))
-        {
-            var zipRoot = System.IO.Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
-            if (!Directory.Exists(zipRoot))
-                Directory.CreateDirectory(zipRoot);
-            System.IO.Compression.ZipFile.ExtractToDirectory(path, zipRoot);
-            jsonPath = Path.Combine(zipRoot, "Animation.json");
-            directory = new DirectoryInfo(zipRoot);
-        }
-
-        var json = File.ReadAllText(jsonPath);
+        var json = File.ReadAllText(jsonPath.FullName);
         var wledAnimation = JsonConvert.DeserializeObject<WLEDAnimation>(json);
 
         var animation = new LinearAnimation();
@@ -41,7 +30,7 @@ public class WLEDAnimationLoader
                     {
                         IPAddress = transition.Step.IPAddress,
                         Port = transition.Step.Port,
-                        ImagePath = System.IO.Path.Combine(directory.FullName, transition.Step.ImagePath),
+                        ImagePath = System.IO.Path.Combine(animationFolder.FullName, transition.Step.ImagePath),
                         Width = transition.Step.Width,
                         Height = transition.Step.Height,
                         Wait = transition.Step.Wait,

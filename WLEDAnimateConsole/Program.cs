@@ -26,13 +26,23 @@ internal class Program
 
         //await AnimationTest(ipAddress, port);
 
-        await WLEDAnimationTest();
+        //await WLEDAnimationTest();
+        await WLEDAnimationFromWLEDFile();
+    }
+
+    public static async Task WLEDAnimationFromWLEDFile()
+    {
+        var animationManager = new AnimationManager(new WLEDAnimationLoader());
+        await animationManager.UploadAnimation(new FileInfo("SampleAnimation/SampleAnimation.wled").OpenRead(), "SampleAnimation.wled");
+
+        await animationManager.UploadAndPlayAnimation(new FileInfo("SampleAnimation/SampleAnimation.wled").OpenRead(), "SampleAnimation.wled");
+        await animationManager.PlayAnimation("Animation Sample");
     }
 
     public static async Task WLEDAnimationTest()
     {
         var loader = new WLEDAnimationLoader();
-        var animation = await loader.LoadAnimation("Animation/AnimationSample.json");
+        var animation = await loader.LoadAnimation(new DirectoryInfo("SampleAnimation"));
 
         try
         {
