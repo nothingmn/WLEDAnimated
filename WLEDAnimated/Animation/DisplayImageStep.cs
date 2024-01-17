@@ -1,6 +1,6 @@
 ﻿using AnimationCore.Interfaces;
 using System.Net;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 using SixLabors.ImageSharp;
 
 namespace WLEDAnimated.Animation;

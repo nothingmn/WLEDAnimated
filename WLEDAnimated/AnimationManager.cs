@@ -4,7 +4,6 @@ using System.Runtime.CompilerServices;
 using WLEDAnimated.Animation;
 using System.IO;
 using System.IO.Compression;
-using Newtonsoft.Json.Converters;
 
 namespace WLEDAnimated;
 

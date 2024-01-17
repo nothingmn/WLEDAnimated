@@ -5,7 +5,6 @@ using AnimationCore;
 using WLEDAnimated;
 using Color = System.Drawing.Color;
 using AnimationCore.Interfaces;
-using Newtonsoft.Json;
 using WLEDAnimated.Animation;
 using System.Threading;
 using System;

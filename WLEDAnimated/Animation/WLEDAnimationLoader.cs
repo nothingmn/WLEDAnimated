@@ -1,8 +1,5 @@
 ﻿using AnimationCore;
 using AnimationCore.Interfaces;
-using Newtonsoft.Json;
-using System.IO;
-using System.Runtime.Intrinsics.X86;
 
 namespace WLEDAnimated.Animation;
 
@@ -12,16 +9,14 @@ public class WLEDAnimationLoader
     {
         var jsonPath = new FileInfo(Path.Combine(animationFolder.FullName, "Animation.json"));
         var json = File.ReadAllText(jsonPath.FullName);
-        var wledAnimation = JsonConvert.DeserializeObject<WLEDAnimation>(json);
+        var wledAnimation = System.Text.Json.JsonSerializer.Deserialize<WLEDAnimation>(json);
         return Task.FromResult(wledAnimation);
     }
 
     public async Task<IAnimation> LoadAnimation(System.IO.DirectoryInfo animationFolder)
     {
         var wledAnimation = await LoadWLEDAnimation(animationFolder);
-
         var animation = new LinearAnimation();
-
         animation.Name = wledAnimation.Name;
 
         if (wledAnimation.Transitions != null && wledAnimation.Transitions.Any())
