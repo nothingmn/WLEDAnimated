@@ -12,7 +12,11 @@ public interface IWLEDApiManager
 
     Task ScrollingText(string text, int speed = -0);
 
-    Task SetState(StateResponse state);
+    StateRequest ConvertStateResponseToRequest(StateResponse state);
+
+    Task SetStateFromResponse(StateResponse state);
+
+    Task SetStateFromRequest(StateRequest state);
 
     Task On(int brightness = -1);
 

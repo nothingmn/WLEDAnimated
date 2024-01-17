@@ -1,4 +1,6 @@
-﻿namespace WLEDAnimated.Animation;
+﻿using Kevsoft.WLED;
+
+namespace WLEDAnimated.Animation;
 
 public class WLEDAnimation
 {
@@ -24,6 +26,7 @@ public class Step
     public int Height { get; set; }
     public int Wait { get; set; }
     public int PauseBetweenFrames { get; set; }
+    public StateRequest State { get; set; }
 
     public string TextToDisplay { get; set; }
     public int Brightness { get; set; } = 128;

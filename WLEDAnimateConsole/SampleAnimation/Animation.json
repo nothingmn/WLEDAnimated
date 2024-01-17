@@ -17,6 +17,26 @@
       }
     },
     {
+      "StartDelay": 1000,
+      "InterTransitionDelay": 0,
+      "Step": {
+        "StartDelay": 0,
+        "TypeName": "WLEDStateStep",
+        "Description": "Display Black HOle",
+        "IPAddress": "10.0.0.217",
+        "DurationToDisplay": 2500,
+        "PauseBetweenFrames": 100,
+        "State": {
+          "Segments": [
+            {
+              "EffectId": 183
+            }
+
+          ]
+        }
+      }
+    },
+    {
       "StartDelay": 0,
       "InterTransitionDelay": 0,
       "Step": {

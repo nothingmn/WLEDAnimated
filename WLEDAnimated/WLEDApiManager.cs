@@ -59,10 +59,20 @@ public class WLEDApiManager : IWLEDApiManager
         await _client.Post(request);
     }
 
-    public async Task SetState(StateResponse state)
+    public StateRequest ConvertStateResponseToRequest(StateResponse state)
+    {
+        return StateRequest.From(state);
+    }
+
+    public async Task SetStateFromResponse(StateResponse state)
     {
         var request = StateRequest.From(state);
         await _client.Post(request);
+    }
+
+    public async Task SetStateFromRequest(StateRequest state)
+    {
+        await _client.Post(state);
     }
 
     public async Task On(int brightness = -1)
