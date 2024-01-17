@@ -1,4 +1,5 @@
-﻿using AnimationCore.Interfaces;
+﻿using System.Text.Json.Serialization;
+using AnimationCore.Interfaces;
 
 namespace AnimationCore;
 

@@ -49,4 +49,11 @@ public class AnimationController : ControllerBase
 
         return await _animationManager.UploadAndPlayAnimation(file.OpenReadStream(), file.FileName);
     }
+
+    [HttpGet()]
+    [Route("animations")]
+    public async Task<List<string>> Get()
+    {
+        return await _animationManager.GetAnimations();
+    }
 }

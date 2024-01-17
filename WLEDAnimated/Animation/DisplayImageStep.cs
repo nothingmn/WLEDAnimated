@@ -1,5 +1,6 @@
 ﻿using AnimationCore.Interfaces;
 using System.Net;
+using Newtonsoft.Json;
 using SixLabors.ImageSharp;
 
 namespace WLEDAnimated.Animation;
@@ -35,9 +36,12 @@ public class DisplayImageStep : IStep
     public int Iterations { get; set; } = 1;
     public string Description { get; set; } = "Display Image";
 
+    [JsonIgnore]
     public Func<CancellationToken, Task> BeforeTransition { get; set; }
 
+    [JsonIgnore]
     public Func<CancellationToken, Task> Transition { get; set; }
 
+    [JsonIgnore]
     public Func<CancellationToken, Task> AfterTransition { get; set; }
 }

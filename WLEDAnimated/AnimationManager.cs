@@ -21,6 +21,11 @@ public class AnimationManager
         if (!animationsFolder.Exists) System.IO.Directory.CreateDirectory(animationsFolder.FullName);
     }
 
+    public Task<List<string>> GetAnimations()
+    {
+        return Task.FromResult((from d in animationsFolder.GetDirectories() select d.Name)?.ToList());
+    }
+
     private DirectoryInfo GetAnimationFolderByAnimationName(string animationName)
     {
         return new DirectoryInfo(System.IO.Path.Combine(animationsFolder.FullName, animationName));

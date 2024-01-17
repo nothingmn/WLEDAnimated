@@ -1,5 +1,6 @@
 ﻿using AnimationCore.Interfaces;
 using System.Net;
+using Newtonsoft.Json;
 using SixLabors.ImageSharp;
 
 namespace WLEDAnimated.Animation;
@@ -32,9 +33,12 @@ public class DisplayTextStep : IStep
     public TimeSpan DurationToDisplay { get; set; }
     public string Description { get; set; } = "Display Text";
 
+    [JsonIgnore]
     public Func<CancellationToken, Task> BeforeTransition { get; set; }
 
+    [JsonIgnore]
     public Func<CancellationToken, Task> Transition { get; set; }
 
+    [JsonIgnore]
     public Func<CancellationToken, Task> AfterTransition { get; set; }
 }
