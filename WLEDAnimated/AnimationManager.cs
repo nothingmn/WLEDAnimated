@@ -21,9 +21,15 @@ public class AnimationManager
         if (!animationsFolder.Exists) System.IO.Directory.CreateDirectory(animationsFolder.FullName);
     }
 
-    public Task<List<string>> GetAnimations()
+    public async Task<List<WLEDAnimation>> GetAnimations()
     {
-        return Task.FromResult((from d in animationsFolder.GetDirectories() select d.Name)?.ToList());
+        var animations = new List<WLEDAnimation>();
+        foreach (var animationFolder in animationsFolder.GetDirectories())
+        {
+            var animation = await _wledAnimationLoader.LoadWLEDAnimation(animationFolder);
+            animations.Add(animation);
+        }
+        return animations;
     }
 
     private DirectoryInfo GetAnimationFolderByAnimationName(string animationName)

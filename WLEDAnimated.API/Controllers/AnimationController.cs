@@ -52,7 +52,7 @@ public class AnimationController : ControllerBase
 
     [HttpGet()]
     [Route("animations")]
-    public async Task<List<string>> Get()
+    public async Task<List<WLEDAnimation>> Get()
     {
         return await _animationManager.GetAnimations();
     }

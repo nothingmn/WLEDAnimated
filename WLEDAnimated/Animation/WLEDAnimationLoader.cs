@@ -8,12 +8,17 @@ namespace WLEDAnimated.Animation;
 
 public class WLEDAnimationLoader
 {
-    public Task<IAnimation> LoadAnimation(System.IO.DirectoryInfo animationFolder)
+    public Task<WLEDAnimation> LoadWLEDAnimation(System.IO.DirectoryInfo animationFolder)
     {
         var jsonPath = new FileInfo(Path.Combine(animationFolder.FullName, "Animation.json"));
-
         var json = File.ReadAllText(jsonPath.FullName);
         var wledAnimation = JsonConvert.DeserializeObject<WLEDAnimation>(json);
+        return Task.FromResult(wledAnimation);
+    }
+
+    public async Task<IAnimation> LoadAnimation(System.IO.DirectoryInfo animationFolder)
+    {
+        var wledAnimation = await LoadWLEDAnimation(animationFolder);
 
         var animation = new LinearAnimation();
 
@@ -61,6 +66,6 @@ public class WLEDAnimationLoader
             }
         }
 
-        return Task.FromResult(animation as IAnimation);
+        return animation as IAnimation;
     }
 }
