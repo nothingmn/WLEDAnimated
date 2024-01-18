@@ -33,8 +33,28 @@ public class Program
         builder.Services.AddTransient<WLEDAnimationLoader>();
         builder.Services.AddTransient<AnimationManager>();
         builder.Services.AddTransient<AnimationInvocer>();
+
+        //throw in our basic scheduler...
         builder.Services.AddScheduler();
         builder.Services.AddControllers().AddJsonOptions(options => { options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()); });
+
+        //lets add some vanity config files for usability
+        builder.Configuration.AddJsonFile($"appSettings-{Environment.UserName}.json", true, false);
+        builder.Configuration.AddJsonFile($"appSettings-{Environment.MachineName}.json", true, false);
+
+        //scheduler specific, in case thats your thing
+        builder.Configuration.AddJsonFile("Schedule.json", true, false);
+
+        //cant forget about a docker specific settings file
+        bool isRunningInDocker = Environment.GetEnvironmentVariable("DOTNET_RUNNING_IN_CONTAINER") == "true";
+
+        if (isRunningInDocker)
+        {
+            builder.Configuration.AddJsonFile($"appSettings-docker.json", true, false);
+        }
+
+        //grab the environment variables as well
+        builder.Configuration.AddEnvironmentVariables();
 
         var app = builder.Build();
 
