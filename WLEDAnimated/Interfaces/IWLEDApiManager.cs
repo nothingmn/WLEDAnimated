@@ -10,7 +10,7 @@ public interface IWLEDApiManager
 
     Task SetBrightness(int brightness);
 
-    Task ScrollingText(string text, int speed = -0);
+    Task ScrollingText(string text, int? speed, int? yOffSet, int? trail, int? fontSize, int? rotate);
 
     StateRequest ConvertStateResponseToRequest(StateResponse state);
 
@@ -18,7 +18,7 @@ public interface IWLEDApiManager
 
     Task SetStateFromRequest(StateRequest state);
 
-    Task On(int brightness = -1);
+    Task On(int? brightness);
 
     Task Off();
 }

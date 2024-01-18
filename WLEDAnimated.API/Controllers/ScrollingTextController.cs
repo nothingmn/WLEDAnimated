@@ -17,11 +17,11 @@ public class ScrollingTextController : ControllerBase
     }
 
     [HttpGet("scroll")]
-    public async Task<IActionResult> Scroll(string ipAddress, string text, int speed)
+    public async Task<IActionResult> Scroll(string ipAddress, string text, int? speed, int? yOffSet, int? trail, int? fontSize, int? rotate)
     {
         _logger.LogInformation("Scrolling text called");
         await _apiManager.Connect(ipAddress);
-        await _apiManager.ScrollingText(text, speed);
+        await _apiManager.ScrollingText(text, speed, yOffSet, trail, fontSize, rotate);
 
         return Ok("Done");
     }

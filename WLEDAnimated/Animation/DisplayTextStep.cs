@@ -14,7 +14,7 @@ public class DisplayTextStep : IStep
             var apiManager = new WLEDApiManager();
             var response = await apiManager.Connect(IPAddress);
             await apiManager.On(this.Brightness);
-            await apiManager.ScrollingText(TextToDisplay);
+            await apiManager.ScrollingText(TextToDisplay, Speed, YOffSet, Trail, FontSize, Rotate);
             await Task.Delay(DurationToDisplay, cancellationToken);
 
             if (Revert)
@@ -28,7 +28,13 @@ public class DisplayTextStep : IStep
 
     public string TextToDisplay { get; set; } = "Hello World";
     public string IPAddress { get; set; }
-    public int Brightness { get; set; }
+    public int? Brightness { get; set; }
+    public int? Speed { get; set; }
+    public int? YOffSet { get; set; }
+    public int? Trail { get; set; }
+    public int? FontSize { get; set; }
+    public int? Rotate { get; set; }
+
     public bool Revert { get; set; } = true;
     public TimeSpan DurationToDisplay { get; set; }
     public string Description { get; set; } = "Display Text";

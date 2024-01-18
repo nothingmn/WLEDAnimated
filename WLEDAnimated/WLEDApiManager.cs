@@ -43,7 +43,7 @@ public class WLEDApiManager : IWLEDApiManager
         await _client.Post(WledDevice.State);
     }
 
-    public async Task ScrollingText(string text, int speed = -0)
+    public async Task ScrollingText(string text, int? speed, int? yOffSet, int? trail, int? fontSize, int? rotate)
     {
         WledDevice.State.Segments[0].Name = text;
         var request = StateRequest.From(WledDevice.State);
@@ -55,6 +55,13 @@ public class WLEDApiManager : IWLEDApiManager
         request.Segments[0].EffectId = 122;
         request.Segments[0].EffectSpeed = speed;
         request.Segments[0].Name = text;
+        request.Segments[0].Offset = yOffSet;
+        request.Segments[0].EffectCustomSlider1 = trail;
+        request.Segments[0].EffectCustomSlider2 = fontSize;
+        request.Segments[0].EffectCustomSlider3 = rotate;
+        //request.Segments[0].EffectOption1 = yOffSet;
+        //request.Segments[0].EffectOption2 = yOffSet;
+        //request.Segments[0].EffectOption3 = yOffSet;
 
         await _client.Post(request);
     }
@@ -75,15 +82,15 @@ public class WLEDApiManager : IWLEDApiManager
         await _client.Post(state);
     }
 
-    public async Task On(int brightness = -1)
+    public async Task On(int? brightness)
     {
         // Code to set the brightness of the WLED device
         WledDevice.State.On = true;
-        if (brightness >= 0)
+        if (brightness.HasValue)
         {
             WledDevice.State.Brightness = (byte)brightness;
+            await _client.Post(WledDevice.State);
         }
-        await _client.Post(WledDevice.State);
     }
 
     public async Task Off()

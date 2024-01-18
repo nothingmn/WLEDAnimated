@@ -48,6 +48,8 @@ internal class Program
                 await Task.Delay(100);
                 tpm2.SendStrip(LEDStrip.AllRed(32, 8));
                 await Task.Delay(100);
+                tpm2.SendStrip(LEDStrip.AllBlack(32, 8));
+                await Task.Delay(100);
             }
         }
     }

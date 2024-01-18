@@ -64,6 +64,40 @@ public sealed class SegmentRequest
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public int? EffectIntensity { get; set; }
 
+
+    /// <inheritdoc cref="SegmentResponse.EffectCustomSlider1"/>
+    [JsonPropertyName("c1")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public int? EffectCustomSlider1 { get; set; }
+
+    /// <inheritdoc cref="SegmentResponse.EffectCustomSlider2"/>
+    [JsonPropertyName("c2")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public int? EffectCustomSlider2 { get; set; }
+
+    /// <inheritdoc cref="SegmentResponse.EffectCustomSlider3"/>
+    [JsonPropertyName("c3")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public int? EffectCustomSlider3 { get; set; }
+
+    /// <inheritdoc cref="SegmentResponse.EffectOption1"/>
+    [JsonPropertyName("o1")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public int? EffectOption1 { get; set; }
+
+    /// <inheritdoc cref="SegmentResponse.EffectOption2"/>
+    [JsonPropertyName("o2")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public int? EffectOption2 { get; set; }
+
+    /// <inheritdoc cref="SegmentResponse.EffectOption3"/>
+    [JsonPropertyName("o3")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public int? EffectOption3 { get; set; }
+
+
+
+
     /// <inheritdoc cref="SegmentResponse.ColorPaletteId"/>
     [JsonPropertyName("pal")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

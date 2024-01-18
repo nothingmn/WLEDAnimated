@@ -101,7 +101,7 @@ public sealed class SegmentResponse
     public bool EffectOption2 { get; set; }
 
     [JsonPropertyName("o3")]
-    public bool EffectOption { get; set; }
+    public bool EffectOption3 { get; set; }
 
     /// <summary>
     /// ID of the color palette
