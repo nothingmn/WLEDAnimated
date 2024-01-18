@@ -40,8 +40,14 @@ internal class Program
             for (int x = 0; x < 1; x++)
             {
                 tpm2.Connect(ipAddress, port);
-                tpm2.SendStrip(LEDStrip.AllBlack(32, 8));
-                await Task.Delay(500);
+                tpm2.SendStrip(LEDStrip.AllWhite(32, 8));
+                await Task.Delay(100);
+                tpm2.SendStrip(LEDStrip.AllGreen(32, 8));
+                await Task.Delay(100);
+                tpm2.SendStrip(LEDStrip.AllBlue(32, 8));
+                await Task.Delay(100);
+                tpm2.SendStrip(LEDStrip.AllRed(32, 8));
+                await Task.Delay(100);
             }
         }
     }

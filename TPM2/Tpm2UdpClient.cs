@@ -53,6 +53,9 @@ public class Tpm2UdpClient : IDisposable
         for (int x = 0; x <= data.Length - 1; x++) Console.Write($"{data[x]} ");
 
         Console.WriteLine($"->{endPoint}");
+
+        var server = new TestServer();
+        server.TestPayload(data);
     }
 
     public void SendStrip(LEDStrip strip)
