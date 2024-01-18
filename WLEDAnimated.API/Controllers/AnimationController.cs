@@ -21,7 +21,7 @@ public class AnimationController : ControllerBase
         _animationManager = animationManager;
     }
 
-    [HttpPost()]
+    [HttpGet()]
     [Route("play")]
     public async Task<IAnimation> Play(string name)
     {
