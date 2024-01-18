@@ -6,6 +6,17 @@ using WLEDAnimated.Interfaces;
 using WLEDAnimated.Services;
 
 namespace WLEDAnimated;
+public enum ScrollingTextType
+{
+    Date,
+    Time,
+    ShortDate,
+    ShortTime,
+    Bored,
+    Quotes,
+    Weather,
+    Crypto
+}
 
 public class WLEDApiManager : IWLEDApiManager
 {
@@ -125,11 +136,41 @@ public class WLEDApiManager : IWLEDApiManager
         request.Segments[0].EffectCustomSlider1 = trail;
         request.Segments[0].EffectCustomSlider2 = fontSize;
         request.Segments[0].EffectCustomSlider3 = rotate;
-        //request.Segments[0].EffectOption1 = yOffSet;
-        //request.Segments[0].EffectOption2 = yOffSet;
-        //request.Segments[0].EffectOption3 = yOffSet;
 
         await _client.Post(request);
+    }
+
+    public async Task ScrollingText(ScrollingTextType type, double? lat, double? lon, string? cryptoexchange, int? speed, int? yOffSet,  int? trail, int? fontSize, int? rotate)
+    {
+        switch (type)
+        {
+            case ScrollingTextType.Date:
+                await ScrollingText("%DATE%", speed, yOffSet, trail, fontSize, rotate);
+                break;
+            case ScrollingTextType.Time:
+                await ScrollingText("%TIME%", speed, yOffSet, trail, fontSize, rotate);
+                break;
+            case ScrollingTextType.ShortDate:
+                await ScrollingText("%DATE_SHORT%", speed, yOffSet, trail, fontSize, rotate);
+                break;
+            case ScrollingTextType.ShortTime:
+                await ScrollingText("%TIME_SHORT%", speed, yOffSet, trail, fontSize, rotate);
+                break;
+            case ScrollingTextType.Bored:
+                await ScrollingText("%BORED%", speed, yOffSet, trail, fontSize, rotate);
+                break;
+            case ScrollingTextType.Quotes:
+                await ScrollingText("%QUOTE%", speed, yOffSet, trail, fontSize, rotate);
+                break;
+            case ScrollingTextType.Weather:
+                await ScrollingText($"%WEATHER:{lat}:{lon}%", speed, yOffSet, trail, fontSize, rotate);
+                break;
+            case ScrollingTextType.Crypto:
+                await ScrollingText($"%CRYPTO:{cryptoexchange}%", speed, yOffSet, trail, fontSize, rotate);
+                break;
+            default:
+                break;
+        }
     }
 
     public StateRequest ConvertStateResponseToRequest(StateResponse state)

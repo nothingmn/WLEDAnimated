@@ -11,6 +11,8 @@ public interface IWLEDApiManager
     Task SetBrightness(int brightness);
 
     Task ScrollingText(string text, int? speed, int? yOffSet, int? trail, int? fontSize, int? rotate);
+    
+    Task ScrollingText(ScrollingTextType type, double? lat, double? lon, string? cryptoexchange, int? speed, int? yOffSet, int? trail, int? fontSize, int? rotate);
 
     StateRequest ConvertStateResponseToRequest(StateResponse state);
 

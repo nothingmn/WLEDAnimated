@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using WLEDAnimated.Animation;
 using WLEDAnimated.Interfaces;
 
@@ -27,9 +28,11 @@ namespace WLEDAnimated.API
 
             builder.Services.AddTransient<WLEDAnimationLoader>();
             builder.Services.AddTransient<AnimationManager>();
+            
+            builder.Services.AddControllers().AddJsonOptions(options => { options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()); });
 
             var app = builder.Build();
-
+            
             //            if (app.Environment.IsDevelopment())
             //{
             app.UseSwagger();
