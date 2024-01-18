@@ -109,9 +109,9 @@ public class WLEDApiManager : IWLEDApiManager
                 text = DateTime.Now.ToString(formatString);
             }
 
-            if (text.StartsWith("%WEATHER:", StringComparison.InvariantCultureIgnoreCase))
+            if (text.StartsWith("%WEATHER|", StringComparison.InvariantCultureIgnoreCase))
             {
-                var parts = text.Split(":");
+                var parts = text.Split("|");
                 var lat = double.Parse(parts[1].Replace("%", ""));
                 var lon = double.Parse(parts[2].Replace("%", ""));
                 var weather = new Weather();
@@ -123,7 +123,7 @@ public class WLEDApiManager : IWLEDApiManager
                 }
             }
 
-            if (text.StartsWith("%CRYPTO:", StringComparison.InvariantCultureIgnoreCase))
+            if (text.StartsWith("%CRYPTO|", StringComparison.InvariantCultureIgnoreCase))
             {
                 var name = text.Substring(8).Replace("%", "");
                 var bitcoinService = new ExchangeManager();
@@ -177,11 +177,11 @@ public class WLEDApiManager : IWLEDApiManager
                 break;
 
             case ScrollingTextType.Weather:
-                await ScrollingText($"%WEATHER:{lat}:{lon}%", speed, yOffSet, trail, fontSize, rotate);
+                await ScrollingText($"%WEATHER|{lat}|{lon}%", speed, yOffSet, trail, fontSize, rotate);
                 break;
 
             case ScrollingTextType.Crypto:
-                await ScrollingText($"%CRYPTO:{cryptoexchange}%", speed, yOffSet, trail, fontSize, rotate);
+                await ScrollingText($"%CRYPTO|{cryptoexchange}%", speed, yOffSet, trail, fontSize, rotate);
                 break;
 
             default:
