@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\AnimationCore\AnimationCore.csproj" />
+    <ProjectReference Include="..\TPM2\TPM2.csproj" />
     <ProjectReference Include="..\WLEDAnimated\WLEDAnimated.csproj" />
   </ItemGroup>
 

@@ -8,6 +8,7 @@ using AnimationCore.Interfaces;
 using WLEDAnimated.Animation;
 using System.Threading;
 using System;
+using TPM2;
 
 namespace WLEDAnimateConsole;
 
@@ -18,6 +19,7 @@ internal class Program
         // IP Address and Port of the WLED device
         string ipAddress = "10.0.0.217"; // Replace with the correct IP
         int port = 21324; // Default port for WLED UDP
+        int port2 = 65506; // Second default port for WLED UDP
         System.AppDomain.CurrentDomain.UnhandledException += (sender, e) => Console.WriteLine(e.ExceptionObject.ToString());
 
         //UDPSender(ipAddress, port);
@@ -26,7 +28,22 @@ internal class Program
         //await AnimationTest(ipAddress, port);
 
         //await WLEDAnimationTest();
-        await WLEDAnimationFromWLEDFile();
+        //await WLEDAnimationFromWLEDFile();
+
+        await TPM2ProtocolTest(ipAddress, port2);
+    }
+
+    public static async Task TPM2ProtocolTest(string ipAddress, int port)
+    {
+        using (var tpm2 = new Tpm2UdpClient())
+        {
+            for (int x = 0; x < 1; x++)
+            {
+                tpm2.Connect(ipAddress, port);
+                tpm2.SendStrip(LEDStrip.AllBlack(32, 8));
+                await Task.Delay(500);
+            }
+        }
     }
 
     public static async Task WLEDAnimationFromWLEDFile()
