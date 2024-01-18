@@ -15,6 +15,7 @@
   <ItemGroup>
     <ProjectReference Include="..\AnimationCore\AnimationCore.csproj" />
     <ProjectReference Include="..\Kevsoft.WLED\Kevsoft.WLED.csproj" />
+    <ProjectReference Include="..\WLEDAnimated.Services\WLEDAnimated.Services.csproj" />
   </ItemGroup>
 
   <ItemGroup>

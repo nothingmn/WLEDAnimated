@@ -173,7 +173,7 @@ internal class Program
         var apiManager = new WLEDApiManager();
         await apiManager.Connect(ipAddress);
         await apiManager.On(10);
-        await apiManager.ScrollingText(DateTime.UtcNow.ToLongDateString());
+        await apiManager.ScrollingText(DateTime.UtcNow.ToLongDateString(), 128, 0, 0, 128, 15);
     }
 
     private static async Task APIBasicOnOffBrightness(string ipAddress)
