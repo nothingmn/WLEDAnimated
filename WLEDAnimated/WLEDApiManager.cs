@@ -6,6 +6,7 @@ using WLEDAnimated.Interfaces;
 using WLEDAnimated.Services;
 
 namespace WLEDAnimated;
+
 public enum ScrollingTextType
 {
     Date,
@@ -101,6 +102,13 @@ public class WLEDApiManager : IWLEDApiManager
                     break;
             }
 
+            if (text.StartsWith("%DATE_FORMATTED|", StringComparison.InvariantCultureIgnoreCase))
+            {
+                var parts = text.Split("|");
+                var formatString = parts[1].Replace("%", "");
+                text = DateTime.Now.ToString(formatString);
+            }
+
             if (text.StartsWith("%WEATHER:", StringComparison.InvariantCultureIgnoreCase))
             {
                 var parts = text.Split(":");
@@ -140,34 +148,42 @@ public class WLEDApiManager : IWLEDApiManager
         await _client.Post(request);
     }
 
-    public async Task ScrollingText(ScrollingTextType type, double? lat, double? lon, string? cryptoexchange, int? speed, int? yOffSet,  int? trail, int? fontSize, int? rotate)
+    public async Task ScrollingText(ScrollingTextType type, double? lat, double? lon, string? cryptoexchange, int? speed, int? yOffSet, int? trail, int? fontSize, int? rotate)
     {
         switch (type)
         {
             case ScrollingTextType.Date:
                 await ScrollingText("%DATE%", speed, yOffSet, trail, fontSize, rotate);
                 break;
+
             case ScrollingTextType.Time:
                 await ScrollingText("%TIME%", speed, yOffSet, trail, fontSize, rotate);
                 break;
+
             case ScrollingTextType.ShortDate:
                 await ScrollingText("%DATE_SHORT%", speed, yOffSet, trail, fontSize, rotate);
                 break;
+
             case ScrollingTextType.ShortTime:
                 await ScrollingText("%TIME_SHORT%", speed, yOffSet, trail, fontSize, rotate);
                 break;
+
             case ScrollingTextType.Bored:
                 await ScrollingText("%BORED%", speed, yOffSet, trail, fontSize, rotate);
                 break;
+
             case ScrollingTextType.Quotes:
                 await ScrollingText("%QUOTE%", speed, yOffSet, trail, fontSize, rotate);
                 break;
+
             case ScrollingTextType.Weather:
                 await ScrollingText($"%WEATHER:{lat}:{lon}%", speed, yOffSet, trail, fontSize, rotate);
                 break;
+
             case ScrollingTextType.Crypto:
                 await ScrollingText($"%CRYPTO:{cryptoexchange}%", speed, yOffSet, trail, fontSize, rotate);
                 break;
+
             default:
                 break;
         }
