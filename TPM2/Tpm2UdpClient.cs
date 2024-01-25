@@ -33,21 +33,12 @@ public class Tpm2UdpClient : IDisposable
 
     public void SendLEDStrip(LEDStrip strip)
     {
-        var payload = ConvertStripToPayload(strip);
+        var payload = ConstructPayload(strip);
         SendData(payload);
     }
 
-    private void SendData(byte[] payload)
+    private void SendData(byte[] data)
     {
-        var packet = new List<byte>()
-        {
-            PacketStartByte,  //(udpIn[0] == 0x9c)
-            (byte)PacketTypes.DataFrame // byte tpmType = udpIn[1];       if (tpmType != 0xda) return; //return if notTPM2.NET data
-        };
-        packet.AddRange(payload);
-        packet.Add(PacketEndByte);
-
-        var data = packet.ToArray();
         udpClient.Send(data, data.Length - 1, endPoint);  //strip.show();
 
         for (int x = 0; x <= data.Length - 1; x++) Console.Write($"{data[x]} ");
@@ -58,10 +49,23 @@ public class Tpm2UdpClient : IDisposable
         //server.TestPayload(data);
     }
 
-    public void SendStrip(LEDStrip strip)
+    public byte[] ConstructPayload(LEDStrip strip)
     {
         var payload = ConvertStripToPayload(strip);
-        SendData(payload);
+        var packet = new List<byte>()
+        {
+            PacketStartByte,  //(udpIn[0] == 0x9c)
+            (byte)PacketTypes.DataFrame // byte tpmType = udpIn[1];       if (tpmType != 0xda) return; //return if notTPM2.NET data
+        };
+        packet.AddRange(payload);
+        packet.Add(PacketEndByte);
+
+        return packet.ToArray();
+    }
+
+    public void SendStrip(LEDStrip strip)
+    {
+        SendData(ConstructPayload(strip));
     }
 
     private byte[] ConvertStripToPayload(LEDStrip strip)

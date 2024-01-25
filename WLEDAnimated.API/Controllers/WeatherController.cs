@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SixLabors.ImageSharp;
+using WLEDAnimated.Interfaces;
 
 namespace WLEDAnimated.API.Controllers;
 
@@ -9,11 +10,13 @@ public class WeatherController : ControllerBase
 {
     private readonly ILogger<UploadImageController> _logger;
     private readonly AssetManager _assetManager;
+    private readonly IImageSender _sender;
 
-    public WeatherController(ILogger<UploadImageController> logger, AssetManager assetManager)
+    public WeatherController(ILogger<UploadImageController> logger, AssetManager assetManager, IImageSender sender)
     {
         _logger = logger;
         _assetManager = assetManager;
+        _sender = sender;
     }
 
     [HttpGet("change", Name = "change")]
@@ -30,9 +33,7 @@ public class WeatherController : ControllerBase
         var filePath = System.IO.Path.Combine(Path.GetTempPath(), file.Name);
         file.CopyTo(filePath);
 
-        var sender = new ImageUDPSender();
-
-        sender.Send(
+        _sender.Send(
             ipAddress,
             port,
             filePath,
@@ -42,7 +43,6 @@ public class WeatherController : ControllerBase
             500,
             1
         );
-        // TODO: Process the file here
         return Ok(conditions);
     }
 
@@ -60,9 +60,7 @@ public class WeatherController : ControllerBase
         var filePath = System.IO.Path.Combine(Path.GetTempPath(), file.Name);
         file.CopyTo(filePath);
 
-        var sender = new ImageUDPSender();
-
-        sender.Send(
+        _sender.Send(
             ipAddress,
             port,
             filePath,
@@ -72,7 +70,6 @@ public class WeatherController : ControllerBase
             500,
             1
         );
-        // TODO: Process the file here
         return Ok("Its sunny");
     }
 }

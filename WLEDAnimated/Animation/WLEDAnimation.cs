@@ -27,9 +27,19 @@ public class Step
     public int Wait { get; set; }
     public int PauseBetweenFrames { get; set; }
     public StateRequest State { get; set; }
-
     public string TextToDisplay { get; set; }
     public int Brightness { get; set; } = 128;
     public bool Revert { get; set; } = true;
     public int DurationToDisplay { get; set; } = 5000;
+    public int? Speed { get; set; }
+    public int? YOffSet { get; set; }
+    public int? Trail { get; set; }
+    public int? Rotate { get; set; }
+    public ScrollingTextType ScrollingTextType { get; set; }
+    public double? Lat { get; set; }
+    public double? Lon { get; set; }
+    public string CryptoExchange { get; set; }
+    public int? FontSize { get; set; }
+
+    public List<Step> Steps { get; set; }
 }

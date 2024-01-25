@@ -1,7 +1,6 @@
-using System.Net;
-using System.Runtime.InteropServices.Marshalling;
 using Microsoft.AspNetCore.Mvc;
 using SixLabors.ImageSharp;
+using WLEDAnimated.Interfaces;
 
 namespace WLEDAnimated.API.Controllers;
 
@@ -10,10 +9,12 @@ namespace WLEDAnimated.API.Controllers;
 public class UploadImageController : ControllerBase
 {
     private readonly ILogger<UploadImageController> _logger;
+    private readonly IImageSender _imageSender;
 
-    public UploadImageController(ILogger<UploadImageController> logger)
+    public UploadImageController(ILogger<UploadImageController> logger, IImageSender imageSender)
     {
         _logger = logger;
+        _imageSender = imageSender;
     }
 
     [HttpPost(Name = "UploadImage")]
@@ -31,9 +32,7 @@ public class UploadImageController : ControllerBase
             await file.CopyToAsync(stream);
         }
 
-        var sender = new ImageUDPSender();
-
-        sender.Send(
+        _imageSender.Send(
             ipAddress,
             port,
             filePath,

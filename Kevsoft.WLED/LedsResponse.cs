@@ -39,4 +39,19 @@ public sealed class LedsResponse
     /// </summary>
     [JsonPropertyName("maxseg")]
     public byte MaximumSegments { get; set; }
+
+    /// <summary>
+    /// Maximum number of segments supported by this version.
+    /// </summary>
+    [JsonPropertyName("matrix")]
+    public Matrix Matrix { get; set; }
+}
+
+public class Matrix
+{
+    [JsonPropertyName("w")]
+    public int Width { get; set; }
+
+    [JsonPropertyName("h")]
+    public int Height { get; set; }
 }

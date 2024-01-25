@@ -1,5 +1,6 @@
 ﻿using System.Drawing;
 using System.Text.Json.Nodes;
+using System.Text.Json.Serialization;
 using Kevsoft.WLED;
 using WLEDAnimated.Animation;
 using WLEDAnimated.Interfaces;
@@ -7,6 +8,7 @@ using WLEDAnimated.Services;
 
 namespace WLEDAnimated;
 
+[JsonConverter(typeof(JsonStringEnumConverter))]
 public enum ScrollingTextType
 {
     Date,
@@ -16,7 +18,8 @@ public enum ScrollingTextType
     Bored,
     Quotes,
     Weather,
-    Crypto
+    Crypto,
+    Text
 }
 
 public class WLEDApiManager : IWLEDApiManager
@@ -25,9 +28,26 @@ public class WLEDApiManager : IWLEDApiManager
     private WLedClient _client;
     public WLedRootResponse WledDevice { get; set; }
 
-    public int Width { get; set; }
-    public int Height { get; set; }
-    public bool Is2D { get; set; }
+    public int? Width
+    {
+        get { return WledDevice?.Information?.Leds?.Matrix?.Width; }
+    }
+
+    public int? Height
+    {
+        get
+        {
+            return WledDevice?.Information?.Leds?.Matrix?.Height;
+        }
+    }
+
+    public bool Is2D
+    {
+        get
+        {
+            return WledDevice?.Information?.Leds?.Matrix?.Width > 0 && WledDevice?.Information?.Leds?.Matrix?.Height > 0;
+        }
+    }
 
     public async Task<WLedRootResponse> Connect(string ipAddress)
     {

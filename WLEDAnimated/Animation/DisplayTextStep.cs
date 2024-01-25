@@ -14,7 +14,14 @@ public class DisplayTextStep : IStep
             var apiManager = new WLEDApiManager();
             var response = await apiManager.Connect(IPAddress);
             await apiManager.On(this.Brightness);
-            await apiManager.ScrollingText(TextToDisplay, Speed, YOffSet, Trail, FontSize, Rotate);
+            if (string.IsNullOrWhiteSpace(TextToDisplay))
+            {
+                await apiManager.ScrollingText(ScrollingTextType, Lat, Lon, CryptoExchange, Speed, YOffSet, Trail, FontSize, Rotate);
+            }
+            else
+            {
+                await apiManager.ScrollingText(TextToDisplay, Speed, YOffSet, Trail, FontSize, Rotate);
+            }
             await Task.Delay(DurationToDisplay, cancellationToken);
 
             if (Revert)
@@ -26,14 +33,19 @@ public class DisplayTextStep : IStep
         };
     }
 
-    public string TextToDisplay { get; set; } = "Hello World";
+    public string TextToDisplay { get; set; }
     public string IPAddress { get; set; }
     public int? Brightness { get; set; }
     public int? Speed { get; set; }
     public int? YOffSet { get; set; }
     public int? Trail { get; set; }
-    public int? FontSize { get; set; }
     public int? Rotate { get; set; }
+
+    public ScrollingTextType ScrollingTextType { get; set; } = ScrollingTextType.Text;
+    public double? Lat { get; set; }
+    public double? Lon { get; set; }
+    public string CryptoExchange { get; set; }
+    public int? FontSize { get; set; }
 
     public bool Revert { get; set; } = true;
     public TimeSpan DurationToDisplay { get; set; }

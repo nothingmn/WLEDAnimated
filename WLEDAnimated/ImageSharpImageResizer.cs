@@ -1,4 +1,5 @@
 ﻿using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Formats;
 using SixLabors.ImageSharp.Processing;
 using SixLabors.ImageSharp.Processing.Processors.Transforms;
 using WLEDAnimated.Interfaces;
@@ -23,18 +24,21 @@ public class ImageSharpImageResizer : IImageResizer
 
         if (!System.IO.File.Exists(resizedFile))
         {
-            using (Image image = Image.Load(File.ReadAllBytes(path)))
+            using (var image = Image.Load(File.ReadAllBytes(path)))
             {
                 var (scaledWidth, scaledHeight) =
-                    GetScaledDimensions(image.Width, image.Height, dimensions.Width, dimensions.Height);
-
-                if (dimensions.Width == image.Width && dimensions.Height == image.Height) return path;
+                    CalculateNewDimensions(dimensions.Width, dimensions.Height, image.Width, image.Height);
 
                 Console.WriteLine($"Dimensions: {dimensions.Width}x{dimensions.Height}");
                 Console.WriteLine($"Image: {image.Width}x{image.Height}");
-
                 Console.WriteLine($"Final: {scaledWidth}x{scaledHeight}");
-                image.Mutate(x => x.Resize(scaledWidth, scaledHeight, new BoxResampler()));
+
+                if (scaledHeight != dimensions.Height || scaledWidth != dimensions.Width)
+                {
+                    Console.WriteLine($"Image will be scaled to {scaledWidth}x{scaledHeight}");
+                    image.Mutate(x => x.Resize(scaledWidth, scaledHeight, new TriangleResampler()));
+                }
+
                 image.Save(resizedFile);
             }
         }
@@ -42,17 +46,23 @@ public class ImageSharpImageResizer : IImageResizer
         return resizedFile;
     }
 
-    public static (int, int) GetScaledDimensions(int originalWidth, int originalHeight, int maxWidth, int maxHeight)
+    public (int, int) CalculateNewDimensions(int screenWidth, int screenHeight, int imageWidth, int imageHeight)
     {
-        double widthRatio = (double)maxWidth / originalWidth;
-        double heightRatio = (double)maxHeight / originalHeight;
-        double ratio = Math.Min(widthRatio, heightRatio);
+        // Calculate the scaling factors for width and height
+        float widthScale = (float)screenWidth / imageWidth;
+        float heightScale = (float)screenHeight / imageHeight;
 
-        int newWidth = (int)(originalWidth * ratio);
-        int newHeight = (int)(originalHeight * ratio);
+        // Use the smaller scaling factor to ensure the image fits within the screen dimensions
+        float scale = Math.Min(widthScale, heightScale);
+
+        // Calculate the new dimensions
+        int newWidth = (int)(imageWidth * scale);
+        int newHeight = (int)(imageHeight * scale);
+
+        // Ensure that the new dimensions do not exceed the screen dimensions
+        newWidth = Math.Min(newWidth, screenWidth);
+        newHeight = Math.Min(newHeight, screenHeight);
 
         return (newWidth, newHeight);
     }
-
-    // Usage example
 }

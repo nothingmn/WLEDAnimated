@@ -1,17 +1,16 @@
 ﻿using AnimationCore.Interfaces;
-using System.Net;
 using System.Text.Json.Serialization;
 using SixLabors.ImageSharp;
+using WLEDAnimated.Interfaces;
 
 namespace WLEDAnimated.Animation;
 
 public class DisplayImageStep : IStep
 {
-    public DisplayImageStep()
+    public DisplayImageStep(IImageSender sender)
     {
         this.Transition += async (cancellationToken) =>
         {
-            var sender = new ImageUDPSender();
             sender.Send(
                 IPAddress,
                 Port,

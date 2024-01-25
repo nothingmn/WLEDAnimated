@@ -1,10 +1,18 @@
 ﻿using AnimationCore;
 using AnimationCore.Interfaces;
+using WLEDAnimated.Interfaces;
 
 namespace WLEDAnimated.Animation;
 
 public class WLEDAnimationLoader
 {
+    private readonly IImageSender _sender;
+
+    public WLEDAnimationLoader(IImageSender sender)
+    {
+        _sender = sender;
+    }
+
     public Task<WLEDAnimation> LoadWLEDAnimation(System.IO.DirectoryInfo animationFolder)
     {
         var jsonPath = new FileInfo(Path.Combine(animationFolder.FullName, "Animation.json"));
@@ -23,50 +31,7 @@ public class WLEDAnimationLoader
         {
             foreach (var transition in wledAnimation.Transitions)
             {
-                IStep step = null;
-                var type = transition.Step.TypeName.ToLowerInvariant();
-                switch (type)
-                {
-                    case "displayimagestep":
-                        step = new DisplayImageStep
-                        {
-                            IPAddress = transition.Step.IPAddress,
-                            Port = transition.Step.Port,
-                            ImagePath = System.IO.Path.Combine(animationFolder.FullName, transition.Step.ImagePath),
-                            Width = transition.Step.Width,
-                            Height = transition.Step.Height,
-                            Wait = transition.Step.Wait,
-                            PauseBetweenFrames = transition.Step.PauseBetweenFrames,
-                            Description = transition.Step.Description
-                        };
-                        break;
-
-                    case "displaytextstep":
-                        step = new DisplayTextStep()
-                        {
-                            IPAddress = transition.Step.IPAddress,
-                            Description = transition.Step.Description,
-                            TextToDisplay = transition.Step.TextToDisplay,
-                            Brightness = transition.Step.Brightness,
-                            DurationToDisplay = TimeSpan.FromMilliseconds(transition.Step.DurationToDisplay),
-                            Revert = transition.Step.Revert
-                        };
-                        break;
-
-                    case "wledstatestep":
-                        step = new WLEDStateStep()
-                        {
-                            IPAddress = transition.Step.IPAddress,
-                            Description = transition.Step.Description,
-                            State = transition.Step.State,
-                            DurationToDisplay = TimeSpan.FromMilliseconds(transition.Step.DurationToDisplay),
-                            Revert = transition.Step.Revert
-                        };
-                        break;
-
-                    default:
-                        throw new NotImplementedException($"The step type {type} is not implemented.");
-                }
+                var step = CreateStep(animationFolder, transition.Step);
 
                 var t = new BasicTransition
                 {
@@ -79,5 +44,76 @@ public class WLEDAnimationLoader
         }
 
         return animation as IAnimation;
+    }
+
+    private IStep? CreateStep(DirectoryInfo animationFolder, Step step)
+    {
+        IStep createStep = null;
+        var type = step.TypeName.ToLowerInvariant();
+        switch (type)
+        {
+            case "displayimagestep":
+                createStep = new DisplayImageStep(_sender)
+                {
+                    IPAddress = step.IPAddress,
+                    Port = step.Port,
+                    ImagePath = System.IO.Path.Combine(animationFolder.FullName, step.ImagePath),
+                    Width = step.Width,
+                    Height = step.Height,
+                    Wait = step.Wait,
+                    PauseBetweenFrames = step.PauseBetweenFrames,
+                    Description = step.Description
+                };
+                break;
+
+            case "displaytextstep":
+                createStep = new DisplayTextStep()
+                {
+                    IPAddress = step.IPAddress,
+                    Description = step.Description,
+                    TextToDisplay = step.TextToDisplay,
+                    Brightness = step.Brightness,
+                    DurationToDisplay = TimeSpan.FromMilliseconds(step.DurationToDisplay),
+                    Revert = step.Revert,
+                    Speed = step.Speed,
+                    YOffSet = step.YOffSet,
+                    Trail = step.Trail,
+                    Rotate = step.Rotate,
+                    ScrollingTextType = step.ScrollingTextType,
+                    Lat = step.Lat,
+                    Lon = step.Lon,
+                    CryptoExchange = step.CryptoExchange,
+                    FontSize = step.FontSize,
+                };
+                break;
+
+            case "wledstatestep":
+                createStep = new WLEDStateStep()
+                {
+                    IPAddress = step.IPAddress,
+                    Description = step.Description,
+                    State = step.State,
+                    DurationToDisplay = TimeSpan.FromMilliseconds(step.DurationToDisplay),
+                    Revert = step.Revert
+                };
+                break;
+
+            case "multistep":
+                createStep = new MultiStep();
+                if (step.Steps != null && step.Steps.Any())
+                {
+                    foreach (var s in step.Steps)
+                    {
+                        var subStep = CreateStep(animationFolder, s);
+                        (createStep as MultiStep).Steps.Add(subStep);
+                    }
+                }
+                break;
+
+            default:
+                throw new NotImplementedException($"The step type {type} is not implemented.");
+        }
+
+        return createStep;
     }
 }

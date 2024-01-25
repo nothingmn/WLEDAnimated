@@ -3,6 +3,7 @@ using System.Runtime.InteropServices.ComTypes;
 using System.Runtime.InteropServices.Marshalling;
 using Microsoft.AspNetCore.Mvc;
 using SixLabors.ImageSharp;
+using WLEDAnimated.Interfaces;
 
 namespace WLEDAnimated.API.Controllers;
 
@@ -11,10 +12,12 @@ namespace WLEDAnimated.API.Controllers;
 public class UrlImageController : ControllerBase
 {
     private readonly ILogger<UploadImageController> _logger;
+    private readonly IImageSender _sender;
 
-    public UrlImageController(ILogger<UploadImageController> logger)
+    public UrlImageController(ILogger<UploadImageController> logger, IImageSender sender)
     {
         _logger = logger;
+        _sender = sender;
     }
 
     [HttpPost()]
@@ -54,8 +57,7 @@ public class UrlImageController : ControllerBase
                     await stream.CopyToAsync(fileStream);
                 }
 
-                var sender = new ImageUDPSender();
-                sender.Send(ipAddress, port, filePath, new Size(width, height), 0, (byte)wait, pauseBetweenFrames, iterations);
+                _sender.Send(ipAddress, port, filePath, new Size(width, height), 0, (byte)wait, pauseBetweenFrames, iterations);
             }
         }
 

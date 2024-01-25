@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SixLabors.ImageSharp;
+using WLEDAnimated.Interfaces;
 
 namespace WLEDAnimated.API.Controllers;
 
@@ -8,11 +9,13 @@ public class TestController : ControllerBase
 {
     private readonly ILogger<UploadImageController> _logger;
     private readonly AssetManager _assetManager;
+    private readonly IImageSender _sender;
 
-    public TestController(ILogger<UploadImageController> logger, AssetManager assetManager)
+    public TestController(ILogger<UploadImageController> logger, AssetManager assetManager, IImageSender sender)
     {
         _logger = logger;
         _assetManager = assetManager;
+        _sender = sender;
     }
 
     [HttpGet("test", Name = "test")]
@@ -27,11 +30,10 @@ public class TestController : ControllerBase
             return BadRequest($"No test animation on file for: 8x32.test for the dimensions of {height}x{width}.");
         }
         var filePath = System.IO.Path.Combine(Path.GetTempPath(), file.Name);
-        file.CopyTo(filePath);
+        if (!System.IO.File.Exists(filePath))
+            file.CopyTo(filePath, false);
 
-        var sender = new ImageUDPSender();
-
-        sender.Send(
+        _sender.Send(
             ipAddress,
             port,
             filePath,
@@ -41,7 +43,6 @@ public class TestController : ControllerBase
             pauseBetweenFrames,
             iterations
         );
-        // TODO: Process the file here
         return Ok("Done");
     }
 }

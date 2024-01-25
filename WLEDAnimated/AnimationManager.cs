@@ -4,17 +4,20 @@ using System.Runtime.CompilerServices;
 using WLEDAnimated.Animation;
 using System.IO;
 using System.IO.Compression;
+using WLEDAnimated.Interfaces;
 
 namespace WLEDAnimated;
 
 public class AnimationManager
 {
     private readonly WLEDAnimationLoader _wledAnimationLoader;
+    private readonly IImageSender _sender;
     private DirectoryInfo animationsFolder = null;
 
-    public AnimationManager(WLEDAnimationLoader wledAnimationLoader)
+    public AnimationManager(WLEDAnimationLoader wledAnimationLoader, IImageSender sender)
     {
         _wledAnimationLoader = wledAnimationLoader;
+        _sender = sender;
         var asmFile = new FileInfo(this.GetType().Assembly.Location);
         animationsFolder = new DirectoryInfo(System.IO.Path.Combine(asmFile.Directory.FullName, "Animations"));
         if (!animationsFolder.Exists) System.IO.Directory.CreateDirectory(animationsFolder.FullName);
@@ -71,7 +74,7 @@ public class AnimationManager
                             var animationFile = new FileInfo(System.IO.Path.Combine(zipRoot.FullName, entry.FullName));
                             entry.ExtractToFile(animationFile.FullName);
 
-                            var loader = new WLEDAnimationLoader();
+                            var loader = new WLEDAnimationLoader(_sender);
                             animation = await loader.LoadAnimation(animationFile.Directory);
                             var name = animation.Name;
                             var animationFolder = GetAnimationFolderByAnimationName(name);
@@ -106,7 +109,7 @@ public class AnimationManager
 
     public async Task<IAnimation> PlayAnimation(string name)
     {
-        var loader = new WLEDAnimationLoader();
+        var loader = new WLEDAnimationLoader(_sender);
         var animation = await loader.LoadAnimation(new DirectoryInfo(System.IO.Path.Combine(animationsFolder.FullName, name)));
         return await PlayAnimation(animation);
     }

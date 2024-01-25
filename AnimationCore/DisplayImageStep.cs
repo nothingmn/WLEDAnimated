@@ -8,7 +8,6 @@ public class DisplayImageStep : IStep
     public string ImagePath { get; set; }
     public string IPAddress { get; set; }
     public int Port { get; set; } = 21324;
-
     public string Description { get; set; } = "Display Image";
 
     [JsonIgnore]

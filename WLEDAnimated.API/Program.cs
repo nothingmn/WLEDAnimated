@@ -25,6 +25,9 @@ public class Program
         builder.Services.AddTransient<ImageUDPSender>();
         builder.Services.AddTransient<IImageConverter, ImageToDNRGBConverter>();
         builder.Services.AddTransient<IImageResizer, ImageSharpImageResizer>();
+        builder.Services.AddTransient<IImageToConverterFactory, ImageToConverterFactory>();
+        builder.Services.AddTransient<IImageSender, ImageUDPSender>();
+
         builder.Services.AddTransient<IWLEDApiManager, WLEDApiManager>();
 
         builder.Services.AddTransient<DeviceDiscovery>();
@@ -83,7 +86,7 @@ public class Program
             var schedules = new List<SchedulerConfig>();
             config.GetSection("Scheduler").Bind(schedules);
 
-            foreach (var schedulerConfig in schedules)
+            foreach (var schedulerConfig in schedules?.Where(schedulerConfig => schedulerConfig.Enabled))
             {
                 var type = schedulerConfig.Invocable;
                 var invocer = typeof(Program).Assembly.GetTypes().Where(x => x.FullName.Equals(type, StringComparison.InvariantCultureIgnoreCase))?.FirstOrDefault();
@@ -108,11 +111,4 @@ public class Program
 
         app.Run();
     }
-}
-
-public class SchedulerConfig
-{
-    public string Cron { get; set; } = "*/5 * * * *";
-    public string Invocable { get; set; }
-    public string Animation { get; set; }
 }

@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="8.0.0" />
     <PackageReference Include="SixLabors.ImageSharp" Version="3.1.2" />
     <PackageReference Include="System.IO.Compression.ZipFile" Version="4.3.0" />
     <PackageReference Include="Tmds.MDns" Version="0.8.0" />
@@ -15,6 +16,7 @@
   <ItemGroup>
     <ProjectReference Include="..\AnimationCore\AnimationCore.csproj" />
     <ProjectReference Include="..\Kevsoft.WLED\Kevsoft.WLED.csproj" />
+    <ProjectReference Include="..\TPM2\TPM2.csproj" />
     <ProjectReference Include="..\WLEDAnimated.Services\WLEDAnimated.Services.csproj" />
   </ItemGroup>
 
