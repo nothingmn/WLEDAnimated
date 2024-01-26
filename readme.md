@@ -57,23 +57,26 @@ You can download one of the releases on the release tab, or via docker:
 
 
 Run with your own custom scheduler configuration
+
 ```cmd
-docker run --rm -d -p 8080:8080/tcp -v %cd%/Schedule.json:/app/Schedule.json --name wledanimateapi robchartier/wledanimateapi
+docker run  --restart unless-stopped -d -p 8080:8080/tcp -v %cd%/Schedule.json:/app/Schedule.json --name wledanimateapi robchartier/wledanimateapi
 ```
 
 Run with your own custom scheduler configuration and canned animations
+
 ```cmd
-docker run --rm -d -p 8080:8080/tcp -v %cd%/Schedule.json:/app/Schedule.json -v %cd%/Animations:/app/Animations  --name wledanimateapi robchartier/wledanimateapi
+docker run  --restart unless-stopped 	 -d -p 8080:8080/tcp -v %cd%/Schedule.json:/app/Schedule.json -v %cd%/Animations:/app/Animations  --name wledanimateapi robchartier/wledanimateapi
 ````
 
 ### Non-Windows (linux/mac):
 
 Run with your own custom scheduler configuration
+
 ```bash
-docker run --rm -d -p 8080:8080/tcp -v $(pwd)/Schedule.json:/app/Schedule.json --name wledanimateapi robchartier/wledanimateapi
+docker run  --restart unless-stopped -d -p 8080:8080/tcp -v $(pwd)/Schedule.json:/app/Schedule.json --name wledanimateapi robchartier/wledanimateapi
 ```
 
 Run with your own custom scheduler configuration and canned animations
 ```bash
-docker run --rm -d -p 8080:8080/tcp -v $(pwd)/Schedule.json:/app/Schedule.json -v $(pwd)/Animations:/app/Animations --name wledanimateapi wledanimateapi
+docker run  --restart unless-stopped -d -p 8080:8080/tcp -v $(pwd)/Schedule.json:/app/Schedule.json -v $(pwd)/Animations:/app/Animations --name wledanimateapi wledanimateapi
 ```
