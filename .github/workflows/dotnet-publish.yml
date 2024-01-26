@@ -1,4 +1,4 @@
-name: .NET Build and Publish
+name: .NET Build, Publish and Release
 
 on:
   push:
@@ -31,8 +31,30 @@ jobs:
     - name: Zip the publish directory
       run: zip -r publish-${{ github.sha }}.zip publish/
 
-    - name: Upload artifact
+    - name: Upload build artifact
       uses: actions/upload-artifact@v2
       with:
         name: published-app
         path: publish-${{ github.sha }}.zip
+
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ github.ref }}
+        release_name: Release ${{ github.ref }}
+        draft: false
+        prerelease: false
+        body: "Release of commit ${{ github.sha }}"
+
+    - name: Upload release asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./publish-${{ github.sha }}.zip
+        asset_name: publish-${{ github.sha }}.zip
+        asset_content_type: application/zip
