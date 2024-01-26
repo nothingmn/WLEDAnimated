@@ -2,7 +2,7 @@
 
 A simple API to provide more features on top of WLEDs APIs themselves.
 
-A useful tool to self host via docker, or the executable (windows, linux mac).  
+A useful tool to self host via docker, or the executable (windows, linux or mac).  
 
 
 ## Core Features:
@@ -42,6 +42,12 @@ A useful tool to self host via docker, or the executable (windows, linux mac).
 
 A good example is you can upload your custom animations and trigger them from, say home assistant.
 
+
+## Support
+We fully support the current WLED HTTP JSON Api, along with two UDP Protocols: DNRGB and TPM2NET.  It has been tested on a 8x32, 16x32 WLED devices running 14.x. Ideally more folks would test on a variety of matrices.  
+
+
+## Get it!
 
 You can download one of the releases on the release tab, or via docker:
 
