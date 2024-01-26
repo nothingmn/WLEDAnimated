@@ -10,7 +10,14 @@ public class WledDeviceDiscovery
         {
             deviceDiscovery.ValidDeviceFound += (sender, e) =>
             {
-                Devices.Add(e.CreatedDevice);
+                var exists = from d in Devices
+                    where d.NetworkAddress.Equals(e.CreatedDevice.NetworkAddress,
+                        StringComparison.InvariantCultureIgnoreCase)
+                    select d;
+                if (exists == null || !exists.Any())
+                {
+                    Devices.Add(e.CreatedDevice);
+                }
             };
             deviceDiscovery.StartDiscovery();
         }, TaskCreationOptions.LongRunning);

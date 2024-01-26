@@ -16,6 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ScrollingTextPlugins\ScrollingTextPlugins.csproj" />
     <ProjectReference Include="..\WLEDAnimated\WLEDAnimated.csproj" />
   </ItemGroup>
 

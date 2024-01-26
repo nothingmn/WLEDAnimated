@@ -1,25 +1,31 @@
 ﻿using AnimationCore.Interfaces;
 using System.Net;
 using System.Text.Json.Serialization;
+using Microsoft.Extensions.Logging;
 using SixLabors.ImageSharp;
+using WLEDAnimated.Interfaces;
 
 namespace WLEDAnimated.Animation;
 
 public class DisplayTextStep : IStep
 {
-    public DisplayTextStep()
+    private readonly ILogger<DisplayTextStep> _logger;
+
+    public DisplayTextStep(IWLEDApiManager apiManager, ILogger<DisplayTextStep> logger)
     {
+        _logger = logger;
         this.Transition += async (cancellationToken) =>
         {
-            var apiManager = new WLEDApiManager();
             var response = await apiManager.Connect(IPAddress);
             await apiManager.On(this.Brightness);
             if (string.IsNullOrWhiteSpace(TextToDisplay))
             {
-                await apiManager.ScrollingText(ScrollingTextType, Lat, Lon, CryptoExchange, Speed, YOffSet, Trail, FontSize, Rotate);
+                _logger.LogInformation("No Text provided, lets go the plugin route...{ScrollingTextPluginName}, {ScrollingTextPluginPayload}", ScrollingTextPluginName, ScrollingTextPluginPayload);
+                await apiManager.ScrollingText(ScrollingTextPluginName, ScrollingTextPluginPayload, Speed, YOffSet, Trail, FontSize, Rotate);
             }
             else
             {
+                _logger.LogInformation("Static text provided '{text}'", TextToDisplay);
                 await apiManager.ScrollingText(TextToDisplay, Speed, YOffSet, Trail, FontSize, Rotate);
             }
             await Task.Delay(DurationToDisplay, cancellationToken);
@@ -40,11 +46,9 @@ public class DisplayTextStep : IStep
     public int? YOffSet { get; set; }
     public int? Trail { get; set; }
     public int? Rotate { get; set; }
+    public string ScrollingTextPluginName { get; set; }
 
-    public ScrollingTextType ScrollingTextType { get; set; } = ScrollingTextType.Text;
-    public double? Lat { get; set; }
-    public double? Lon { get; set; }
-    public string CryptoExchange { get; set; }
+    public string ScrollingTextPluginPayload { get; set; }
     public int? FontSize { get; set; }
 
     public bool Revert { get; set; } = true;

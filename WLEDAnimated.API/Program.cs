@@ -1,3 +1,5 @@
+using System.Reflection;
+using System.Reflection.Metadata;
 using System.Runtime.CompilerServices;
 using System.Text.Json.Serialization;
 using Coravel;
@@ -27,15 +29,23 @@ public class Program
         builder.Services.AddTransient<IImageResizer, ImageSharpImageResizer>();
         builder.Services.AddTransient<IImageToConverterFactory, ImageToConverterFactory>();
         builder.Services.AddTransient<IImageSender, ImageUDPSender>();
+        builder.Services.AddTransient<WLEDDevice, WLEDDevice>();
 
         builder.Services.AddTransient<IWLEDApiManager, WLEDApiManager>();
 
-        builder.Services.AddTransient<DeviceDiscovery>();
+        builder.Services.AddTransient<MultiStep, MultiStep>();
+        builder.Services.AddTransient<DisplayImageStep, DisplayImageStep>();
+        builder.Services.AddTransient<DisplayTextStep, DisplayTextStep>();
+
+        builder.Services.AddSingleton<DeviceDiscovery>();
         builder.Services.AddSingleton<WledDeviceDiscovery>();
 
         builder.Services.AddTransient<WLEDAnimationLoader>();
         builder.Services.AddTransient<AnimationManager>();
         builder.Services.AddTransient<AnimationInvocer>();
+        builder.Services.AddTransient<IScrollingTextPluginFactory, ScrollingTextPluginFactory>();
+
+        LoadScrollingTextPlugins(builder.Services);
 
         //throw in our basic scheduler...
         builder.Services.AddScheduler();
@@ -110,5 +120,34 @@ public class Program
         dd.Start(discover);
 
         app.Run();
+    }
+
+    private static void LoadScrollingTextPlugins(IServiceCollection services)
+    {
+        var asmFile = new FileInfo(typeof(Program).Assembly.Location);
+        var binFolder = new DirectoryInfo(System.IO.Path.Combine(asmFile.Directory.FullName));
+        foreach (var asm in binFolder.GetFiles("*.dll"))
+        {
+            try
+            {
+                var a = Assembly.LoadFrom(asm.FullName);
+                var pluginTypes = from t in a.GetTypes()
+                                  where t.GetInterfaces().Contains(typeof(IScrollingTextPlugin))
+                                  select t;
+
+                if (pluginTypes.Any())
+                {
+                    foreach (var pluginType in pluginTypes)
+                    {
+                        services.AddKeyedTransient(typeof(IScrollingTextPlugin), pluginType.Name, pluginType);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+        }
     }
 }

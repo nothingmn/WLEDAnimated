@@ -4,6 +4,10 @@ namespace WLEDAnimated.Interfaces;
 
 public interface IWLEDApiManager
 {
+    public int? Width { get; }
+    public int? Height { get; }
+    public bool Is2D { get; }
+
     Task<WLedRootResponse> Connect(string ipAddress);
 
     void Disconnect();
@@ -11,8 +15,8 @@ public interface IWLEDApiManager
     Task SetBrightness(int brightness);
 
     Task ScrollingText(string text, int? speed, int? yOffSet, int? trail, int? fontSize, int? rotate);
-    
-    Task ScrollingText(ScrollingTextType type, double? lat, double? lon, string? cryptoexchange, int? speed, int? yOffSet, int? trail, int? fontSize, int? rotate);
+
+    Task ScrollingText(string scrollingTextPluginName, string scrollingTextPluginPayload, int? speed, int? yOffSet, int? trail, int? fontSize, int? rotate);
 
     StateRequest ConvertStateResponseToRequest(StateResponse state);
 

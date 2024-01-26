@@ -35,10 +35,9 @@ public class Step
     public int? YOffSet { get; set; }
     public int? Trail { get; set; }
     public int? Rotate { get; set; }
-    public ScrollingTextType ScrollingTextType { get; set; }
-    public double? Lat { get; set; }
-    public double? Lon { get; set; }
-    public string CryptoExchange { get; set; }
+    public string ScrollingTextPluginName { get; set; }
+    public string ScrollingTextPluginPayload { get; set; }
+
     public int? FontSize { get; set; }
 
     public List<Step> Steps { get; set; }

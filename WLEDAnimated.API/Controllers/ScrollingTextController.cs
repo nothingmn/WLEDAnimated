@@ -4,8 +4,6 @@ using WLEDAnimated.Interfaces;
 
 namespace WLEDAnimated.API.Controllers;
 
-
-
 [ApiController]
 public class ScrollingTextController : ControllerBase
 {
@@ -27,12 +25,13 @@ public class ScrollingTextController : ControllerBase
 
         return Ok("Done");
     }
+
     [HttpGet("scrolldata")]
-    public async Task<IActionResult> ScrollData(string ipAddress, ScrollingTextType type, double? lat, double? lon, string? cryptoexchange, int? speed, int? yOffSet, int? trail, int? fontSize, int? rotate)
+    public async Task<IActionResult> ScrollData(string ipAddress, string scrollingTextPluginName, string? scrollingTextPluginPayload, int? speed, int? yOffSet, int? trail, int? fontSize, int? rotate)
     {
         _logger.LogInformation("Scrolling text called");
         await _apiManager.Connect(ipAddress);
-        await _apiManager.ScrollingText(type, lat, lon, cryptoexchange, speed, yOffSet, trail, fontSize, rotate);
+        await _apiManager.ScrollingText(scrollingTextPluginName, scrollingTextPluginPayload, speed, yOffSet, trail, fontSize, rotate);
 
         return Ok("Done");
     }

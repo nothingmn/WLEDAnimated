@@ -8,13 +8,16 @@ namespace WLEDAnimated;
 //Discover _http._tcp services via mDNS/Zeroconf and verify they are WLED devices by sending an API call
 public class DeviceDiscovery
 {
+    private readonly IServiceProvider _services;
     private static DeviceDiscovery Instance;
     private ServiceBrowser serviceBrowser;
 
     public event EventHandler<DeviceCreatedEventArgs> ValidDeviceFound;
 
-    public DeviceDiscovery()
+    public DeviceDiscovery(IServiceProvider services)
     {
+        _services = services;
+
         serviceBrowser = new ServiceBrowser();
         serviceBrowser.ServiceAdded += OnServiceAdded;
     }
@@ -31,22 +34,16 @@ public class DeviceDiscovery
 
     private async void OnServiceAdded(object sender, ServiceAnnouncementEventArgs e)
     {
-        var toAdd = new WLEDDevice();
+        var wledDevice = _services.GetService(typeof(WLEDDevice)) as WLEDDevice;
         foreach (var addr in e.Announcement.Addresses)
         {
-            toAdd.NetworkAddress = addr.ToString(); break; //only get first address
+            wledDevice.NetworkAddress = addr.ToString(); break; //only get first address
         }
-        toAdd.Name = e.Announcement.Hostname;
-        if (await toAdd.Refresh()) //check if the service is a valid WLED light
+        wledDevice.Name = e.Announcement.Hostname;
+        if (await wledDevice.Refresh()) //check if the service is a valid WLED light
         {
-            OnValidDeviceFound(new DeviceCreatedEventArgs(toAdd, false));
+            OnValidDeviceFound(new DeviceCreatedEventArgs(wledDevice, false));
         }
-    }
-
-    public static DeviceDiscovery GetInstance()
-    {
-        if (Instance == null) Instance = new DeviceDiscovery();
-        return Instance;
     }
 
     protected virtual void OnValidDeviceFound(DeviceCreatedEventArgs e)

@@ -3,16 +3,16 @@ using System.Net;
 using System.Text.Json.Serialization;
 using SixLabors.ImageSharp;
 using Kevsoft.WLED;
+using WLEDAnimated.Interfaces;
 
 namespace WLEDAnimated.Animation;
 
 public class WLEDStateStep : IStep
 {
-    public WLEDStateStep()
+    public WLEDStateStep(IWLEDApiManager apiManager)
     {
         this.Transition += async (cancellationToken) =>
         {
-            var apiManager = new WLEDApiManager();
             var response = await apiManager.Connect(IPAddress);
 
             await apiManager.SetStateFromRequest(State);

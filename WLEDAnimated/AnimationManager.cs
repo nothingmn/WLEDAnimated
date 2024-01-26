@@ -74,12 +74,12 @@ public class AnimationManager
                             var animationFile = new FileInfo(System.IO.Path.Combine(zipRoot.FullName, entry.FullName));
                             entry.ExtractToFile(animationFile.FullName);
 
-                            var loader = new WLEDAnimationLoader(_sender);
-                            animation = await loader.LoadAnimation(animationFile.Directory);
+                            //var loader = new WLEDAnimationLoader(_sender);
+                            animation = await _wledAnimationLoader.LoadAnimation(animationFile.Directory);
                             var name = animation.Name;
                             var animationFolder = GetAnimationFolderByAnimationName(name);
                             System.IO.Compression.ZipFile.ExtractToDirectory(tempZipFile, animationFolder.FullName, overwriteFiles: true);
-                            animation = await loader.LoadAnimation(animationFolder);
+                            animation = await _wledAnimationLoader.LoadAnimation(animationFolder);
                             break;
                         }
                     }
@@ -109,8 +109,20 @@ public class AnimationManager
 
     public async Task<IAnimation> PlayAnimation(string name)
     {
-        var loader = new WLEDAnimationLoader(_sender);
-        var animation = await loader.LoadAnimation(new DirectoryInfo(System.IO.Path.Combine(animationsFolder.FullName, name)));
-        return await PlayAnimation(animation);
+        IAnimation animation = null;
+        try
+        {
+            animation = await _wledAnimationLoader.LoadAnimation(new DirectoryInfo(System.IO.Path.Combine(animationsFolder.FullName, name)));
+        }
+        catch (Exception e)
+        {
+            animation = await _wledAnimationLoader.LoadAnimation(new DirectoryInfo(System.IO.Path.Combine(animationsFolder.FullName, $"{name} Animation")));
+        }
+
+        if (animation != null)
+        {
+            return await PlayAnimation(animation);
+        }
+        return null;
     }
 }
