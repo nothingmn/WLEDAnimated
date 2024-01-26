@@ -17,6 +17,12 @@ jobs:
     - name: Check out the repo
       uses: actions/checkout@v2
 
+    - name: Get short SHA
+      run: echo "SHORT_SHA=$("${{ github.sha }}".SubString(0, 8))" >> $env:GITHUB_ENV
+      
+    - name: Print short SHA
+      run: echo "Short SHA is ${{ env.SHORT_SHA }}"
+
     - name: Setup .NET
       uses: actions/setup-dotnet@v2
       with:
@@ -28,17 +34,43 @@ jobs:
     - name: Build
       run: dotnet build "./WLEDAnimated.API/WLEDAnimated.API.csproj" -c Release --no-restore
 
-    - name: Publish
-      run: dotnet publish "./WLEDAnimated.API/WLEDAnimated.API.csproj" -c Release -o publish --no-restore
+      # Repeat this step for each platform you want to publish for
+    - name: Publish for Windows
+      run: dotnet publish "./WLEDAnimated.API/WLEDAnimated.API.csproj" -c Release -o publish/win-x64 --no-restore -r win-x64 --self-contained true
 
-    - name: Zip the publish directory
-      run: zip -r publish-${{ github.sha }}.zip publish/
+    - name: Publish for Linux
+      run: dotnet publish "./WLEDAnimated.API/WLEDAnimated.API.csproj" -c Release -o publish/linux-x64 --no-restore -r linux-x64 --self-contained true
 
-    - name: Upload build artifact
+    - name: Publish for macOS
+      run: dotnet publish "./WLEDAnimated.API/WLEDAnimated.API.csproj" -c Release -o publish/osx-x64 --no-restore -r osx-x64 --self-contained true
+
+    - name: Zip the publish directory for Windows
+      run: zip -r publish-win-${{ github.sha }}.zip publish/win-x64/
+
+    - name: Zip the publish directory for Linux
+      run: zip -r publish-linux-${{ github.sha }}.zip publish/linux-x64/
+
+    - name: Zip the publish directory for macOS
+      run: zip -r publish-osx-${{ github.sha }}.zip publish/osx-x64/
+
+    # Repeat this step for each zipped platform
+    - name: Upload Windows build artifact
       uses: actions/upload-artifact@v2
       with:
-        name: published-app
-        path: publish-${{ github.sha }}.zip
+        name: windows-app
+        path: publish-win-${{ github.sha }}.zip
+
+    - name: Upload Linux build artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: linux-app
+        path: publish-linux-${{ github.sha }}.zip
+
+    - name: Upload macOS build artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: macos-app
+        path: publish-osx-${{ github.sha }}.zip
 
     - name: Create Release
       id: create_release
@@ -46,18 +78,40 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: ${{ github.ref }}
-        release_name: Release ${{ github.ref }}
+        tag_name: alpha-${{ env.SHORT_SHA }}
+        release_name: Release - alpha-${{ env.SHORT_SHA }}
         draft: false
         prerelease: false
         body: "Release of commit ${{ github.sha }}"
 
-    - name: Upload release asset
+    # Repeat this step for each platform
+    - name: Upload Windows release asset
       uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./publish-${{ github.sha }}.zip
-        asset_name: publish-${{ github.sha }}.zip
+        asset_path: ./publish-win-${{ github.sha }}.zip
+        asset_name: publish-win-${{ github.sha }}.zip
         asset_content_type: application/zip
+
+    - name: Upload Linux release asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./publish-linux-${{ github.sha }}.zip
+        asset_name: publish-linux-${{ github.sha }}.zip
+        asset_content_type: application/zip
+
+    - name: Upload macOS release asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./publish-osx-${{ github.sha }}.zip
+        asset_name: publish-osx-${{ github.sha }}.zip
+        asset_content_type: application/zip
+        
