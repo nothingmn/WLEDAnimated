@@ -1,12 +1,11 @@
-WLED Animated API
-----
+# WLED Animated API
 
 A simple API to provide more features on top of WLEDs APIs themselves.
 
 A useful tool to self host via docker, or the executable (windows, linux mac).  
 
 
-Core Features:
+## Core Features:
 
 1. Upload and Play Animations
 	a. Animations are zip files
@@ -46,28 +45,29 @@ A good example is you can upload your custom animations and trigger them from, s
 
 You can download one of the releases on the release tab, or via docker:
 
-Docker Hub
+## Docker
 
-Windows:
+### Windows:
+
 
 Run with your own custom scheduler configuration
-```
+```cmd
 docker run --rm -d -p 8080:8080/tcp -v %cd%/Schedule.json:/app/Schedule.json --name wledanimateapi robchartier/wledanimateapi
 ```
 
 Run with your own custom scheduler configuration and canned animations
-```
+```cmd
 docker run --rm -d -p 8080:8080/tcp -v %cd%/Schedule.json:/app/Schedule.json -v %cd%/Animations:/app/Animations  --name wledanimateapi robchartier/wledanimateapi
 ````
 
-Non-Windows (linux/mac):
+### Non-Windows (linux/mac):
 
 Run with your own custom scheduler configuration
-```
+```bash
 docker run --rm -d -p 8080:8080/tcp -v $(pwd)/Schedule.json:/app/Schedule.json --name wledanimateapi robchartier/wledanimateapi
 ```
 
 Run with your own custom scheduler configuration and canned animations
-```
+```bash
 docker run --rm -d -p 8080:8080/tcp -v $(pwd)/Schedule.json:/app/Schedule.json -v $(pwd)/Animations:/app/Animations --name wledanimateapi wledanimateapi
 ```
