@@ -1,4 +1,6 @@
 WLED Animated API
+----
+
 A simple API to provide more features on top of WLEDs APIs themselves.
 
 A useful tool to self host via docker, or the executable (windows, linux mac).  
@@ -33,5 +35,39 @@ Core Features:
 5. Canned images for weather (work in progress)
 	a. Mostly we need a set of nice animated images for all types of weather
 
+6. A built in scheduler which can run animations
+	a. for example, create a simple animation which just updates the WLED device with the current time
+	b. run that animation every minute
+	c. or weather every hour
+	
 
 A good example is you can upload your custom animations and trigger them from, say home assistant.
+
+
+You can download one of the releases on the release tab, or via docker:
+
+Docker Hub
+
+Windows:
+
+Run with your own custom scheduler configuration
+```cmd
+docker run --rm -d -p 8080:8080/tcp -v %cd%/Schedule.json:/app/Schedule.json --name wledanimateapi robchartier/wledanimateapi
+```
+
+Run with your own custom scheduler configuration and canned animations
+```cmd
+docker run --rm -d -p 8080:8080/tcp -v %cd%/Schedule.json:/app/Schedule.json -v %cd%/Animations:/app/Animations  --name wledanimateapi robchartier/wledanimateapi
+````
+
+Non-Windows (linux/mac):
+
+Run with your own custom scheduler configuration
+```bash
+docker run --rm -d -p 8080:8080/tcp -v $(pwd)/Schedule.json:/app/Schedule.json --name wledanimateapi robchartier/wledanimateapi
+```
+
+Run with your own custom scheduler configuration and canned animations
+```bash
+docker run --rm -d -p 8080:8080/tcp -v $(pwd)/Schedule.json:/app/Schedule.json -v $(pwd)/Animations:/app/Animations --name wledanimateapi wledanimateapi
+```
