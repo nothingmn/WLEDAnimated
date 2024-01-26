@@ -18,7 +18,7 @@ jobs:
       uses: actions/checkout@v2
 
     - name: Get short SHA
-      run: echo "SHORT_SHA=$("${{ github.sha }}".SubString(0, 8))" >> $env:GITHUB_ENV
+      run: echo "SHORT_SHA=$(echo ${{ github.sha }} | cut -c1-8)" >> $GITHUB_ENV
       
     - name: Print short SHA
       run: echo "Short SHA is ${{ env.SHORT_SHA }}"
