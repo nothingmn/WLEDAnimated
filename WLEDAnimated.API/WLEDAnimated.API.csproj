@@ -7,7 +7,9 @@
     <InvariantGlobalization>true</InvariantGlobalization>
     <UserSecretsId>3590346e-c7e8-439b-a8cd-0df5e8785876</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <RuntimeIdentifiers>win-x64;linux-x64;osx-x64</RuntimeIdentifiers>
   </PropertyGroup>
+
 
   <ItemGroup>
     <PackageReference Include="Coravel" Version="5.0.2" />
