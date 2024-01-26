@@ -92,6 +92,7 @@ public class Program
         var provider = app.Services;
         provider.UseScheduler(scheduler =>
         {
+            var logger = provider.GetService<ILogger<Program>>();
             var config = provider.GetService<IConfiguration>();
             var schedules = new List<SchedulerConfig>();
             config.GetSection("Scheduler").Bind(schedules);

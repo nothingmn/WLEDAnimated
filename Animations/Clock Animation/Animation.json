@@ -1,0 +1,20 @@
+{
+  "Name": "Clock Animation",
+  "Transitions": [
+    {
+      "StartDelay": 0,
+      "InterTransitionDelay": 0,
+      "Step": {
+        "StartDelay": 0,
+        "TypeName": "DisplayTextStep",
+        "Description": "Display The Time",
+        "ScrollingTextPluginName" : "DateTime",
+        "ScrollingTextPluginPayload": "hh:mm",
+        "IPAddress": "10.0.0.217",
+        "Brightness": 128,
+        "Revert": false,
+        "DurationToDisplay": 0
+      }
+    }
+  ]
+}

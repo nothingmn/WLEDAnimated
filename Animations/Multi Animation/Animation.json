@@ -1,0 +1,38 @@
+{
+  "Name": "Multi Animation",
+  "Transitions": [
+    {
+      "Step": {
+        "TypeName": "MultiStep",
+        "Steps" : [
+          {
+            "StartDelay": 0,
+            "TypeName": "DisplayTextStep",
+            "Description": "Display The Time",
+            "ScrollingTextPluginName" : "DateTime",
+            "ScrollingTextPluginPayload": "hh:mm",
+            "IPAddress": "10.0.0.217",
+            "Trail": 0,
+            "fontSize" : 128,            
+            "Brightness": 128,
+            "Revert": false,
+            "DurationToDisplay": 0
+          },
+          {
+            "StartDelay": 0,
+            "TypeName": "DisplayTextStep",
+            "Description": "Display The Weather",
+            "ScrollingTextPluginName" : "Weather",
+            "ScrollingTextPluginPayload": "49,-122",
+            "IPAddress": "10.0.0.197",
+            "Trail": 0,
+            "fontSize" : 128,            
+            "Brightness": 128,
+            "Revert": false,
+            "DurationToDisplay": 0
+          }          
+        ]
+      }
+    }
+  ]
+}

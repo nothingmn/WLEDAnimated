@@ -59,7 +59,6 @@ public class WLEDAnimationLoader
         {
             case "displayimagestep":
                 var displayImageStep = _services.GetService<DisplayImageStep>();
-
                 displayImageStep.IPAddress = step.IPAddress;
                 displayImageStep.Port = step.Port;
                 displayImageStep.ImagePath = System.IO.Path.Combine(animationFolder.FullName, step.ImagePath);
