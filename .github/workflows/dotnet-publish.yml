@@ -1,0 +1,38 @@
+name: .NET Build and Publish
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check out the repo
+      uses: actions/checkout@v2
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: '8.0'
+
+    - name: Restore dependencies
+      run: dotnet restore "./WLEDAnimated.API/WLEDAnimated.API.csproj"
+
+    - name: Build
+      run: dotnet build "./WLEDAnimated.API/WLEDAnimated.API.csproj" -c Release --no-restore
+
+    - name: Publish
+      run: dotnet publish "./WLEDAnimated.API/WLEDAnimated.API.csproj" -c Release -o publish --no-restore
+
+    - name: Zip the publish directory
+      run: zip -r publish-${{ github.sha }}.zip publish/
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: published-app
+        path: publish-${{ github.sha }}.zip
