@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.DependencyInjection;
 using SixLabors.ImageSharp;
 using WLEDAnimated.Interfaces;
 
@@ -9,11 +10,13 @@ public class ScrollingTextController : ControllerBase
 {
     private readonly ILogger<UploadImageController> _logger;
     private readonly IWLEDApiManager _apiManager;
+    private readonly IEnumerable<IScrollingTextPlugin> _plugins;
 
-    public ScrollingTextController(ILogger<UploadImageController> logger, IWLEDApiManager apiManager)
+    public ScrollingTextController(ILogger<UploadImageController> logger, IWLEDApiManager apiManager, IEnumerable<IScrollingTextPlugin> plugins)
     {
         _logger = logger;
         _apiManager = apiManager;
+        _plugins = plugins;
     }
 
     [HttpGet("scroll")]
@@ -34,5 +37,15 @@ public class ScrollingTextController : ControllerBase
         await _apiManager.ScrollingText(scrollingTextPluginName, scrollingTextPluginPayload, speed, yOffSet, trail, fontSize, rotate);
 
         return Ok("Done");
+    }
+
+    [HttpGet("plugins")]
+    public Task<IEnumerable<string>> GetPlugins()
+    {
+        _logger.LogInformation("Get Plugins called");
+
+        if (_plugins == null) return Task.FromResult((new List<string>()).AsEnumerable());
+
+        return Task.FromResult((from p in _plugins select p.GetType().Name));
     }
 }

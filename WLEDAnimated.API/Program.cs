@@ -43,6 +43,8 @@ public class Program
         builder.Services.AddTransient<WLEDAnimationLoader>();
         builder.Services.AddTransient<AnimationManager>();
         builder.Services.AddTransient<AnimationInvocer>();
+        builder.Services.AddTransient<AssemblyTypeProcessor>();
+
         builder.Services.AddTransient<IScrollingTextPluginFactory, ScrollingTextPluginFactory>();
 
         LoadScrollingTextPlugins(builder.Services);
@@ -127,28 +129,15 @@ public class Program
     {
         var asmFile = new FileInfo(typeof(Program).Assembly.Location);
         var binFolder = new DirectoryInfo(System.IO.Path.Combine(asmFile.Directory.FullName));
-        foreach (var asm in binFolder.GetFiles("*.dll"))
-        {
-            try
-            {
-                var a = Assembly.LoadFrom(asm.FullName);
-                var pluginTypes = from t in a.GetTypes()
-                                  where t.GetInterfaces().Contains(typeof(IScrollingTextPlugin))
-                                  select t;
 
-                if (pluginTypes.Any())
-                {
-                    foreach (var pluginType in pluginTypes)
-                    {
-                        services.AddKeyedTransient(typeof(IScrollingTextPlugin), pluginType.Name, pluginType);
-                    }
-                }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }
+        var loader = new AssemblyTypeProcessor();
+        var pluginTypes = loader.ProcessTypesImplementingInterface(binFolder.FullName, typeof(IScrollingTextPlugin));
+
+        foreach (var pluginType in pluginTypes)
+        {
+            services.AddKeyedTransient(typeof(IScrollingTextPlugin), pluginType.Name, pluginType);
+            services.AddTransient(typeof(IScrollingTextPlugin), pluginType);
+            Console.WriteLine($"Added plugin {pluginType.Name}");
         }
     }
 }
