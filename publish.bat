@@ -10,7 +10,8 @@ docker create --name wledanimateapi wledanimateapi
 
 rem docker run --rm -d -p 8080:8080/tcp --name wledanimateapi wledanimateapi
 
-rem docker run --rm -d -p 8080:8080/tcp -v %cd%/Schedule.json:/app/Schedule.json --name wledanimateapi wledanimateapi
+docker run  --restart unless-stopped  -d -p 8080:8080/tcp -v %cd%/Schedule.json:/app/Schedule.json -v %cd%/Animations:/app/Animations  --name wledanimateapi wledanimateapi
+
 rem docker run --rm -d -p 8080:8080/tcp -v %cd%/Schedule.json:/app/Schedule.json -v %cd%/Animations:/app/Animations  --name wledanimateapi wledanimateapi
 
 rem docker login --username robchartier

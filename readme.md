@@ -65,7 +65,7 @@ docker run  --restart unless-stopped -d -p 8080:8080/tcp -v %cd%/Schedule.json:/
 Run with your own custom scheduler configuration and canned animations
 
 ```cmd
-docker run  --restart unless-stopped 	 -d -p 8080:8080/tcp -v %cd%/Schedule.json:/app/Schedule.json -v %cd%/Animations:/app/Animations  --name wledanimateapi robchartier/wledanimateapi
+docker run  --restart unless-stopped  -d -p 8080:8080/tcp -v %cd%/Schedule.json:/app/Schedule.json -v %cd%/Animations:/app/Animations  --name wledanimateapi robchartier/wledanimateapi
 ````
 
 ### Non-Windows (linux/mac):
@@ -78,5 +78,23 @@ docker run  --restart unless-stopped -d -p 8080:8080/tcp -v $(pwd)/Schedule.json
 
 Run with your own custom scheduler configuration and canned animations
 ```bash
-docker run  --restart unless-stopped -d -p 8080:8080/tcp -v $(pwd)/Schedule.json:/app/Schedule.json -v $(pwd)/Animations:/app/Animations --name wledanimateapi wledanimateapi
+docker run  --restart unless-stopped -d -p 8080:8080/tcp -v $(pwd)/Schedule.json:/app/Schedule.json -v $(pwd)/Animations:/app/Animations --name wledanimateapi robchartier/wledanimateapi
 ```
+
+### TimeZone:
+You will most likey need to add to the above arguments your timezone, especially if you want to generate the date/time scrolling text, this is done by adding
+
+```
+-e TZ=Europe/London
+
+```
+
+Find your timezone here: https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+
+For example:
+```bash
+docker run -e TZ=Europe/London  --restart unless-stopped -d -p 8080:8080/tcp -v $(pwd)/Schedule.json:/app/Schedule.json -v $(pwd)/Animations:/app/Animations --name wledanimateapi robchartier/wledanimateapi
+```
+
+We are defaulting to America/Vancouver in the image.
+
