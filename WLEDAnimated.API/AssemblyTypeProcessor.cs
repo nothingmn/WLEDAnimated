@@ -20,10 +20,9 @@ public class AssemblyTypeProcessor
 
                 typesImplementingInterface.AddRange(types);
             }
-            catch (Exception ex)
+            catch
             {
-                Console.WriteLine($"Error loading assembly '{filePath}': {ex.Message}");
-                // Optionally handle or log exceptions
+                // safe to skip since we only care about loadable plugins.
             }
         }
 
