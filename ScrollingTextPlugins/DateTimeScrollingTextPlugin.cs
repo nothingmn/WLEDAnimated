@@ -19,7 +19,7 @@ public class DateTimeScrollingTextPlugin : IScrollingTextPlugin
         var format = payload;
         if (string.IsNullOrWhiteSpace(payload)) format = "dd/MM/yyyy HH:mm:ss";
 
-        _logger.LogInformation("Getting crypto: {format}...", format);
+        _logger.LogInformation("Getting datetime: {format}...", format);
 
         var final = DateTime.Now.ToString(format);
         _logger.LogInformation(final);
