@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using WLEDAnimated.Interfaces;
 
 namespace WLEDAnimated;
@@ -7,11 +8,13 @@ public class ImageToConverterFactory : IImageToConverterFactory
 {
     private readonly IConfiguration _config;
     private readonly IImageResizer _imageResizer;
+    private readonly IServiceProvider _services;
 
-    public ImageToConverterFactory(IConfiguration config, IImageResizer imageResizer)
+    public ImageToConverterFactory(IConfiguration config, IImageResizer imageResizer, IServiceProvider services)
     {
         _config = config;
         _imageResizer = imageResizer;
+        _services = services;
     }
 
     public IImageConverter GetConverter(string type = null)
@@ -19,14 +22,9 @@ public class ImageToConverterFactory : IImageToConverterFactory
         if (string.IsNullOrWhiteSpace(type))
         {
             type = _config["WLED:ImageConverter"];
-            if (string.IsNullOrWhiteSpace(type)) type = "DNRGB";
+            if (string.IsNullOrWhiteSpace(type)) type = "TPM2NET";
         }
 
-        return type switch
-        {
-            "TPM2.NET" => new ImageToTPM2NETConverter(_imageResizer),
-            "DNRGB" => new ImageToDNRGBConverter(_imageResizer),
-            _ => new ImageToDNRGBConverter(_imageResizer)
-        };
+        return _services.GetKeyedService<IImageConverter>(type);
     }
 }
