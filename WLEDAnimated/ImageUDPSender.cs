@@ -32,10 +32,12 @@ public class ImageUDPSender : IImageSender
                         //Console.WriteLine($"{DateTime.Now}");
                         udpClient.Send(segment, segment.Length, ipEndPoint);
                         Console.WriteLine($"{DateTime.Now} : Sent {segment.Length} bytes to {ipAddress}:{port}");
+                        Thread.Sleep(1);
                     }
                     Thread.Sleep(pauseBetweenFrames);
                 }
             }
         }
+        Console.WriteLine($"Done sending image {path}");
     }
 }

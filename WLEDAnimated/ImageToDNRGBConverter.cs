@@ -21,8 +21,9 @@ public class ImageToDNRGBConverter : IImageConverter
     {
         var packets = new List<byte[]>();
         int maxPixelsPerPacket = (MaxPayloadSize - 4) / 3; // 4 bytes for header, 3 bytes per pixel
-
         int totalPixels = image.Width * image.Height;
+        bool isLastPacket;
+
         for (int i = 0; i < totalPixels; i += maxPixelsPerPacket)
         {
             var frame = new List<byte>
@@ -33,12 +34,21 @@ public class ImageToDNRGBConverter : IImageConverter
             };
 
             int endPixel = Math.Min(i + maxPixelsPerPacket, totalPixels);
+            isLastPacket = endPixel == totalPixels;
+
             for (int pixelIndex = i; pixelIndex < endPixel; pixelIndex++)
             {
                 int x = pixelIndex % image.Width;
                 int y = pixelIndex / image.Width;
                 Rgba32 pixel = image.GetRowSpan(y)[x];
                 frame.AddRange(new byte[] { pixel.R, pixel.G, pixel.B });
+            }
+
+            // If this is the last packet and it's not full, pad with null bytes
+            if (isLastPacket && frame.Count < MaxPayloadSize)
+            {
+                int paddingSize = MaxPayloadSize - frame.Count;
+                frame.AddRange(new byte[paddingSize]);
             }
 
             packets.Add(frame.ToArray());

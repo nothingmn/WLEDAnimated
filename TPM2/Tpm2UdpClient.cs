@@ -41,22 +41,30 @@ public class Tpm2UdpClient : IDisposable
         for (int i = 0; i < leds.Length; i += maxLedsPerPacket)
         {
             var frame = new List<byte>
-                {
-                    PacketStartByte,
-                    (byte)PacketType,
-                    0, // Placeholder for frame size (high byte)
-                    0, // Placeholder for frame size (low byte)
-                    1, // packetNumber
-                    1  // packetCount - Placeholder
-                };
+            {
+                PacketStartByte,
+                (byte)PacketType,
+                0, // Placeholder for frame size (high byte)
+                0, // Placeholder for frame size (low byte)
+                1, // packetNumber
+                1  // packetCount - Placeholder
+            };
 
             int frameSize = 0;
+            bool isLastPacket = i + maxLedsPerPacket >= leds.Length;
             for (int j = i; j < Math.Min(i + maxLedsPerPacket, leds.Length); j++)
             {
                 frame.Add((byte)leds[j].R);
                 frame.Add((byte)leds[j].G);
                 frame.Add((byte)leds[j].B);
                 frameSize += 3;
+            }
+
+            // Padding the last packet with null bytes if it's not full
+            if (isLastPacket && frameSize < MaxPayloadSize - 6)
+            {
+                int paddingSize = MaxPayloadSize - 6 - frameSize;
+                frame.AddRange(new byte[paddingSize]);
             }
 
             frame[2] = (byte)((frameSize >> 8) & 0xFF);
