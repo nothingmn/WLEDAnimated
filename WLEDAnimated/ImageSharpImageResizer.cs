@@ -22,6 +22,7 @@ public class ImageSharpImageResizer : IImageResizer
         if (!file.Exists) throw new FileNotFoundException("File not found", path);
         var resizedFile = System.IO.Path.Combine($"{file.Name}-{dimensions.Height}x{dimensions.Width}{file.Extension}");
 
+        var root = System.IO.Directory.GetCurrentDirectory();
         if (!System.IO.File.Exists(resizedFile))
         {
             using (var image = Image.Load(File.ReadAllBytes(path)))
@@ -33,10 +34,14 @@ public class ImageSharpImageResizer : IImageResizer
                 Console.WriteLine($"Image: {image.Width}x{image.Height}");
                 Console.WriteLine($"Final: {scaledWidth}x{scaledHeight}");
 
-                if (scaledHeight != dimensions.Height || scaledWidth != dimensions.Width)
+                if (image.Height != dimensions.Height || image.Width != dimensions.Width)
                 {
                     Console.WriteLine($"Image will be scaled to {scaledWidth}x{scaledHeight}");
                     image.Mutate(x => x.Resize(scaledWidth, scaledHeight, new TriangleResampler()));
+                }
+                else
+                {
+                    Console.WriteLine($"Final: {scaledWidth}x{scaledHeight}");
                 }
 
                 image.Save(resizedFile);
