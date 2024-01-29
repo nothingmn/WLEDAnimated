@@ -4,6 +4,7 @@ using System.Runtime.CompilerServices;
 using System.Text.Json.Serialization;
 using Coravel;
 using Coravel.Invocable;
+using Microsoft.Extensions.DependencyInjection;
 using WLEDAnimated.Animation;
 using WLEDAnimated.API.Invocables;
 using WLEDAnimated.Interfaces;
@@ -25,8 +26,11 @@ public class Program
         builder.Services.AddSingleton<AssetManager>();
         builder.Services.AddTransient<WLEDApiManager>();
         builder.Services.AddTransient<ImageUDPSender>();
-        builder.Services.AddTransient<IImageConverter, ImageToDNRGBConverter>();
+        builder.Services.AddKeyedTransient<IImageConverter, ImageToDNRGBConverter>("DNRGB");
+        builder.Services.AddKeyedTransient<IImageConverter, ImageToTPM2NETConverter>("TPM2NET");
+
         builder.Services.AddTransient<IImageResizer, ImageSharpImageResizer>();
+
         builder.Services.AddTransient<IImageToConverterFactory, ImageToConverterFactory>();
         builder.Services.AddTransient<IImageSender, ImageUDPSender>();
         builder.Services.AddTransient<WLEDDevice, WLEDDevice>();
@@ -39,6 +43,7 @@ public class Program
 
         builder.Services.AddSingleton<DeviceDiscovery>();
         builder.Services.AddSingleton<WledDeviceDiscovery>();
+        builder.Services.AddTransient<EndpointConverter, EndpointConverter>();
 
         builder.Services.AddTransient<WLEDAnimationLoader>();
         builder.Services.AddTransient<AnimationManager>();

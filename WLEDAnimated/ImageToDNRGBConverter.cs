@@ -1,5 +1,7 @@
 ﻿using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
+using System;
+using System.Collections.Generic;
 using System.IO;
 using WLEDAnimated.Interfaces;
 
@@ -8,63 +10,61 @@ namespace WLEDAnimated;
 public class ImageToDNRGBConverter : IImageConverter
 {
     private readonly IImageResizer _imageResizer;
+    private const int MaxPayloadSize = 1000;
 
     public ImageToDNRGBConverter(IImageResizer imageResizer)
     {
         _imageResizer = imageResizer;
     }
 
-    private byte[] ConvertImageOrFrameToBytePayload(PixelAccessor<Rgba32> image, int startIndex, byte wait = 10)
+    private List<byte[]> ConvertImageOrFrameToBytePayload(PixelAccessor<Rgba32> image, int startIndex, byte wait = 10)
     {
-        // Color is pixel-agnostic, but it's implicitly convertible to the Rgba32 pixel type
-        var frame = new List<byte>();
-        // Start index for LED (0 for the first LED)
-        byte startIndexHigh = (byte)(startIndex >> 8);
-        byte startIndexLow = (byte)(startIndex & 0xFF);
-        frame.AddRange(new byte[] { 4, wait, startIndexHigh, startIndexLow });
+        var packets = new List<byte[]>();
+        int maxPixelsPerPacket = (MaxPayloadSize - 4) / 3; // 4 bytes for header, 3 bytes per pixel
 
-        for (int y = 0; y < image.Height; y++)
+        int totalPixels = image.Width * image.Height;
+        for (int i = 0; i < totalPixels; i += maxPixelsPerPacket)
         {
-            Span<Rgba32> pixelRow = image.GetRowSpan(y);
-
-            // pixelRow.Length has the same value as accessor.Width,
-            // but using pixelRow.Length allows the JIT to optimize away bounds checks:
-            for (int x = 0; x < image.Width; x++)
+            var frame = new List<byte>
             {
-                // Get a reference to the pixel at position x
-                ref Rgba32 pixel = ref pixelRow[x];
+                4, wait,
+                (byte)((startIndex >> 8) & 0xFF),
+                (byte)(startIndex & 0xFF)
+            };
+
+            int endPixel = Math.Min(i + maxPixelsPerPacket, totalPixels);
+            for (int pixelIndex = i; pixelIndex < endPixel; pixelIndex++)
+            {
+                int x = pixelIndex % image.Width;
+                int y = pixelIndex / image.Width;
+                Rgba32 pixel = image.GetRowSpan(y)[x];
                 frame.AddRange(new byte[] { pixel.R, pixel.G, pixel.B });
             }
+
+            packets.Add(frame.ToArray());
+            startIndex += maxPixelsPerPacket;
         }
-        return frame.ToArray();
+
+        return packets;
     }
 
-    public List<byte[]> ConvertImage(string path, Size dimensions, int startIndex = 0, byte wait = 10)
+    public List<List<byte[]>> ConvertImage(string path, Size dimensions, int startIndex = 0, byte wait = 10)
     {
         var resizedFile = _imageResizer.ResizeImage(path, dimensions);
-        var frames = new List<byte[]>();
+        var allFramesPackets = new List<List<byte[]>>();
 
         using (var image = Image.Load<Rgba32>(resizedFile))
         {
-            if (image.Frames?.Count > 0)
+            foreach (var frame in image.Frames.Cast<ImageFrame<Rgba32>>())
             {
-                foreach (var frame in image.Frames.Cast<ImageFrame<Rgba32>>())
+                frame.ProcessPixelRows(accessor =>
                 {
-                    frame.ProcessPixelRows(accessor =>
-                    {
-                        frames.Add(ConvertImageOrFrameToBytePayload(accessor, startIndex, wait));
-                    });
-                }
-            }
-            else
-            {
-                image.ProcessPixelRows(accessor =>
-                {
-                    frames.Add(ConvertImageOrFrameToBytePayload(accessor, startIndex, wait));
+                    var packets = ConvertImageOrFrameToBytePayload(accessor, startIndex, wait);
+                    allFramesPackets.Add(packets);
                 });
             }
         }
 
-        return frames;
+        return allFramesPackets;
     }
 }

@@ -15,7 +15,7 @@ public class ImageToTPM2NETConverter : IImageConverter
         _imageResizer = imageResizer;
     }
 
-    private byte[] ConvertImageOrFrameToBytePayload(PixelAccessor<Rgba32> image, int startIndex, byte wait = 10)
+    private List<byte[]> ConvertImageOrFrameToBytePayload(PixelAccessor<Rgba32> image, int startIndex, byte wait = 10)
     {
         var client = new Tpm2UdpClient();
         var ledStrip = new LEDStrip(image.Height * image.Width);
@@ -39,10 +39,10 @@ public class ImageToTPM2NETConverter : IImageConverter
         return client.ConstructPayload(ledStrip);
     }
 
-    public List<byte[]> ConvertImage(string path, Size dimensions, int startIndex = 0, byte wait = 10)
+    public List<List<byte[]>> ConvertImage(string path, Size dimensions, int startIndex = 0, byte wait = 10)
     {
         var resizedFile = _imageResizer.ResizeImage(path, dimensions);
-        var frames = new List<byte[]>();
+        var frames = new List<List<byte[]>>();
 
         using (var image = Image.Load<Rgba32>(resizedFile))
         {

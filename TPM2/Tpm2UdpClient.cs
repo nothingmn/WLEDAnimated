@@ -19,9 +19,10 @@ public enum PacketTypes : byte
 
 public class Tpm2UdpClient : IDisposable
 {
-    private const byte PacketStartByte = 0x9C; //156
-    private const byte PacketEndByte = 0x36; //54
-    private const PacketTypes PacketType = PacketTypes.DataFrame; // Assuming a standard packet type for LED data
+    private const byte PacketStartByte = 0x9C;
+    private const byte PacketEndByte = 0x36;
+    private const PacketTypes PacketType = PacketTypes.DataFrame;
+    private const int MaxPayloadSize = 1380; // Maximum payload size
     private UdpClient udpClient;
     private IPEndPoint endPoint;
 
@@ -31,67 +32,65 @@ public class Tpm2UdpClient : IDisposable
         endPoint = new IPEndPoint(IPAddress.Parse(ipAddress), port);
     }
 
+    public List<byte[]> ConstructPayload(LEDStrip strip)
+    {
+        var leds = strip.GetLEDs();
+        var packets = new List<byte[]>();
+        int maxLedsPerPacket = (MaxPayloadSize - 6) / 3; // 6 bytes for start byte, packet type, frame size (2 bytes), packet number, packet count, end byte
+
+        for (int i = 0; i < leds.Length; i += maxLedsPerPacket)
+        {
+            var frame = new List<byte>
+                {
+                    PacketStartByte,
+                    (byte)PacketType,
+                    0, // Placeholder for frame size (high byte)
+                    0, // Placeholder for frame size (low byte)
+                    1, // packetNumber
+                    1  // packetCount - Placeholder
+                };
+
+            int frameSize = 0;
+            for (int j = i; j < Math.Min(i + maxLedsPerPacket, leds.Length); j++)
+            {
+                frame.Add((byte)leds[j].R);
+                frame.Add((byte)leds[j].G);
+                frame.Add((byte)leds[j].B);
+                frameSize += 3;
+            }
+
+            frame[2] = (byte)((frameSize >> 8) & 0xFF);
+            frame[3] = (byte)(frameSize & 0xFF);
+            frame.Add(PacketEndByte);
+
+            packets.Add(frame.ToArray());
+        }
+
+        // Update packet counts
+        for (int k = 0; k < packets.Count; k++)
+        {
+            packets[k][5] = (byte)packets.Count;
+            packets[k][4] = (byte)(k + 1);
+        }
+
+        return packets;
+    }
+
     public void SendLEDStrip(LEDStrip strip)
     {
-        var payload = ConstructPayload(strip);
-        SendData(payload);
+        var packets = ConstructPayload(strip);
+        foreach (var packet in packets)
+        {
+            SendData(packet);
+        }
     }
 
     private void SendData(byte[] data)
     {
-        udpClient.Send(data, data.Length - 1, endPoint);  //strip.show();
+        udpClient.Send(data, data.Length, endPoint);
 
-        for (int x = 0; x <= data.Length - 1; x++) Console.Write($"{data[x]} ");
-
+        for (int x = 0; x < data.Length; x++) Console.Write($"{data[x]} ");
         Console.WriteLine($"->{endPoint}");
-
-        //var server = new TestServer();
-        //server.TestPayload(data);
-    }
-
-    public byte[] ConstructPayload(LEDStrip strip)
-    {
-        var payload = ConvertStripToPayload(strip);
-        var packet = new List<byte>()
-        {
-            PacketStartByte,  //(udpIn[0] == 0x9c)
-            (byte)PacketTypes.DataFrame // byte tpmType = udpIn[1];       if (tpmType != 0xda) return; //return if notTPM2.NET data
-        };
-        packet.AddRange(payload);
-        packet.Add(PacketEndByte);
-
-        return packet.ToArray();
-    }
-
-    public void SendStrip(LEDStrip strip)
-    {
-        SendData(ConstructPayload(strip));
-    }
-
-    private byte[] ConvertStripToPayload(LEDStrip strip)
-    {
-        var leds = strip.GetLEDs();
-        var frameSize = (leds.Length - 1) * 3;
-        var frame = new List<byte>()
-        {
-            //    if (tpmPacketCount == 1) tpmPayloadFrameSize = (udpIn[2] << 8) + udpIn[3]; //save frame size for the whole payload if this is the first packet
-            (byte)((frameSize >> 8) & 0xFF), //Frame size in 16 bits - High-Byte first, then
-            (byte)(frameSize & 0xFF), // Low-Byte
-            1, //packetNumber,     byte packetNum = udpIn[4]; //starts with 1!
-            1  //packetCount,      byte numPackets = udpIn[5];     if (tpmPacketCount == numPackets) //reset packet count and show if all packets were received
-        };
-        //int reconstructedFrameSize = (frame[0] << 8) | frame[1];
-
-        //uint16_t id = (tpmPayloadFrameSize / 3) * (packetNum - 1); //start LED
-        //setRealtimePixel(id, udpIn[i], udpIn[i+1], udpIn[i+2], 0);
-        foreach (var led in leds)
-        {
-            frame.Add((byte)led.R);
-            frame.Add((byte)led.G);
-            frame.Add((byte)led.B);
-        }
-
-        return frame.ToArray();
     }
 
     public void Dispose()
