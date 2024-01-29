@@ -4,7 +4,7 @@
       "Invocable": "WLEDAnimated.API.Invocables.AnimationInvocer",
       "Cron": "* * * * *",
       "Animation": "Clock Animation",
-      "Enabled": false
+      "Enabled": true
     }
   ]
 }

@@ -5,6 +5,12 @@
       "Cron": "* * * * *",
       "Animation": "Clock Animation",
       "Enabled": true
+    },
+    {
+      "Invocable": "WLEDAnimated.API.Invocables.AnimationInvocer",
+      "Cron": "* * * * *",
+      "Animation": "Weather Animation",
+      "Enabled": true
     }
   ]
 }

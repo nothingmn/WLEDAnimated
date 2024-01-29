@@ -1,13 +1,23 @@
 ﻿using WLEDAnimated.Interfaces;
 using static System.Net.Mime.MediaTypeNames;
 using WLEDAnimated.Services;
+using Microsoft.Extensions.Logging;
 
 namespace ScrollingTextPlugins;
 
 public class WeatherScrollingTextPlugin : IScrollingTextPlugin
 {
+    private readonly ILogger<BoredScrollingTextPlugin> _logger;
+
+    public WeatherScrollingTextPlugin(ILogger<BoredScrollingTextPlugin> logger)
+    {
+        _logger = logger;
+    }
+
     public async Task<string> GetTextToDisplay(string payload = null)
     {
+        _logger.LogInformation("Getting weather: {payload}...", payload);
+
         if (string.IsNullOrWhiteSpace(payload)) return null;
 
         double lat;
@@ -22,7 +32,9 @@ public class WeatherScrollingTextPlugin : IScrollingTextPlugin
         if (w != null)
         {
             var wr = w.dataseries.FirstOrDefault();
-            return $"{wr.temp2m}C, Precip:{wr.prec_type}, Clouds:{wr.CloudCover}";
+            var final = $"{wr.temp2m}C, Precip:{wr.prec_type}, Clouds:{wr.CloudCover}";
+            _logger.LogInformation(final);
+            return final;
         }
 
         return null;

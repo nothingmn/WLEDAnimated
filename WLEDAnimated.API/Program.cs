@@ -116,6 +116,7 @@ public class Program
 
                     if (animationInvocer != null)
                     {
+                        logger.LogInformation($"Adding animation {schedulerConfig.Animation} with cron {schedulerConfig.Cron}");
                         animationInvocer.Animation = schedulerConfig.Animation;
                         scheduler.ScheduleAsync(async () => { await instance.Invoke(); }).Cron(schedulerConfig.Cron);
                     }
