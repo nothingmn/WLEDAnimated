@@ -7,9 +7,9 @@ namespace ScrollingTextPlugins;
 
 public class DateTimeScrollingTextPlugin : IScrollingTextPlugin
 {
-    private readonly ILogger<BoredScrollingTextPlugin> _logger;
+    private readonly ILogger<DateTimeScrollingTextPlugin> _logger;
 
-    public DateTimeScrollingTextPlugin(ILogger<BoredScrollingTextPlugin> logger)
+    public DateTimeScrollingTextPlugin(ILogger<DateTimeScrollingTextPlugin> logger)
     {
         _logger = logger;
     }

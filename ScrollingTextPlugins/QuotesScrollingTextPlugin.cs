@@ -7,9 +7,9 @@ namespace ScrollingTextPlugins;
 
 public class QuotesScrollingTextPlugin : IScrollingTextPlugin
 {
-    private readonly ILogger<BoredScrollingTextPlugin> _logger;
+    private readonly ILogger<QuotesScrollingTextPlugin> _logger;
 
-    public QuotesScrollingTextPlugin(ILogger<BoredScrollingTextPlugin> logger)
+    public QuotesScrollingTextPlugin(ILogger<QuotesScrollingTextPlugin> logger)
     {
         _logger = logger;
     }

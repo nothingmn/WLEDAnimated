@@ -6,9 +6,9 @@ namespace ScrollingTextPlugins;
 
 public class CryptoScrollingTextPlugin : IScrollingTextPlugin
 {
-    private readonly ILogger<BoredScrollingTextPlugin> _logger;
+    private readonly ILogger<CryptoScrollingTextPlugin> _logger;
 
-    public CryptoScrollingTextPlugin(ILogger<BoredScrollingTextPlugin> logger)
+    public CryptoScrollingTextPlugin(ILogger<CryptoScrollingTextPlugin> logger)
     {
         _logger = logger;
     }

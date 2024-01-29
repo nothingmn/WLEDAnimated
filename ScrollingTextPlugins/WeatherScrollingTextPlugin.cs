@@ -7,9 +7,9 @@ namespace ScrollingTextPlugins;
 
 public class WeatherScrollingTextPlugin : IScrollingTextPlugin
 {
-    private readonly ILogger<BoredScrollingTextPlugin> _logger;
+    private readonly ILogger<WeatherScrollingTextPlugin> _logger;
 
-    public WeatherScrollingTextPlugin(ILogger<BoredScrollingTextPlugin> logger)
+    public WeatherScrollingTextPlugin(ILogger<WeatherScrollingTextPlugin> logger)
     {
         _logger = logger;
     }
