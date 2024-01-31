@@ -1,5 +1,5 @@
 #See https://aka.ms/customizecontainer to learn how to customize your debug container and how Visual Studio uses this Dockerfile to build your images for faster debugging.
-ARG VERSION=1.0.0-DEADBEEF
+ARG APP_VERSION=1.0.0-DEADBEEF
 
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 ENV DEBIAN_FRONTEND=noninteractive
@@ -10,7 +10,7 @@ EXPOSE 8080
 EXPOSE 8081
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
-ARG VERSION
+ARG APP_VERSION
 RUN apt-get update && apt-get install -y tzdata
 RUN apt-get autoclean
 RUN apt-get autoremove
@@ -22,11 +22,14 @@ COPY ["WLEDAnimated.API/WLEDAnimated.API.csproj", "WLEDAnimated.API/"]
 RUN dotnet restore "./WLEDAnimated.API/./WLEDAnimated.API.csproj"
 COPY . .
 WORKDIR "/src/WLEDAnimated.API"
-RUN dotnet build "./WLEDAnimated.API.csproj" -c $BUILD_CONFIGURATION -o /app/build /p:Version=$VERSION  /p:AssemblyInformationalVersion=$VERSION
+RUN dotnet build "./WLEDAnimated.API.csproj" -c $BUILD_CONFIGURATION -o /app/build /p:Version=$APP_VERSION  /p:AssemblyInformationalVersion=$APP_VERSION
 
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
 RUN dotnet publish "./WLEDAnimated.API.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN apt-get autoclean
+RUN apt-get autoremove
+RUN apt-get clean
 
 FROM base AS final
 WORKDIR /app
