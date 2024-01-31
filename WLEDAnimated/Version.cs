@@ -17,6 +17,9 @@ public class Version
         //_version = "1.0.0-a0bc1df";
         //_version = "1.0.0-a0bc1dfdeadbeef22233423532";
         //_version = "1.0.0";
+        //_version = "1.0.0+55581a6522fb8b132c0ce8a3f597b6a1cabd2bc4";
+        _version = _version.Replace("+", "-");
+
         FullVersion = _version;
 
         if (_version.Contains("-"))
