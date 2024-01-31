@@ -23,6 +23,10 @@ public class Version
             Major = versionParts[0];
             Minor = versionParts[1];
             Hash = versionParts[2];
+            if (Hash.Length > 8)
+            {
+                Hash = Hash.Substring(0, 8);
+            }
         }
         else
         {

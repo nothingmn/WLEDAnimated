@@ -3,6 +3,7 @@
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 ENV DEBIAN_FRONTEND=noninteractive
 ENV TZ=America/Vancouver
+ENV VERSION=1.0.0-DEADBEEF
 USER app
 WORKDIR /app
 EXPOSE 8080
@@ -20,7 +21,7 @@ COPY ["WLEDAnimated.API/WLEDAnimated.API.csproj", "WLEDAnimated.API/"]
 RUN dotnet restore "./WLEDAnimated.API/./WLEDAnimated.API.csproj"
 COPY . .
 WORKDIR "/src/WLEDAnimated.API"
-RUN dotnet build "./WLEDAnimated.API.csproj" -c $BUILD_CONFIGURATION -o /app/build
+RUN dotnet build "./WLEDAnimated.API.csproj" -c $BUILD_CONFIGURATION -o /app/build /p:Version=$VERSION  /p:AssemblyInformationalVersion=$VERSION
 
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
