@@ -35,16 +35,17 @@ jobs:
         username: ${{ secrets.DOCKER_HUB_USERNAME }}
         password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
 
-    - name: Build and push
+    # Set a short SHA environment variable
+    - name: Extract short SHA
+      run: echo "SHORT_SHA=$(echo $GITHUB_SHA | cut -c1-7)" >> $GITHUB_ENV
+
+    # Using docker/build-push-action to build and push with multiple tags
+    - name: Build and push with docker/build-push-action
       uses: docker/build-push-action@v3
       with:
         context: .
         file: ./Dockerfile
         push: true
-        tags: ${{ env.IMAGE_NAME }}:latest
-
-    - name: Build and Publish Docker Image
-      run: |
-        docker build -t ${{ env.IMAGE_NAME }}:latest .
-        docker push ${{ env.IMAGE_NAME }}:latest
-
+        tags: |
+          ${{ env.IMAGE_NAME }}:latest
+          ${{ env.IMAGE_NAME }}:${{ env.SHORT_SHA }}

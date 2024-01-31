@@ -7,13 +7,14 @@
       "Step": {
         "StartDelay": 0,
         "TypeName": "DisplayTextStep",
-        "Description": "Display The Time",
-        "ScrollingTextPluginName" : "DateTime",
-        "ScrollingTextPluginPayload": "h:mm",
-        "IPAddress": "10.0.0.217",
+        "Description": "Display The Weather",
+        "ScrollingTextPluginName" : "Weather",
+        "ScrollingTextPluginPayload": "49,-122",
+        "IPAddress": "10.0.0.197",
         "Brightness": 128,
-        "Revert": false,
         "Trail" : 0,
+        "FontSize": 255,
+        "Revert": false,
         "DurationToDisplay": 0
       }
     }

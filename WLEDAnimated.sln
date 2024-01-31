@@ -8,6 +8,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C4AB5FA0-98E7-4EF3-815E-81A5D34BAF02}"
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
+		.github\workflows\build_deploy.yml = .github\workflows\build_deploy.yml
+		Dockerfile = Dockerfile
+		.github\workflows\dotnet-publish.yml = .github\workflows\dotnet-publish.yml
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WLEDAnimated.API", "WLEDAnimated.API\WLEDAnimated.API.csproj", "{C0C94B64-3A53-4392-8874-F4980F40D7E2}"
@@ -18,7 +21,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AnimationCore", "AnimationC
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TPM2", "TPM2\TPM2.csproj", "{A3BB57A2-B1D2-4146-B24B-7155D60A12D8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScrollingTextPlugins", "ScrollingTextPlugins\ScrollingTextPlugins.csproj", "{5D870E9B-049E-4123-9BD1-7A12CEC33209}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ScrollingTextPlugins", "ScrollingTextPlugins\ScrollingTextPlugins.csproj", "{5D870E9B-049E-4123-9BD1-7A12CEC33209}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

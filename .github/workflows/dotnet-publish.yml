@@ -32,17 +32,17 @@ jobs:
       run: dotnet restore "./WLEDAnimated.API/WLEDAnimated.API.csproj"
 
     - name: Build
-      run: dotnet build "./WLEDAnimated.API/WLEDAnimated.API.csproj" -c Release --no-restore
+      run: dotnet build "./WLEDAnimated.API/WLEDAnimated.API.csproj" -c Release --no-restore /p:Version=1.0.$SHORT_SHA
 
       # Repeat this step for each platform you want to publish for
     - name: Publish for Windows
-      run: dotnet publish "./WLEDAnimated.API/WLEDAnimated.API.csproj" -c Release -o publish/win-x64 --no-restore -r win-x64 --self-contained true
+      run: dotnet publish "./WLEDAnimated.API/WLEDAnimated.API.csproj" -c Release -o publish/win-x64 --no-restore -r win-x64 --self-contained true /p:Version=1.0.$SHORT_SHA
 
     - name: Publish for Linux
-      run: dotnet publish "./WLEDAnimated.API/WLEDAnimated.API.csproj" -c Release -o publish/linux-x64 --no-restore -r linux-x64 --self-contained true
+      run: dotnet publish "./WLEDAnimated.API/WLEDAnimated.API.csproj" -c Release -o publish/linux-x64 --no-restore -r linux-x64 --self-contained true /p:Version=1.0.$SHORT_SHA
 
     - name: Publish for macOS
-      run: dotnet publish "./WLEDAnimated.API/WLEDAnimated.API.csproj" -c Release -o publish/osx-x64 --no-restore -r osx-x64 --self-contained true
+      run: dotnet publish "./WLEDAnimated.API/WLEDAnimated.API.csproj" -c Release -o publish/osx-x64 --no-restore -r osx-x64 --self-contained true /p:Version=1.0.$SHORT_SHA
 
     - name: Zip the publish directory for Windows
       run: zip -r publish-win-${{ github.sha }}.zip publish/win-x64/
