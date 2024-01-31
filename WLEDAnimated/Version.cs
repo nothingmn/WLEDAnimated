@@ -14,34 +14,27 @@ public class Version
             ? informationalVersionAttribute.InformationalVersion
             : "1.0.0-DEADBEEFFF";
 
-        if (_version.Contains("+")) _version = _version.Replace("+", "-");
-        var _hash = _version.Split('-');
-        if (_hash[1].Length > 7)
-        {
-            _version = $"{_hash[0]}-{_hash[1].Substring(0, 7)}";
-        }
-
-        var versionParts = _version.Split('.');
-
+        //_version = "1.0.0-a0bc1df";
+        //_version = "1.0.0-a0bc1dfdeadbeef22233423532";
+        //_version = "1.0.0";
         FullVersion = _version;
 
-        if (versionParts.Length >= 3)
+        if (_version.Contains("-"))
         {
+            var parts = _version.Split('-');
+            Hash = parts[1];
+            if (Hash.Length > 7) Hash = Hash.Substring(0, 7);
+            var versionParts = parts[0].Split('.');
             Major = versionParts[0];
             Minor = versionParts[1];
-            Hash = versionParts[2];
-        }
-        else
-        {
-            // Handle unexpected format
-            Major = "1";
-            Minor = "0";
-            Hash = "DEADBEEFFF";
+            Revision = versionParts[2];
+            FullVersion = $"{Major}.{Minor}.{Revision}-{Hash}";
         }
     }
 
     public string Major { get; }
     public string Minor { get; }
+    public string Revision { get; }
     public string Hash { get; }
     public string FullVersion { get; }
 }
