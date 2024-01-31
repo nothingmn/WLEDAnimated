@@ -8,6 +8,7 @@
 
   <PropertyGroup>
 	<AssemblyInformationalVersion>1.0.0-$(SHORT_SHA)</AssemblyInformationalVersion>
+	  <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
 
   <ItemGroup>
