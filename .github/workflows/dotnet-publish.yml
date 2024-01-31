@@ -35,17 +35,17 @@ jobs:
       run: dotnet restore "./WLEDAnimated.API/WLEDAnimated.API.csproj"
 
     - name: Build
-      run: dotnet build "./WLEDAnimated.API/WLEDAnimated.API.csproj" -c Release --no-restore /p:Version=$VERSION
+      run: dotnet build "./WLEDAnimated.API/WLEDAnimated.API.csproj" -c Release --no-restore /p:Version=$VERSION  /p:AssemblyInformationalVersion=$VERSION
 
       # Repeat this step for each platform you want to publish for
     - name: Publish for Windows
-      run: dotnet publish "./WLEDAnimated.API/WLEDAnimated.API.csproj" -c Release -o publish/win-x64 --no-restore -r win-x64 --self-contained true /p:Version=$VERSION
+      run: dotnet publish "./WLEDAnimated.API/WLEDAnimated.API.csproj" -c Release -o publish/win-x64 --no-restore -r win-x64 --self-contained true /p:Version=$VERSION /p:AssemblyInformationalVersion=$VERSION
 
     - name: Publish for Linux
-      run: dotnet publish "./WLEDAnimated.API/WLEDAnimated.API.csproj" -c Release -o publish/linux-x64 --no-restore -r linux-x64 --self-contained true /p:Version=$VERSION
+      run: dotnet publish "./WLEDAnimated.API/WLEDAnimated.API.csproj" -c Release -o publish/linux-x64 --no-restore -r linux-x64 --self-contained true /p:Version=$VERSION /p:AssemblyInformationalVersion=$VERSION
 
     - name: Publish for macOS
-      run: dotnet publish "./WLEDAnimated.API/WLEDAnimated.API.csproj" -c Release -o publish/osx-x64 --no-restore -r osx-x64 --self-contained true /p:Version=$VERSION
+      run: dotnet publish "./WLEDAnimated.API/WLEDAnimated.API.csproj" -c Release -o publish/osx-x64 --no-restore -r osx-x64 --self-contained true /p:Version=$VERSION /p:AssemblyInformationalVersion=$VERSION
 
     - name: Zip the publish directory for Windows
       run: zip -r publish-win-${{ env.VERSION }}.zip publish/win-x64/

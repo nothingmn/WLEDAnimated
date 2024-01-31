@@ -40,7 +40,7 @@ jobs:
 
     - name: Generate version string
       run: echo "VERSION=1.0.0-$SHORT_SHA" >> $GITHUB_ENV
-  
+    
     - name: Print Version
       run: echo "Version is ${{ env.VERSION }}"
 
