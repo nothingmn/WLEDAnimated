@@ -34,9 +34,6 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore "./WLEDAnimated.API/WLEDAnimated.API.csproj"
 
-    - name: Command line version
-      run: echo $VERSION
-
     - name: Build
       run: dotnet build "./WLEDAnimated.API/WLEDAnimated.API.csproj" -c Release --no-restore /p:Version=$VERSION  /p:AssemblyInformationalVersion=$VERSION
 
