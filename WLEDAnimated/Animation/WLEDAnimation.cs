@@ -19,6 +19,7 @@ public class Step
 {
     public string TypeName { get; set; }
     public string Description { get; set; }
+    public string? Template { get; set; }
     public string ImagePath { get; set; }
     public string IPAddress { get; set; }
     public int Port { get; set; }
@@ -35,6 +36,11 @@ public class Step
     public int? YOffSet { get; set; }
     public int? Trail { get; set; }
     public int? Rotate { get; set; }
+
+    public int Iterations { get; set; } = 1;
+    public double? Lat { get; set; }
+
+    public double? Lon { get; set; }
     public string ScrollingTextPluginName { get; set; }
     public string ScrollingTextPluginPayload { get; set; }
 

@@ -70,6 +70,22 @@ public class WLEDAnimationLoader
                 createStep = displayImageStep;
                 break;
 
+            case "displayrenderedweatherimagestep":
+                var displayRenderedWeather = _services.GetService<DisplayRenderedWeatherImageStep>();
+                displayRenderedWeather.IPAddress = step.IPAddress;
+                displayRenderedWeather.Port = step.Port;
+                displayRenderedWeather.Lat = step.Lat;
+                displayRenderedWeather.Lon = step.Lon;
+                displayRenderedWeather.Width = step.Width;
+                displayRenderedWeather.Height = step.Height;
+                displayRenderedWeather.Wait = step.Wait;
+                displayRenderedWeather.PauseBetweenFrames = step.PauseBetweenFrames;
+                displayRenderedWeather.Description = step.Description;
+                displayRenderedWeather.Template = step.Template;
+                displayRenderedWeather.Iterations = step.Iterations;
+                createStep = displayRenderedWeather;
+                break;
+
             case "displaytextstep":
                 var displayTextStep = _services.GetService<DisplayTextStep>();
                 displayTextStep.IPAddress = step.IPAddress;

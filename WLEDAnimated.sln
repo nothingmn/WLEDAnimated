@@ -23,6 +23,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TPM2", "TPM2\TPM2.csproj", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ScrollingTextPlugins", "ScrollingTextPlugins\ScrollingTextPlugins.csproj", "{5D870E9B-049E-4123-9BD1-7A12CEC33209}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageGeneration", "ImageGeneration\ImageGeneration.csproj", "{D1F29999-80DB-4C49-960C-1E334407C19E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -53,6 +55,10 @@ Global
 		{5D870E9B-049E-4123-9BD1-7A12CEC33209}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5D870E9B-049E-4123-9BD1-7A12CEC33209}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5D870E9B-049E-4123-9BD1-7A12CEC33209}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D1F29999-80DB-4C49-960C-1E334407C19E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D1F29999-80DB-4C49-960C-1E334407C19E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D1F29999-80DB-4C49-960C-1E334407C19E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D1F29999-80DB-4C49-960C-1E334407C19E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

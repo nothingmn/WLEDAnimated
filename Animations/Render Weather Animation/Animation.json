@@ -1,0 +1,18 @@
+{
+  "Name": "Render Weather Animation",
+  "Transitions": [
+    {
+      "StartDelay": 0,
+      "InterTransitionDelay": 0,
+      "Step": {
+        "StartDelay": 0,
+        "TypeName": "DisplayRenderedWeatherImageStep",
+        "Description": "Display The Weather Rendered",
+        "IPAddress": "10.0.0.197",
+        "Lat": 49,
+        "Lon": -122,
+        "Wait": 1
+      }
+    }
+  ]
+}

@@ -4,10 +4,12 @@ using System.Runtime.CompilerServices;
 using System.Text.Json.Serialization;
 using Coravel;
 using Coravel.Invocable;
+using ImageGeneration;
 using Microsoft.Extensions.DependencyInjection;
 using WLEDAnimated.Animation;
 using WLEDAnimated.API.Invocables;
 using WLEDAnimated.Interfaces;
+using WLEDAnimated.Services;
 
 namespace WLEDAnimated.API;
 
@@ -39,7 +41,12 @@ public class Program
 
         builder.Services.AddTransient<MultiStep, MultiStep>();
         builder.Services.AddTransient<DisplayImageStep, DisplayImageStep>();
+        builder.Services.AddTransient<WLEDStateStep, WLEDStateStep>();
+
         builder.Services.AddTransient<DisplayTextStep, DisplayTextStep>();
+        builder.Services.AddTransient<DisplayRenderedWeatherImageStep, DisplayRenderedWeatherImageStep>();
+        builder.Services.AddTransient<Weather, Weather>();
+        builder.Services.AddTransient<IBasicTemplatedImage, BasicTemplatedImage>();
 
         builder.Services.AddSingleton<Version>();
         builder.Services.AddSingleton<DeviceDiscovery>();
