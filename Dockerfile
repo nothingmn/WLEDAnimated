@@ -3,7 +3,7 @@
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 ENV DEBIAN_FRONTEND=noninteractive
 ENV TZ=America/Vancouver
-ENV VERSION=1.0.0-DEADBEEF
+ARG VERSION=1.0.0-DEADBEEF
 USER app
 WORKDIR /app
 EXPOSE 8080
