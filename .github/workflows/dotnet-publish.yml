@@ -19,9 +19,12 @@ jobs:
 
     - name: Get short SHA
       run: echo "SHORT_SHA=$(echo ${{ github.sha }} | cut -c1-8)" >> $GITHUB_ENV
-      
-    - name: Print short SHA
-      run: echo "Short SHA is ${{ env.SHORT_SHA }}"
+
+    - name: Generate version string
+      run: echo "VERSION=1.0.0-${GITHUB_SHA::7}" >> $GITHUB_ENV
+  
+    - name: Print Version
+      run: echo "Version is ${{ env.VERSION }}"
 
     - name: Setup .NET
       uses: actions/setup-dotnet@v2
@@ -32,45 +35,45 @@ jobs:
       run: dotnet restore "./WLEDAnimated.API/WLEDAnimated.API.csproj"
 
     - name: Build
-      run: dotnet build "./WLEDAnimated.API/WLEDAnimated.API.csproj" -c Release --no-restore /p:Version=1.0.$SHORT_SHA
+      run: dotnet build "./WLEDAnimated.API/WLEDAnimated.API.csproj" -c Release --no-restore /p:Version=$VERSION
 
       # Repeat this step for each platform you want to publish for
     - name: Publish for Windows
-      run: dotnet publish "./WLEDAnimated.API/WLEDAnimated.API.csproj" -c Release -o publish/win-x64 --no-restore -r win-x64 --self-contained true /p:Version=1.0.$SHORT_SHA
+      run: dotnet publish "./WLEDAnimated.API/WLEDAnimated.API.csproj" -c Release -o publish/win-x64 --no-restore -r win-x64 --self-contained true /p:Version=$VERSION
 
     - name: Publish for Linux
-      run: dotnet publish "./WLEDAnimated.API/WLEDAnimated.API.csproj" -c Release -o publish/linux-x64 --no-restore -r linux-x64 --self-contained true /p:Version=1.0.$SHORT_SHA
+      run: dotnet publish "./WLEDAnimated.API/WLEDAnimated.API.csproj" -c Release -o publish/linux-x64 --no-restore -r linux-x64 --self-contained true /p:Version=$VERSION
 
     - name: Publish for macOS
-      run: dotnet publish "./WLEDAnimated.API/WLEDAnimated.API.csproj" -c Release -o publish/osx-x64 --no-restore -r osx-x64 --self-contained true /p:Version=1.0.$SHORT_SHA
+      run: dotnet publish "./WLEDAnimated.API/WLEDAnimated.API.csproj" -c Release -o publish/osx-x64 --no-restore -r osx-x64 --self-contained true /p:Version=$VERSION
 
     - name: Zip the publish directory for Windows
-      run: zip -r publish-win-${{ github.sha }}.zip publish/win-x64/
+      run: zip -r publish-win-${{ env.VERSION }}.zip publish/win-x64/
 
     - name: Zip the publish directory for Linux
-      run: zip -r publish-linux-${{ github.sha }}.zip publish/linux-x64/
+      run: zip -r publish-linux-${{ env.VERSION }}.zip publish/linux-x64/
 
     - name: Zip the publish directory for macOS
-      run: zip -r publish-osx-${{ github.sha }}.zip publish/osx-x64/
+      run: zip -r publish-osx-${{ env.VERSION }}.zip publish/osx-x64/
 
     # Repeat this step for each zipped platform
     - name: Upload Windows build artifact
       uses: actions/upload-artifact@v2
       with:
-        name: windows-app
-        path: publish-win-${{ github.sha }}.zip
+        name: windows-app   
+        path: publish-win-${{ env.VERSION }}.zip
 
     - name: Upload Linux build artifact
       uses: actions/upload-artifact@v2
       with:
         name: linux-app
-        path: publish-linux-${{ github.sha }}.zip
+        path: publish-linux-${{ env.VERSION }}.zip
 
     - name: Upload macOS build artifact
       uses: actions/upload-artifact@v2
       with:
         name: macos-app
-        path: publish-osx-${{ github.sha }}.zip
+        path: publish-osx-${{ env.VERSION }}.zip
 
     - name: Create Release
       id: create_release
@@ -78,11 +81,11 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: alpha-${{ env.SHORT_SHA }}
-        release_name: Release - alpha-${{ env.SHORT_SHA }}
+        tag_name: alpha-${{ env.VERSION }}
+        release_name: Release - ${{ env.VERSION }}
         draft: false
         prerelease: false
-        body: "Release of commit ${{ github.sha }}"
+        body: "Release of commit ${{ github.sha }}, version ${{ env.VERSION }}"
 
     # Repeat this step for each platform
     - name: Upload Windows release asset
@@ -91,8 +94,8 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./publish-win-${{ github.sha }}.zip
-        asset_name: publish-win-${{ github.sha }}.zip
+        asset_path: ./publish-win-${{ env.VERSION }}.zip
+        asset_name: publish-win-${{ env.VERSION }}.zip
         asset_content_type: application/zip
 
     - name: Upload Linux release asset
@@ -101,8 +104,8 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./publish-linux-${{ github.sha }}.zip
-        asset_name: publish-linux-${{ github.sha }}.zip
+        asset_path: ./publish-linux-${{ env.VERSION }}.zip
+        asset_name: publish-linux-${{ env.VERSION }}.zip
         asset_content_type: application/zip
 
     - name: Upload macOS release asset
@@ -111,7 +114,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./publish-osx-${{ github.sha }}.zip
-        asset_name: publish-osx-${{ github.sha }}.zip
+        asset_path: ./publish-osx-${{ env.VERSION }}.zip
+        asset_name: publish-osx-${{ env.VERSION }}.zip
         asset_content_type: application/zip
         

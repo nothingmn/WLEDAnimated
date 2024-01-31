@@ -35,9 +35,15 @@ jobs:
         username: ${{ secrets.DOCKER_HUB_USERNAME }}
         password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
 
-    # Set a short SHA environment variable
-    - name: Extract short SHA
-      run: echo "SHORT_SHA=$(echo $GITHUB_SHA | cut -c1-7)" >> $GITHUB_ENV
+    - name: Get short SHA
+      run: echo "SHORT_SHA=$(echo ${{ github.sha }} | cut -c1-8)" >> $GITHUB_ENV
+
+    - name: Generate version string
+      run: echo "VERSION=1.0.0-${GITHUB_SHA::7}" >> $GITHUB_ENV
+  
+    - name: Print Version
+      run: echo "Version is ${{ env.VERSION }}"
+
 
     # Using docker/build-push-action to build and push with multiple tags
     - name: Build and push with docker/build-push-action
@@ -48,4 +54,4 @@ jobs:
         push: true
         tags: |
           ${{ env.IMAGE_NAME }}:latest
-          ${{ env.IMAGE_NAME }}:${{ env.SHORT_SHA }}
+          ${{ env.IMAGE_NAME }}:${{ env.VERSION }}
