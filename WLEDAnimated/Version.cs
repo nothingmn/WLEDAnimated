@@ -26,7 +26,7 @@ public class Version
         {
             var parts = _version.Split('-');
             Hash = parts[1];
-            if (Hash.Length > 7) Hash = Hash.Substring(0, 7);
+            if (Hash.Length > 8) Hash = Hash.Substring(0, 8);
             var versionParts = parts[0].Split('.');
             Major = versionParts[0];
             Minor = versionParts[1];
