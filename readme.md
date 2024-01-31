@@ -38,7 +38,7 @@ A useful tool to self host via docker, or the executable (windows, linux or mac)
 	a. for example, create a simple animation which just updates the WLED device with the current time
 	b. run that animation every minute
 	c. or weather every hour
-	
+	d. pick any WLED preset or effect and combine that with animated gifs or scrolling text targeting one or more WLED devices on your network!
 
 A good example is you can upload your custom animations and trigger them from, say home assistant.
 
