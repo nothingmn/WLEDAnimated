@@ -12,7 +12,14 @@ public class Version
         var informationalVersionAttribute = assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>();
         _version = informationalVersionAttribute != null
             ? informationalVersionAttribute.InformationalVersion
-            : "1.0.DEADBEEF";
+            : "1.0.0-DEADBEEFFF";
+
+        if (_version.Contains("+")) _version = _version.Replace("+", "-");
+        var _hash = _version.Split('-');
+        if (_hash[1].Length > 7)
+        {
+            _version = $"{_hash[0]}-{_hash[1].Substring(1, 8)}";
+        }
 
         var versionParts = _version.Split('.');
 
@@ -23,17 +30,13 @@ public class Version
             Major = versionParts[0];
             Minor = versionParts[1];
             Hash = versionParts[2];
-            if (Hash.Length > 8)
-            {
-                Hash = Hash.Substring(0, 8);
-            }
         }
         else
         {
             // Handle unexpected format
             Major = "1";
             Minor = "0";
-            Hash = "DEADBEEF";
+            Hash = "DEADBEEFFF";
         }
     }
 

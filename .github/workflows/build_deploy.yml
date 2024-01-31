@@ -51,6 +51,8 @@ jobs:
       with:
         context: .
         file: ./Dockerfile
+        args: |
+          VERSION=${{ env.VERSION }}
         push: true
         tags: |
           ${{ env.IMAGE_NAME }}:latest
