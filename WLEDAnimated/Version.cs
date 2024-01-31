@@ -14,11 +14,14 @@ public class Version
             ? informationalVersionAttribute.InformationalVersion
             : "1.0.0-DEADBEEFFF";
 
+        _version = "1.0.0-deb1b60b";
+        //_version = "1.0.0-deb1b60b+abcdefabcdef1234565677775544";
+
         if (_version.Contains("+")) _version = _version.Replace("+", "-");
         var _hash = _version.Split('-');
         if (_hash[1].Length > 7)
         {
-            _version = $"{_hash[0]}-{_hash[1].Substring(1, 8)}";
+            _version = $"{_hash[0]}-{_hash[1].Substring(0, 7)}";
         }
 
         var versionParts = _version.Split('.');
