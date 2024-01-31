@@ -41,6 +41,7 @@ public class Program
         builder.Services.AddTransient<DisplayImageStep, DisplayImageStep>();
         builder.Services.AddTransient<DisplayTextStep, DisplayTextStep>();
 
+        builder.Services.AddSingleton<Version>();
         builder.Services.AddSingleton<DeviceDiscovery>();
         builder.Services.AddSingleton<WledDeviceDiscovery>();
         builder.Services.AddTransient<EndpointConverter, EndpointConverter>();
@@ -51,7 +52,6 @@ public class Program
         builder.Services.AddTransient<AssemblyTypeProcessor>();
 
         builder.Services.AddTransient<IScrollingTextPluginFactory, ScrollingTextPluginFactory>();
-
         LoadScrollingTextPlugins(builder.Services);
 
         //throw in our basic scheduler...
@@ -97,32 +97,37 @@ public class Program
         app.UseDefaultFiles();
 
         var provider = app.Services;
+
+        var logger = provider.GetService<ILogger<Program>>();
+
         provider.UseScheduler(scheduler =>
+    {
+        var config = provider.GetService<IConfiguration>();
+        var schedules = new List<SchedulerConfig>();
+        config.GetSection("Scheduler").Bind(schedules);
+
+        foreach (var schedulerConfig in schedules?.Where(schedulerConfig => schedulerConfig.Enabled))
         {
-            var logger = provider.GetService<ILogger<Program>>();
-            var config = provider.GetService<IConfiguration>();
-            var schedules = new List<SchedulerConfig>();
-            config.GetSection("Scheduler").Bind(schedules);
-
-            foreach (var schedulerConfig in schedules?.Where(schedulerConfig => schedulerConfig.Enabled))
+            var type = schedulerConfig.Invocable;
+            var invocer = typeof(Program).Assembly.GetTypes().Where(x => x.FullName.Equals(type, StringComparison.InvariantCultureIgnoreCase))?.FirstOrDefault();
+            if (invocer != null)
             {
-                var type = schedulerConfig.Invocable;
-                var invocer = typeof(Program).Assembly.GetTypes().Where(x => x.FullName.Equals(type, StringComparison.InvariantCultureIgnoreCase))?.FirstOrDefault();
-                if (invocer != null)
-                {
-                    var instance = app.Services.GetService(invocer) as IInvocable;
-                    //var instance = ActivatorUtilities.CreateInstance(provider, invocer) as IInvocable;
-                    var animationInvocer = instance as AnimationInvocer;
+                var instance = app.Services.GetService(invocer) as IInvocable;
+                //var instance = ActivatorUtilities.CreateInstance(provider, invocer) as IInvocable;
+                var animationInvocer = instance as AnimationInvocer;
 
-                    if (animationInvocer != null)
-                    {
-                        logger.LogInformation($"Adding animation {schedulerConfig.Animation} with cron {schedulerConfig.Cron}");
-                        animationInvocer.Animation = schedulerConfig.Animation;
-                        scheduler.ScheduleAsync(async () => { await instance.Invoke(); }).Cron(schedulerConfig.Cron);
-                    }
+                if (animationInvocer != null)
+                {
+                    logger.LogInformation($"Adding animation {schedulerConfig.Animation} with cron {schedulerConfig.Cron}");
+                    animationInvocer.Animation = schedulerConfig.Animation;
+                    scheduler.ScheduleAsync(async () => { await instance.Invoke(); }).Cron(schedulerConfig.Cron);
                 }
             }
-        });
+        }
+    });
+
+        var version = app.Services.GetService<Version>();
+        logger.LogInformation(version.FullVersion);
 
         var dd = app.Services.GetService<WledDeviceDiscovery>();
         var discover = app.Services.GetService<DeviceDiscovery>();
