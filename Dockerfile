@@ -21,6 +21,7 @@ COPY ["WLEDAnimated.API/WLEDAnimated.API.csproj", "WLEDAnimated.API/"]
 RUN dotnet restore "./WLEDAnimated.API/./WLEDAnimated.API.csproj"
 COPY . .
 WORKDIR "/src/WLEDAnimated.API"
+RUN echo $VERSION
 RUN dotnet build "./WLEDAnimated.API.csproj" -c $BUILD_CONFIGURATION -o /app/build /p:Version=$VERSION  /p:AssemblyInformationalVersion=$VERSION
 
 FROM build AS publish
