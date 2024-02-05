@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using WLEDAnimated.Animation;
 using WLEDAnimated.API.Invocables;
 using WLEDAnimated.Interfaces;
+using WLEDAnimated.Interfaces.Services;
 using WLEDAnimated.Services;
 
 namespace WLEDAnimated.API;
@@ -60,6 +61,7 @@ public class Program
 
         builder.Services.AddTransient<IScrollingTextPluginFactory, ScrollingTextPluginFactory>();
         LoadScrollingTextPlugins(builder.Services);
+        RegisterServices(builder.Services);
 
         //throw in our basic scheduler...
         builder.Services.AddScheduler();
@@ -141,6 +143,14 @@ public class Program
         dd.Start(discover);
 
         app.Run();
+    }
+
+    private static void RegisterServices(IServiceCollection services)
+    {
+        services.AddTransient<IWeather, Weather>();
+        services.AddTransient<IWeatherResponse, WeatherResponse>();
+        services.AddTransient<ISeries, Series>();
+        services.AddTransient<IWind10m, Wind10m>();
     }
 
     private static void LoadScrollingTextPlugins(IServiceCollection services)

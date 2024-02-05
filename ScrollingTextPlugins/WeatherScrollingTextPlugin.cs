@@ -31,7 +31,7 @@ public class WeatherScrollingTextPlugin : IScrollingTextPlugin
         var w = await weather.Get(lat, lon);
         if (w != null)
         {
-            var wr = w.dataseries.FirstOrDefault();
+            var wr = w.DataSeries.FirstOrDefault();
             var final = $"{wr.temp2m}C, Precip:{wr.prec_type}, Clouds:{wr.CloudCover}";
             _logger.LogInformation(final);
             return final;

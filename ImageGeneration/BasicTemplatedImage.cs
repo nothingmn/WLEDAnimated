@@ -4,6 +4,7 @@ using SolidCompany.Wrappers.Logging.Abstractions;
 using SolidCompany.Wrappers.WkHtmlToImage;
 using SolidCompany.Wrappers.WkHtmlToImage.Registration;
 using WLEDAnimated.Interfaces;
+using WLEDAnimated.Interfaces.Services;
 
 namespace ImageGeneration;
 

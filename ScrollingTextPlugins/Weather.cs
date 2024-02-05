@@ -1,8 +1,11 @@
-﻿namespace WLEDAnimated.Services;
+﻿using System.Text.Json.Serialization;
+using WLEDAnimated.Interfaces.Services;
 
-public class Weather
+namespace WLEDAnimated.Services;
+
+public class Weather : IWeather
 {
-    public async Task<WeatherResponse> Get(double lat, double lon)
+    public async Task<IWeatherResponse> Get(double lat, double lon)
     {
         var json = await (new HttpClient(new HttpClientHandler()
         {
@@ -12,23 +15,33 @@ public class Weather
     }
 }
 
-public class WeatherResponse
+public class WeatherResponse : IWeatherResponse
 {
     public string product { get; set; }
     public string init { get; set; }
-    public List<Datasery> dataseries { get; set; }
+
+    [JsonPropertyName("dataseries")]
+    public List<ISeries> DataSeries { get; set; }
+
+    public ISeries Current
+    {
+        get
+        {
+            return DataSeries.FirstOrDefault();
+        }
+    }
 }
 
-public class Datasery
+public class Series : ISeries
 {
     public int timepoint { get; set; }
     public int cloudcover { get; set; }
-    public int seeing { get; set; }
-    public int transparency { get; set; }
-    public int lifted_index { get; set; }
-    public int rh2m { get; set; }
-    public Wind10m wind10m { get; set; }
-    public int temp2m { get; set; }
+    public double seeing { get; set; }
+    public double transparency { get; set; }
+    public double lifted_index { get; set; }
+    public double rh2m { get; set; }
+    public IWind10m wind10m { get; set; }
+    public double temp2m { get; set; }
     public string prec_type { get; set; }
 
     public string CloudCover
@@ -74,7 +87,7 @@ public class Datasery
     }
 }
 
-public class Wind10m
+public class Wind10m : IWind10m
 {
     public string direction { get; set; }
     public int speed { get; set; }

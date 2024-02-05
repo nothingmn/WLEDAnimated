@@ -4,19 +4,26 @@ using System.Text.Json.Serialization;
 using Microsoft.Extensions.Logging;
 using SixLabors.ImageSharp;
 using WLEDAnimated.Interfaces;
+using WLEDAnimated.Interfaces.Services;
 
 namespace WLEDAnimated.Animation;
 
 public class DisplayRenderedWeatherImageStep : DisplayRenderedImageStep
 {
-    public DisplayRenderedWeatherImageStep(ILogger<DisplayRenderedImageStep> log, IImageSender sender, IBasicTemplatedImage templatingEngine) : base(log, sender, templatingEngine)
+    public DisplayRenderedWeatherImageStep(ILogger<DisplayRenderedImageStep> log, IImageSender sender, IBasicTemplatedImage templatingEngine, IWeather weatherService) : base(log, sender, templatingEngine)
     {
         this.Transition += async (token) =>
         {
-            this.Data = new { Lat, Lon };
+            this.Data = new
+            {
+                Lat,
+                Lon
+            };
+
+            var weather = new { Lat, Lon, Weather = await weatherService.Get(Lat.Value, Lon.Value) };
 
             var path = Path.GetTempFileName() + ".png";
-            using (var stm = await templatingEngine.GenerateImage(Template, Data, Width))
+            using (var stm = await templatingEngine.GenerateImage(Template, weather, Width))
             {
                 File.WriteAllBytes(path, stm.ToArray());
             }
