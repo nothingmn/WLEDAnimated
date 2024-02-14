@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\AnimationCore\AnimationCore.csproj" />
+    <ProjectReference Include="..\DDP\DDP.csproj" />
     <ProjectReference Include="..\Kevsoft.WLED\Kevsoft.WLED.csproj" />
     <ProjectReference Include="..\TPM2\TPM2.csproj" />
   </ItemGroup>

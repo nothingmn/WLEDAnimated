@@ -6,6 +6,7 @@ using Coravel;
 using Coravel.Invocable;
 using ImageGeneration;
 using Microsoft.Extensions.DependencyInjection;
+using SixLabors.ImageSharp.Processing.Processors.Transforms;
 using WLEDAnimated.Animation;
 using WLEDAnimated.API.Invocables;
 using WLEDAnimated.Interfaces;
@@ -31,6 +32,7 @@ public class Program
         builder.Services.AddTransient<ImageUDPSender>();
         builder.Services.AddKeyedTransient<IImageConverter, ImageToDNRGBConverter>("DNRGB");
         builder.Services.AddKeyedTransient<IImageConverter, ImageToTPM2NETConverter>("TPM2NET");
+        builder.Services.AddKeyedTransient<IImageConverter, ImageToDDPConverter>("DDP");
 
         builder.Services.AddTransient<IImageResizer, ImageSharpImageResizer>();
 

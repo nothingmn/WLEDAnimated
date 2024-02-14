@@ -1,6 +1,4 @@
-﻿using System.Globalization;
-using System.Net;
-using System.Net.Sockets;
+﻿using System.Net.Sockets;
 using SixLabors.ImageSharp;
 using WLEDAnimated.Interfaces;
 
@@ -32,6 +30,7 @@ public class ImageUDPSender : IImageSender
                         //Console.WriteLine($"{DateTime.Now}");
                         udpClient.Send(segment, segment.Length, ipEndPoint);
                         Console.WriteLine($"{DateTime.Now} : Sent {segment.Length} bytes to {ipAddress}:{port}");
+                        //foreach (var b in segment) Console.Write($"{b:X2} ");
                         Thread.Sleep(1);
                     }
                     Thread.Sleep(pauseBetweenFrames);

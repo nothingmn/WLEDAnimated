@@ -58,7 +58,7 @@ public class WeatherController : ControllerBase
             return BadRequest("Nothing to do here.");
         }
         var filePath = System.IO.Path.Combine(Path.GetTempPath(), file.Name);
-        file.CopyTo(filePath);
+        if (!Path.Exists(filePath)) file.CopyTo(filePath);
 
         _sender.Send(
             ipAddress,
