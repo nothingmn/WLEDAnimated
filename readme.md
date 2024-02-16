@@ -4,47 +4,51 @@ A simple API to provide more features on top of WLEDs APIs themselves.
 
 A useful tool to self host via docker, or the executable (windows, linux or mac).  
 
+## Demos
+https://youtube.com/playlist?list=PLdmz103HwzOQKeGUdDre6nMHIgjRyUPAD&si=xWRNNLp4sn7vH5wU
+
+
 
 ## Core Features:
 
 1. Upload and Play Animations
-	a. Animations are zip files
-	b. Optional animated or not animate images
-	c. Animation.json file to instruct the app as to what to do
-	d. Samples in the "Animations" folder
-	e. WLED HTTP API 
-	f. across multiple devices
-	g. Scrolling text options (see below)
+	1. Animations are zip files
+	1. Optional animated or not animate images
+	1. Animation.json file to instruct the app as to what to do
+	1. Samples in the "Animations" folder
+	1. WLED HTTP API 
+	1. Across multiple devices
+	1. Scrolling text options (see below)
 
 2. Scan the local network for other WLED devices and provide a UI to view the list
 
 3. Lots of options for scrolling text
-	a. Basic text
-	b. Plugin system
-		i. Things to do when Bored 
-		ii. Crypto Markets trading price
-		iii. Customizable formatted date time
-		iv. Quotes
-		v. Weather
-		vi. Write your own!
+	1. Basic text
+	1. Plugin system
+		1. [Things to do when Bored]()
+		1. [Crypto Markets trading price](https://youtube.com/shorts/akgyh8ZLbqE?si=7CibZ1xyk1kBUBAW)
+		1. [Customizable formatted date time](https://youtube.com/shorts/ngPygW_XpbI?si=xkq6Gq4V81VrTEXD)
+		1. [Quotes](https://youtube.com/shorts/x73_-OVXjjI?si=KiuSWRdG9IEos_Xo)
+   		1. [Weather](https://youtube.com/shorts/K3KJeIrk0qM?si=uLeiZKgxX6nGDImm)
+		1. Write your own - we implemented a plugin system.  Just drop your DLL in!
 
 4. Upload or provide a URL an image
-	a. we will auto scale the image to your provide size and display it on the target devices
+	1. we will auto scale the image to your provide size and display it on the target devices
 
 5. Canned images for weather (work in progress)
-	a. Mostly we need a set of nice animated images for all types of weather
+	1. Mostly we need a set of nice animated images for all types of weather
 
 6. A built in scheduler which can run animations
-	a. for example, create a simple animation which just updates the WLED device with the current time
-	b. run that animation every minute
-	c. or weather every hour
-	d. pick any WLED preset or effect and combine that with animated gifs or scrolling text targeting one or more WLED devices on your network!
+	1. for example, create a simple animation which just updates the WLED device with the current time
+	1. run that animation every minute
+	1. or weather every hour
+	1. pick any WLED preset or effect and combine that with animated gifs or scrolling text targeting one or more WLED devices on your network!
 
 A good example is you can upload your custom animations and trigger them from, say home assistant.
 
 
 ## Support
-We fully support the current WLED HTTP JSON Api, along with two UDP Protocols: DNRGB and TPM2NET.  It has been tested on a 8x32, 16x32 WLED devices running 14.x. Ideally more folks would test on a variety of matrices.  
+We fully support the current WLED HTTP JSON Api, along with two UDP Protocols: DNRGB and TPM2NET.  It has been tested on a 8x32, 16x32, 32x32, 16x16 WLED devices running 14.x. Ideally more folks would test on a variety of matrices.  
 
 
 ## Get it!
