@@ -1,4 +1,5 @@
 ﻿using HandlebarsDotNet;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using SolidCompany.Wrappers.Logging.Abstractions;
 using SolidCompany.Wrappers.WkHtmlToImage;
@@ -10,6 +11,13 @@ namespace ImageGeneration;
 
 public class BasicTemplatedImage : IBasicTemplatedImage
 {
+    private readonly ILoggerFactory _loggerFactory;
+
+    public BasicTemplatedImage(ILoggerFactory loggerFactory)
+    {
+        _loggerFactory = loggerFactory;
+    }
+
     public async Task<MemoryStream> GenerateImage(string template, dynamic data, int width)
     {
         var t = Handlebars.Compile(template);
@@ -18,13 +26,11 @@ public class BasicTemplatedImage : IBasicTemplatedImage
 
         var htmlToImage = new HtmlToImage(new HtmlToImageOptions()
         {
-            ExectuionDirectory = new CustomDirectory(System.Environment.CurrentDirectory),
-            DependencyLogger = DependencyLogger.Empty
-        }, new NullLoggerFactory());
+            ExectuionDirectory = new CustomDirectory(System.Environment.CurrentDirectory)
+        }, _loggerFactory);
 
         using (var stm = await htmlToImage.CreateImageAsync(result, width, ImageFormat.Png))
         {
-            if (File.Exists("image.png")) File.Delete("image.png");
             var ms = new MemoryStream();
             await stm.CopyToAsync(ms);
             return ms;

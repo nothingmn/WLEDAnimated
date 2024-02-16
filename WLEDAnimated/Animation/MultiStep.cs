@@ -34,6 +34,8 @@ public class MultiStep : IStep
         };
     }
 
+    public string ParentFolder { get; set; }
+
     public string Description { get; set; } = "Display Text";
 
     public List<IStep> Steps { get; set; } = new List<IStep>();

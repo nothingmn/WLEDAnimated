@@ -39,6 +39,8 @@ public class DisplayTextStep : IStep
         };
     }
 
+    public string ParentFolder { get; set; }
+
     public string TextToDisplay { get; set; }
     public string IPAddress { get; set; }
     public int? Brightness { get; set; }

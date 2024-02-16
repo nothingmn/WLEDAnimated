@@ -133,6 +133,7 @@ public class WLEDAnimationLoader
             default:
                 throw new NotImplementedException($"The step type {type} is not implemented.");
         }
+        createStep.ParentFolder = animationFolder.FullName;
 
         return createStep;
     }

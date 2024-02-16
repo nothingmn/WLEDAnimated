@@ -25,6 +25,8 @@ public class DisplayImageStep : IStep
         };
     }
 
+    public string ParentFolder { get; set; }
+
     public string IPAddress { get; set; }
     public int Port { get; set; } = 21324;
     public string ImagePath { get; set; }

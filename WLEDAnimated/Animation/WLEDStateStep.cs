@@ -27,6 +27,8 @@ public class WLEDStateStep : IStep
         };
     }
 
+    public string ParentFolder { get; set; }
+
     public StateRequest State { get; set; }
     public string IPAddress { get; set; }
     public bool Revert { get; set; }

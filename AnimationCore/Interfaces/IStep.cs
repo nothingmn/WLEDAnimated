@@ -4,6 +4,7 @@ namespace AnimationCore.Interfaces;
 
 public interface IStep
 {
+    string ParentFolder { get; set; }
     string Description { get; set; }
 
     [JsonIgnore]

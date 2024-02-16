@@ -20,6 +20,12 @@ public class DisplayRenderedWeatherImageStep : DisplayRenderedImageStep
                 Lon
             };
 
+            var templateFullPath = System.IO.Path.Combine(ParentFolder, Template);
+            if (File.Exists(templateFullPath))
+            {
+                Template = File.ReadAllText(templateFullPath);
+            }
+
             var weather = new { Lat, Lon, Weather = await weatherService.Get(Lat.Value, Lon.Value) };
 
             var path = Path.GetTempFileName() + ".png";
@@ -53,6 +59,8 @@ public class DisplayRenderedImageStep : IStep
     public DisplayRenderedImageStep(ILogger<DisplayRenderedImageStep> log, IImageSender sender, IBasicTemplatedImage templatingEngine)
     {
     }
+
+    public string ParentFolder { get; set; }
 
     public string Template { get; set; }
     public object Data { get; set; }

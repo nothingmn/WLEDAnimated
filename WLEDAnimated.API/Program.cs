@@ -49,7 +49,9 @@ public class Program
         builder.Services.AddTransient<DisplayTextStep, DisplayTextStep>();
         builder.Services.AddTransient<DisplayRenderedWeatherImageStep, DisplayRenderedWeatherImageStep>();
         builder.Services.AddTransient<Weather, Weather>();
-        builder.Services.AddTransient<IBasicTemplatedImage, BasicTemplatedImage>();
+        //builder.Services.AddTransient<IBasicTemplatedImage, BasicTemplatedImage>();
+        //builder.Services.AddTransient<IBasicTemplatedImage, CoreTemplatedImage>();
+        builder.Services.AddTransient<IBasicTemplatedImage, HtmlTemplatedImage>();
 
         builder.Services.AddSingleton<Version>();
         builder.Services.AddSingleton<DeviceDiscovery>();
