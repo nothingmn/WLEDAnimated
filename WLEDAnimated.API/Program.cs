@@ -150,9 +150,9 @@ public class Program
     private static void RegisterServices(IServiceCollection services)
     {
         services.AddTransient<IWeather, Weather>();
-        services.AddTransient<IWeatherResponse, WeatherResponse>();
-        services.AddTransient<ISeries, Series>();
-        services.AddTransient<IWind10m, Wind10m>();
+        //services.AddTransient<IWeatherResponse, WeatherResponse>();
+        //services.AddTransient<ISeries, Series>();
+        //services.AddTransient<IWind10m, Wind10m>();
     }
 
     private static void LoadScrollingTextPlugins(IServiceCollection services)

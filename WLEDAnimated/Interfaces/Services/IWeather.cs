@@ -2,38 +2,90 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace WLEDAnimated.Interfaces.Services;
 
 public interface IWeather
 {
-    Task<IWeatherResponse> Get(double lat, double lon);
+    Task<WeatherResponse> Get(double lat, double lon);
 }
 
-public interface IWeatherResponse
+public class WeatherResponse
 {
-    List<ISeries> DataSeries { get; set; }
+    public string product { get; set; }
+    public string init { get; set; }
 
-    ISeries Current { get; }
+    [JsonPropertyName("dataseries")]
+    public List<Series> DataSeries { get; set; }
+
+    public Series Current
+    {
+        get
+        {
+            return DataSeries.FirstOrDefault();
+        }
+    }
 }
 
-public interface ISeries
+public class Series
 {
-    int timepoint { get; set; }
-    int cloudcover { get; set; }
-    string CloudCover { get; }
-    double seeing { get; set; }
-    double transparency { get; set; }
-    double lifted_index { get; set; }
-    double rh2m { get; set; }
-    IWind10m wind10m { get; set; }
-    double temp2m { get; set; }
-    string prec_type { get; set; }
+    public int timepoint { get; set; }
+    public int cloudcover { get; set; }
+    public double seeing { get; set; }
+    public double transparency { get; set; }
+    public double lifted_index { get; set; }
+    public double rh2m { get; set; }
+    public Wind10m wind10m { get; set; }
+    public double temp2m { get; set; }
+    public string prec_type { get; set; }
+
+    public string CloudCover
+    {
+        get
+        {
+            switch (cloudcover)
+            {
+                case 0:
+                    return "None";
+
+                case 1:
+                    return "0%-6%";
+
+                case 2:
+                    return "6%-19%";
+
+                case 3:
+                    return "19%-31%";
+
+                case 4:
+                    return "31%-44%";
+
+                case 5:
+                    return "44%-56%";
+
+                case 6:
+                    return "56%-69%";
+
+                case 7:
+                    return "69%-81%";
+
+                case 8:
+                    return "81%-94%";
+
+                case 9:
+                    return "94%-100%";
+
+                default:
+                    return "Unknown";
+            }
+        }
+    }
 }
 
-public interface IWind10m
+public class Wind10m
 {
-    string direction { get; set; }
-    int speed { get; set; }
+    public string direction { get; set; }
+    public int speed { get; set; }
 }

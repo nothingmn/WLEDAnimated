@@ -1,4 +1,5 @@
 ﻿using System.Net.Sockets;
+using Microsoft.Extensions.Logging;
 using SixLabors.ImageSharp;
 using WLEDAnimated.Interfaces;
 
@@ -7,11 +8,13 @@ namespace WLEDAnimated;
 public class ImageUDPSender : IImageSender
 {
     private readonly EndpointConverter _endpointConverter;
+    private readonly ILogger<ImageUDPSender> _log;
     private readonly IImageConverter _converter;
 
-    public ImageUDPSender(IImageToConverterFactory converterFactory, EndpointConverter endpointConverter)
+    public ImageUDPSender(IImageToConverterFactory converterFactory, EndpointConverter endpointConverter, ILogger<ImageUDPSender> log)
     {
         _endpointConverter = endpointConverter;
+        _log = log;
         _converter = converterFactory.GetConverter();
     }
 
@@ -29,12 +32,15 @@ public class ImageUDPSender : IImageSender
                     {
                         //Console.WriteLine($"{DateTime.Now}");
                         udpClient.Send(segment, segment.Length, ipEndPoint);
-                        Console.WriteLine($"{DateTime.Now} : Sent {segment.Length} bytes to {ipAddress}:{port}");
+
+                        _log.LogInformation($"Segment Length:{segment.Length}, Frame Count:{frame.Count} bytes to {ipAddress}:{port}");
                         //foreach (var b in segment) Console.Write($"{b:X2} ");
-                        Thread.Sleep(1);
+                        Thread.Sleep(1); //let's not flood the network
                     }
+                    _log.LogInformation($"Frame: Payload Count: {payload.Count} bytes to {ipAddress}:{port}");
                     Thread.Sleep(pauseBetweenFrames);
                 }
+                _log.LogInformation($"Iterations: Count: {iterations} bytes to {ipAddress}:{port}");
             }
         }
         Console.WriteLine($"Done sending image {path}");
