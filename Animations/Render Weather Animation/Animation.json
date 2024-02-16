@@ -8,10 +8,15 @@
         "StartDelay": 0,
         "TypeName": "DisplayRenderedWeatherImageStep",
         "Description": "Display The Weather Rendered",
-        "IPAddress": "10.0.0.197",
+        "IPAddress": "32x32rig.local",
+        "Port": 21324,
         "Lat": 49,
         "Lon": -122,
-        "Wait": 1
+        "Wait": 5,
+        "Width": 32,
+        "Height": 32,
+        "Template": "<html style='background-color:black;border:0'><font size='3px' color='white'>{{Current.temp2m}}</font></html>",
+        "Iterations" : 1
       }
     }
   ]

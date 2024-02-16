@@ -1,5 +1,5 @@
 {
-  "Name": "Weather Animation",
+  "Name": "Clock Animation",
   "Transitions": [
     {
       "StartDelay": 0,
@@ -7,13 +7,11 @@
       "Step": {
         "StartDelay": 0,
         "TypeName": "DisplayTextStep",
-        "Description": "Display The Weather",
+        "Description": "Display The Time",
         "ScrollingTextPluginName" : "Weather",
         "ScrollingTextPluginPayload": "49,-122",
-        "IPAddress": "10.0.0.197",
+        "IPAddress": "32x32rig.local",
         "Brightness": 128,
-        "Trail" : 0,
-        "FontSize": 255,
         "Revert": false,
         "DurationToDisplay": 0
       }

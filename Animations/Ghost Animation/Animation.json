@@ -1,0 +1,42 @@
+{
+  "Name": "Ghost Animation",
+  "Transitions": [
+    {
+      "StartDelay": 0,
+      "InterTransitionDelay": 0,
+      "Step": {
+        "StartDelay": 0,
+        "TypeName": "DisplayImageStep",
+        "Description": "Display the ghost",
+        "ImagePath" : "ghost-32x32.gif",
+        "IPAddress": "32x32rig.local",
+        "Port": 21324,
+        "Width": 32,
+        "Height": 32,
+        "Brightness": 128,
+        "Wait": 1,
+        "Iterations": 1,
+        "PauseBetweenFrames": 100
+      }
+    },
+    {
+      "StartDelay": 0,
+      "InterTransitionDelay": 0,
+      "Step": {
+        "StartDelay": 0,
+        "TypeName": "DisplayImageStep",
+        "Description": "Display the ghost",
+        "ImagePath" : "ghost-32x32.gif",
+        "IPAddress": "16x16rig.local",
+        "Port": 21324,
+        "Width": 16,
+        "Height": 16,
+        "Brightness": 128,
+        "Wait": 1,
+        "Iterations": 1,
+        "PauseBetweenFrames": 100
+      }
+    }
+
+  ]
+}
