@@ -43,6 +43,10 @@ public class ImageUDPSender : IImageSender
                 _log.LogInformation($"Iterations: Count: {iterations} bytes to {ipAddress}:{port}");
             }
         }
-        Console.WriteLine($"Done sending image {path}");
+        _log.LogInformation($"Done sending image {path}");
+
+        ////force GC to clean up memory, we are dealing with images here
+        GC.Collect();
+        GC.WaitForPendingFinalizers();
     }
 }

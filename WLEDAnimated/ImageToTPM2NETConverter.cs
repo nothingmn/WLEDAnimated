@@ -17,26 +17,28 @@ public class ImageToTPM2NETConverter : IImageConverter
 
     private List<byte[]> ConvertImageOrFrameToBytePayload(PixelAccessor<Rgba32> image, int startIndex, byte wait = 10)
     {
-        var client = new Tpm2UdpClient();
-        var ledStrip = new LEDStrip(image.Height * image.Width);
-
-        int index = 0;
-        for (int y = 0; y < image.Height; y++)
+        using (var client = new Tpm2UdpClient())
         {
-            var pixelRow = image.GetRowSpan(y);
+            var ledStrip = new LEDStrip(image.Height * image.Width);
 
-            // pixelRow.Length has the same value as accessor.Width,
-            // but using pixelRow.Length allows the JIT to optimize away bounds checks:
-            for (int x = 0; x < image.Width; x++)
+            int index = 0;
+            for (int y = 0; y < image.Height; y++)
             {
-                // Get a reference to the pixel at position x
-                ref var pixel = ref pixelRow[x];
-                ledStrip.SetLED(index, new LED(pixel.R, pixel.G, pixel.B));
-                index++;
-            }
-        }
+                var pixelRow = image.GetRowSpan(y);
 
-        return client.ConstructPayload(ledStrip);
+                // pixelRow.Length has the same value as accessor.Width,
+                // but using pixelRow.Length allows the JIT to optimize away bounds checks:
+                for (int x = 0; x < image.Width; x++)
+                {
+                    // Get a reference to the pixel at position x
+                    ref var pixel = ref pixelRow[x];
+                    ledStrip.SetLED(index, new LED(pixel.R, pixel.G, pixel.B));
+                    index++;
+                }
+            }
+
+            return client.ConstructPayload(ledStrip);
+        }
     }
 
     public List<List<byte[]>> ConvertImage(string path, Size dimensions, int startIndex = 0, byte wait = 10)
@@ -50,10 +52,13 @@ public class ImageToTPM2NETConverter : IImageConverter
             {
                 foreach (var frame in image.Frames.Cast<ImageFrame<Rgba32>>())
                 {
-                    frame.ProcessPixelRows(accessor =>
+                    using (frame)
                     {
-                        frames.Add(ConvertImageOrFrameToBytePayload(accessor, startIndex, wait));
-                    });
+                        frame.ProcessPixelRows(accessor =>
+                        {
+                            frames.Add(ConvertImageOrFrameToBytePayload(accessor, startIndex, wait));
+                        });
+                    }
                 }
             }
             else

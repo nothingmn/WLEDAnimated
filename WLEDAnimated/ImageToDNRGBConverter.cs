@@ -67,11 +67,14 @@ public class ImageToDNRGBConverter : IImageConverter
         {
             foreach (var frame in image.Frames.Cast<ImageFrame<Rgba32>>())
             {
-                frame.ProcessPixelRows(accessor =>
+                using (frame)
                 {
-                    var packets = ConvertImageOrFrameToBytePayload(accessor, startIndex, wait);
-                    allFramesPackets.Add(packets);
-                });
+                    frame.ProcessPixelRows(accessor =>
+                    {
+                        var packets = ConvertImageOrFrameToBytePayload(accessor, startIndex, wait);
+                        allFramesPackets.Add(packets);
+                    });
+                }
             }
         }
 

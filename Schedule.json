@@ -10,7 +10,7 @@
       "Invocable": "WLEDAnimated.API.Invocables.AnimationInvocer",
       "Cron": "0 * * * *",
       "Animation": "Weather Animation",
-      "Enabled": true
+      "Enabled": false
     }
   ]
 }
