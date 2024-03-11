@@ -2,5 +2,5 @@
 
 public interface IScrollingTextPlugin
 {
-    Task<string> GetTextToDisplay(string payload = null);
+    Task<string> GetTextToDisplay(string payload = null, object state = null);
 }

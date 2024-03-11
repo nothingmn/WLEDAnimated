@@ -15,7 +15,7 @@ public interface IAnimation
 
     void ScheduleStop(DateTimeOffset stopTime);
 
-    Task StartAsync(CancellationToken cancellationToken, IProgress<AnimationProgress> progress);
+    Task StartAsync(CancellationToken cancellationToken, IProgress<AnimationProgress> progress, object state = null);
 
     void Stop();
 }

@@ -14,7 +14,7 @@ public class QuotesScrollingTextPlugin : IScrollingTextPlugin
         _logger = logger;
     }
 
-    public async Task<string> GetTextToDisplay(string payload = null)
+    public async Task<string> GetTextToDisplay(string payload = null, object state = null)
     {
         _logger.LogInformation("Getting quote");
 

@@ -12,7 +12,7 @@ public class DisplayRenderedWeatherImageStep : DisplayRenderedImageStep
 {
     public DisplayRenderedWeatherImageStep(ILogger<DisplayRenderedImageStep> log, IImageSender sender, IBasicTemplatedImage templatingEngine, IWeather weatherService) : base(log, sender, templatingEngine)
     {
-        this.Transition += async (token) =>
+        this.Transition += async (token, state) =>
         {
             this.Data = new
             {
@@ -74,11 +74,11 @@ public class DisplayRenderedImageStep : IStep
     public string Description { get; set; } = "Display Rendered Image Step";
 
     [JsonIgnore]
-    public Func<CancellationToken, Task> BeforeTransition { get; set; }
+    public Func<CancellationToken, object, Task> BeforeTransition { get; set; }
 
     [JsonIgnore]
-    public Func<CancellationToken, Task> Transition { get; set; }
+    public Func<CancellationToken, object, Task> Transition { get; set; }
 
     [JsonIgnore]
-    public Func<CancellationToken, Task> AfterTransition { get; set; }
+    public Func<CancellationToken, object, Task> AfterTransition { get; set; }
 }

@@ -14,14 +14,15 @@ public class DisplayTextStep : IStep
     public DisplayTextStep(IWLEDApiManager apiManager, ILogger<DisplayTextStep> logger)
     {
         _logger = logger;
-        this.Transition += async (cancellationToken) =>
+
+        this.Transition += async (cancellationToken, state) =>
         {
             var response = await apiManager.Connect(IPAddress);
             await apiManager.On(this.Brightness);
             if (string.IsNullOrWhiteSpace(TextToDisplay))
             {
                 _logger.LogInformation("No Text provided, lets go the plugin route...{ScrollingTextPluginName}, {ScrollingTextPluginPayload}", ScrollingTextPluginName, ScrollingTextPluginPayload);
-                await apiManager.ScrollingText(ScrollingTextPluginName, ScrollingTextPluginPayload, Speed, YOffSet, Trail, FontSize, Rotate);
+                await apiManager.ScrollingText(ScrollingTextPluginName, ScrollingTextPluginPayload, Speed, YOffSet, Trail, FontSize, Rotate, state);
             }
             else
             {
@@ -49,20 +50,18 @@ public class DisplayTextStep : IStep
     public int? Trail { get; set; }
     public int? Rotate { get; set; }
     public string ScrollingTextPluginName { get; set; }
-
     public string ScrollingTextPluginPayload { get; set; }
     public int? FontSize { get; set; }
-
     public bool Revert { get; set; } = true;
     public TimeSpan DurationToDisplay { get; set; }
     public string Description { get; set; } = "Display Text";
 
     [JsonIgnore]
-    public Func<CancellationToken, Task> BeforeTransition { get; set; }
+    public Func<CancellationToken, object, Task> BeforeTransition { get; set; }
 
     [JsonIgnore]
-    public Func<CancellationToken, Task> Transition { get; set; }
+    public Func<CancellationToken, object, Task> Transition { get; set; }
 
     [JsonIgnore]
-    public Func<CancellationToken, Task> AfterTransition { get; set; }
+    public Func<CancellationToken, object, Task> AfterTransition { get; set; }
 }

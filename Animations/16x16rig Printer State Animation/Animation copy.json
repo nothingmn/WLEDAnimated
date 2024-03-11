@@ -1,0 +1,23 @@
+{
+  "Name": "16x16rig Printer State Animation",
+  "Transitions": [
+    {
+      "StartDelay": 0,
+      "InterTransitionDelay": 0,
+      "Step": {
+        "StartDelay": 0,
+        "TypeName": "DisplayTextStep",
+        "Description": "Display Printer State",
+        "ScrollingTextPluginName" : "PrinterStatePlugin",
+        "ScrollingTextPluginPayload": "{{Name}}/{{Status.Printer.State}}/{{Job.ProgressPercent}}/{{Job.DurationUntilEnd}}",
+        "IPAddress": "16x16rig.local",
+        "Brightness": 128,
+        "Trail": 0,
+        "Speed": 255,
+        "FontSize": 255,
+        "Revert": false,
+        "DurationToDisplay": 10
+      }
+    }
+  ]
+}

@@ -16,7 +16,7 @@ public interface IWLEDApiManager
 
     Task ScrollingText(string text, int? speed, int? yOffSet, int? trail, int? fontSize, int? rotate);
 
-    Task ScrollingText(string scrollingTextPluginName, string scrollingTextPluginPayload, int? speed, int? yOffSet, int? trail, int? fontSize, int? rotate);
+    Task ScrollingText(string scrollingTextPluginName, string scrollingTextPluginPayload, int? speed, int? yOffSet, int? trail, int? fontSize, int? rotate, object state = null);
 
     StateRequest ConvertStateResponseToRequest(StateResponse state);
 

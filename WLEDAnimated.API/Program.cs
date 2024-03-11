@@ -11,6 +11,7 @@ using WLEDAnimated.Animation;
 using WLEDAnimated.API.Invocables;
 using WLEDAnimated.Interfaces;
 using WLEDAnimated.Interfaces.Services;
+using WLEDAnimated.Printing;
 using WLEDAnimated.Services;
 
 namespace WLEDAnimated.API;
@@ -66,7 +67,7 @@ public class Program
         builder.Services.AddTransient<IScrollingTextPluginFactory, ScrollingTextPluginFactory>();
         LoadScrollingTextPlugins(builder.Services);
         RegisterServices(builder.Services);
-
+        RegisterPrinterServices(builder.Services);
         //throw in our basic scheduler...
         builder.Services.AddScheduler();
         builder.Services.AddControllers().AddJsonOptions(options => { options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()); });
@@ -110,8 +111,9 @@ public class Program
         app.UseDefaultFiles();
 
         var provider = app.Services;
-
         var logger = provider.GetService<ILogger<Program>>();
+
+        Configure3DPrinters(provider);
 
         provider.UseScheduler(scheduler =>
     {
@@ -126,7 +128,7 @@ public class Program
             if (invocer != null)
             {
                 var instance = app.Services.GetService(invocer) as IInvocable;
-                //var instance = ActivatorUtilities.CreateInstance(provider, invocer) as IInvocable;
+                //var Instance = ActivatorUtilities.CreateInstance(provider, invocer) as IInvocable;
                 var animationInvocer = instance as AnimationInvocer;
 
                 if (animationInvocer != null)
@@ -147,6 +149,29 @@ public class Program
         dd.Start(discover);
 
         app.Run();
+    }
+
+    private static void RegisterPrinterServices(IServiceCollection services)
+    {
+        services.AddSingleton<PrinterInstanceManager, PrinterInstanceManager>();
+        services.AddSingleton<ThreeDPrinters, ThreeDPrinters>();
+        services.AddTransient<ThreeDPrinterConfiguration, ThreeDPrinterConfiguration>();
+        services.AddSingleton<PrinterEventAnimation, PrinterEventAnimation>();
+        services.AddKeyedTransient<I3DPrinter, PrusaLinkPrinter>("PrusaLink");
+    }
+
+    private static void Configure3DPrinters(IServiceProvider services)
+    {
+        var printerConfigs = services.GetService<ThreeDPrinters>();
+        var config = services.GetService<IConfiguration>();
+        var printersConfigSection = config.GetSection("3dPrinters");
+        printerConfigs.Printers = printersConfigSection.Get<List<ThreeDPrinterConfiguration>>(options =>
+        {
+            options.ErrorOnUnknownConfiguration = true;
+        });
+
+        var mgr = services.GetService<PrinterInstanceManager>();
+        mgr.Init().Wait();
     }
 
     private static void RegisterServices(IServiceCollection services)

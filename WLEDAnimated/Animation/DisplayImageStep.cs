@@ -9,7 +9,7 @@ public class DisplayImageStep : IStep
 {
     public DisplayImageStep(IImageSender sender)
     {
-        this.Transition += async (cancellationToken) =>
+        this.Transition += async (cancellationToken, state) =>
         {
             sender.Send(
                 IPAddress,
@@ -38,11 +38,11 @@ public class DisplayImageStep : IStep
     public string Description { get; set; } = "Display Image";
 
     [JsonIgnore]
-    public Func<CancellationToken, Task> BeforeTransition { get; set; }
+    public Func<CancellationToken, object, Task> BeforeTransition { get; set; }
 
     [JsonIgnore]
-    public Func<CancellationToken, Task> Transition { get; set; }
+    public Func<CancellationToken, object, Task> Transition { get; set; }
 
     [JsonIgnore]
-    public Func<CancellationToken, Task> AfterTransition { get; set; }
+    public Func<CancellationToken, object, Task> AfterTransition { get; set; }
 }

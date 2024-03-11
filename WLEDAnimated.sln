@@ -25,7 +25,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ScrollingTextPlugins", "Scr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImageGeneration", "ImageGeneration\ImageGeneration.csproj", "{D1F29999-80DB-4C49-960C-1E334407C19E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DDP", "DDP\DDP.csproj", "{A7591034-6EEE-4651-8A7B-D31CC622EA29}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DDP", "DDP\DDP.csproj", "{A7591034-6EEE-4651-8A7B-D31CC622EA29}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WLEDAnimated.Printing", "WLEDAnimated.Printing\WLEDAnimated.Printing.csproj", "{47673092-FEED-49D5-9A4F-68F2F15CA426}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -65,6 +67,10 @@ Global
 		{A7591034-6EEE-4651-8A7B-D31CC622EA29}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A7591034-6EEE-4651-8A7B-D31CC622EA29}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A7591034-6EEE-4651-8A7B-D31CC622EA29}.Release|Any CPU.Build.0 = Release|Any CPU
+		{47673092-FEED-49D5-9A4F-68F2F15CA426}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{47673092-FEED-49D5-9A4F-68F2F15CA426}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{47673092-FEED-49D5-9A4F-68F2F15CA426}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{47673092-FEED-49D5-9A4F-68F2F15CA426}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -12,5 +12,5 @@ public interface ITransition
     TimeSpan StartDelay { get; set; }
     TimeSpan InterTransitionDelay { get; set; }
 
-    Task PerformTransitionAsync(CancellationToken cancellationToken, IProgress<AnimationProgress> progress);
+    Task PerformTransitionAsync(CancellationToken cancellationToken, IProgress<AnimationProgress> progress, object state = null);
 }

@@ -93,7 +93,7 @@ public class AnimationManager
         return animation;
     }
 
-    public async Task<IAnimation> PlayAnimation(IAnimation animation)
+    public async Task<IAnimation> PlayAnimation(IAnimation animation, object state = null)
     {
         var cancellationTokenSource = new CancellationTokenSource();
         var progress = new Progress<AnimationProgress>(p =>
@@ -103,11 +103,11 @@ public class AnimationManager
         });
 
         // Start the animation asynchronously
-        await animation.StartAsync(cancellationTokenSource.Token, progress);
+        await animation.StartAsync(cancellationTokenSource.Token, progress, state);
         return animation;
     }
 
-    public async Task<IAnimation> PlayAnimation(string name)
+    public async Task<IAnimation> PlayAnimation(string name, object state = null)
     {
         IAnimation animation = null;
         try
@@ -121,7 +121,7 @@ public class AnimationManager
 
         if (animation != null)
         {
-            return await PlayAnimation(animation);
+            return await PlayAnimation(animation, state);
         }
         return null;
     }

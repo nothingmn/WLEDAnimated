@@ -40,19 +40,18 @@ public class LinearAnimation : IAnimation
         // Stop the animation
     }
 
-    public async Task StartAsync(CancellationToken cancellationToken, IProgress<AnimationProgress> progress)
+    public async Task StartAsync(CancellationToken cancellationToken, IProgress<AnimationProgress> progress, object state = null)
     {
-        OnStarted();
+        OnStarted(state);
         foreach (var transition in Transitions)
         {
             if (cancellationToken.IsCancellationRequested)
             {
                 cancellationToken.ThrowIfCancellationRequested();
             }
-            await transition.PerformTransitionAsync(cancellationToken, progress);
+            await transition.PerformTransitionAsync(cancellationToken, progress, state);
         }
-
-        OnCompleted();
+        OnCompleted(state);
     }
 
     public void Stop()
@@ -61,9 +60,9 @@ public class LinearAnimation : IAnimation
         // Implement stopping logic
     }
 
-    protected virtual void OnStarted()
+    protected virtual void OnStarted(object state = null)
     {
-        Started?.Invoke(this, EventArgs.Empty);
+        Started?.Invoke(this, new AnimationEventArgs() { State = state });
     }
 
     protected virtual void OnStopped()
@@ -71,8 +70,8 @@ public class LinearAnimation : IAnimation
         Stopped?.Invoke(this, EventArgs.Empty);
     }
 
-    protected virtual void OnCompleted()
+    protected virtual void OnCompleted(object state = null)
     {
-        Completed?.Invoke(this, EventArgs.Empty);
+        Completed?.Invoke(this, new AnimationEventArgs() { State = state });
     }
 }

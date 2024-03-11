@@ -15,7 +15,7 @@ public class BoredScrollingTextPlugin : IScrollingTextPlugin
         _logger = logger;
     }
 
-    public async Task<string> GetTextToDisplay(string payload = null)
+    public async Task<string> GetTextToDisplay(string payload = null, object state = null)
     {
         _logger.LogInformation("Getting bored...");
         var bored = new Bored();

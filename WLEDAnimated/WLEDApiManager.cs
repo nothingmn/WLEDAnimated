@@ -102,12 +102,12 @@ public class WLEDApiManager : IWLEDApiManager
         await _client.Post(request);
     }
 
-    public async Task ScrollingText(string scrollingTextPluginName, string scrollingTextPluginPayload, int? speed, int? yOffSet, int? trail, int? fontSize, int? rotate)
+    public async Task ScrollingText(string scrollingTextPluginName, string scrollingTextPluginPayload, int? speed, int? yOffSet, int? trail, int? fontSize, int? rotate, object state = null)
     {
         var plugin = _scrollingTextPluginFactory.LoadPluginByName(scrollingTextPluginName);
         if (plugin != null)
         {
-            await ScrollingText(await plugin.GetTextToDisplay(scrollingTextPluginPayload), speed, yOffSet, trail, fontSize, rotate);
+            await ScrollingText(await plugin.GetTextToDisplay(scrollingTextPluginPayload, state), speed, yOffSet, trail, fontSize, rotate);
         }
     }
 

@@ -14,33 +14,33 @@ public class BasicTransition : ITransition
     public TimeSpan StartDelay { get; set; }
     public TimeSpan InterTransitionDelay { get; set; }
 
-    public async Task PerformTransitionAsync(CancellationToken cancellationToken, IProgress<AnimationProgress> progress)
+    public async Task PerformTransitionAsync(CancellationToken cancellationToken, IProgress<AnimationProgress> progress, object state = null)
     {
-        OnTransitionStarted();
+        OnTransitionStarted(state);
 
         await Task.Delay(StartDelay, cancellationToken);
 
         if (ToStep.BeforeTransition != null)
         {
-            await ToStep.BeforeTransition(cancellationToken);
+            await ToStep.BeforeTransition(cancellationToken, state);
         }
         if (ToStep.Transition != null)
         {
-            await ToStep.Transition(cancellationToken);
+            await ToStep.Transition(cancellationToken, state);
         }
 
-        OnTransitionCompleted();
+        OnTransitionCompleted(state);
 
         await Task.Delay(InterTransitionDelay, cancellationToken);
     }
 
-    protected virtual void OnTransitionStarted()
+    protected virtual void OnTransitionStarted(object state = null)
     {
-        TransitionStarted?.Invoke(this, EventArgs.Empty);
+        TransitionStarted?.Invoke(this, new AnimationEventArgs() { State = state });
     }
 
-    protected virtual void OnTransitionCompleted()
+    protected virtual void OnTransitionCompleted(object state = null)
     {
-        TransitionCompleted?.Invoke(this, EventArgs.Empty);
+        TransitionCompleted?.Invoke(this, new AnimationEventArgs() { State = state });
     }
 }

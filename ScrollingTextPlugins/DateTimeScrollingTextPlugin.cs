@@ -14,7 +14,7 @@ public class DateTimeScrollingTextPlugin : IScrollingTextPlugin
         _logger = logger;
     }
 
-    public async Task<string> GetTextToDisplay(string payload = null)
+    public async Task<string> GetTextToDisplay(string payload = null, object state = null)
     {
         var format = payload;
         if (string.IsNullOrWhiteSpace(payload)) format = "dd/MM/yyyy HH:mm:ss";

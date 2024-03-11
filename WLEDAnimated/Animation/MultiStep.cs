@@ -13,7 +13,7 @@ public class MultiStep : IStep
     public MultiStep(ILogger<MultiStep> logger)
     {
         _logger = logger;
-        this.Transition += async (cancellationToken) =>
+        this.Transition += async (cancellationToken, state) =>
         {
             var tasks = new List<Task>();
 
@@ -23,7 +23,7 @@ public class MultiStep : IStep
                 foreach (var step in steps)
                 {
                     _logger.LogInformation("Starting Step:{stepName}, {thisId}, {stepID}", step.GetType().Name, this.GetHashCode(), step.GetHashCode());
-                    tasks.Add(step.Transition(cancellationToken));
+                    tasks.Add(step.Transition(cancellationToken, state));
                     _logger.LogInformation("Started Step:{stepName}", step.GetType().Name);
                 }
             }
@@ -41,11 +41,11 @@ public class MultiStep : IStep
     public List<IStep> Steps { get; set; } = new List<IStep>();
 
     [JsonIgnore]
-    public Func<CancellationToken, Task> BeforeTransition { get; set; }
+    public Func<CancellationToken, object, Task> BeforeTransition { get; set; }
 
     [JsonIgnore]
-    public Func<CancellationToken, Task> Transition { get; set; }
+    public Func<CancellationToken, object, Task> Transition { get; set; }
 
     [JsonIgnore]
-    public Func<CancellationToken, Task> AfterTransition { get; set; }
+    public Func<CancellationToken, object, Task> AfterTransition { get; set; }
 }
