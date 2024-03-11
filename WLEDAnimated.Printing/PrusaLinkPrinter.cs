@@ -9,7 +9,7 @@ public class PrusaLinkPrinter : I3DPrinter
 {
     private readonly ILogger<PrusaLinkPrinter> _log;
     private readonly AnimationManager _animationManager;
-    public PrusaLinkInstance Instance = null;
+    public PrusaLinkInstance Instance { get; set; }
 
     public ThreeDPrinterConfiguration Configuration { get; set; }
 
@@ -132,16 +132,6 @@ public class PrusaLinkPrinter : I3DPrinter
     private async void Update(PrusaLinkInstance instance)
     {
         if (OnPrinterUpdated != null) OnPrinterUpdated(instance);
-    }
-
-    public Task<string> GetStatus()
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<bool> DisconnectAsync()
-    {
-        throw new NotImplementedException();
     }
 }
 

@@ -62,6 +62,7 @@ public class Program
         builder.Services.AddTransient<WLEDAnimationLoader>();
         builder.Services.AddTransient<AnimationManager>();
         builder.Services.AddTransient<AnimationInvocer>();
+        builder.Services.AddTransient<PrinterAnimationInvocer>();
         builder.Services.AddTransient<AssemblyTypeProcessor>();
 
         builder.Services.AddTransient<IScrollingTextPluginFactory, ScrollingTextPluginFactory>();
@@ -128,15 +129,22 @@ public class Program
             if (invocer != null)
             {
                 var instance = app.Services.GetService(invocer) as IInvocable;
-                //var Instance = ActivatorUtilities.CreateInstance(provider, invocer) as IInvocable;
                 var animationInvocer = instance as AnimationInvocer;
 
                 if (animationInvocer != null)
                 {
-                    logger.LogInformation($"Adding animation {schedulerConfig.Animation} with cron {schedulerConfig.Cron}");
                     animationInvocer.Animation = schedulerConfig.Animation;
-                    scheduler.ScheduleAsync(async () => { await instance.Invoke(); }).Cron(schedulerConfig.Cron);
                 }
+                var printerInvocer = instance as PrinterAnimationInvocer;
+
+                if (printerInvocer != null)
+                {
+                    printerInvocer.Animation = schedulerConfig.Animation;
+                    printerInvocer.PrinterId = schedulerConfig.PrinterId;
+                }
+
+                logger.LogInformation($"Adding animation {schedulerConfig.Animation} with cron {schedulerConfig.Cron}");
+                scheduler.ScheduleAsync(async () => { await instance.Invoke(); }).Cron(schedulerConfig.Cron);
             }
         }
     });
@@ -153,7 +161,7 @@ public class Program
 
     private static void RegisterPrinterServices(IServiceCollection services)
     {
-        services.AddSingleton<PrinterInstanceManager, PrinterInstanceManager>();
+        services.AddSingleton<IPrinterInstanceManager, PrinterInstanceManager>();
         services.AddSingleton<ThreeDPrinters, ThreeDPrinters>();
         services.AddTransient<ThreeDPrinterConfiguration, ThreeDPrinterConfiguration>();
         services.AddSingleton<PrinterEventAnimation, PrinterEventAnimation>();
@@ -170,7 +178,7 @@ public class Program
             options.ErrorOnUnknownConfiguration = true;
         });
 
-        var mgr = services.GetService<PrinterInstanceManager>();
+        var mgr = services.GetService<IPrinterInstanceManager>();
         mgr.Init().Wait();
     }
 

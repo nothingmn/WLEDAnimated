@@ -3,7 +3,14 @@ using Microsoft.Extensions.Logging;
 
 namespace WLEDAnimated.Printing;
 
-public class PrinterInstanceManager
+public interface IPrinterInstanceManager
+{
+    List<I3DPrinter> Printers { get; set; }
+
+    Task Init();
+}
+
+public class PrinterInstanceManager : IPrinterInstanceManager
 {
     public List<I3DPrinter> Printers { get; set; }
     private readonly ThreeDPrinters _printersConfig;
@@ -58,7 +65,5 @@ public interface I3DPrinter
 
     public Task<bool> ConnectAsync();
 
-    public Task<string> GetStatus();
-
-    public Task<bool> DisconnectAsync();
+    PrusaLinkInstance Instance { get; set; }
 }

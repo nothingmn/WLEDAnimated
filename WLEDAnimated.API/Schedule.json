@@ -5,6 +5,13 @@
       "Cron": "* * * * *",
       "Animation": "Clock Animation",
       "Enabled": true
+    },
+    {
+      "Invocable": "WLEDAnimated.API.Invocables.PrinterAnimationInvocer",
+      "Cron": "* * * * *",
+      "Animation": "16x16rig Printer State Animation",
+      "Enabled": true,
+      "PrinterId": "PrusaMK4"
     }
   ]
 }
