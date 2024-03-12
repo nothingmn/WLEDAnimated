@@ -30,6 +30,9 @@ https://youtube.com/playlist?list=PLdmz103HwzOQKeGUdDre6nMHIgjRyUPAD&si=xWRNNLp4
 		1. [Customizable formatted date time](https://youtube.com/shorts/ngPygW_XpbI?si=xkq6Gq4V81VrTEXD)
 		1. [Quotes](https://youtube.com/shorts/x73_-OVXjjI?si=KiuSWRdG9IEos_Xo)
    		1. [Weather](https://youtube.com/shorts/K3KJeIrk0qM?si=uLeiZKgxX6nGDImm)
+		1. Prusa Printer Support
+			1. Based on the printer state changes, run an animation
+			1. Run animations to update your WLED device based on the current state of your printer, templated of course!
 		1. Write your own - we implemented a plugin system.  Just drop your DLL in!
 
 4. Upload or provide a URL an image
