@@ -11,31 +11,40 @@ namespace ScrollingTextPlugins;
 public class PrinterStatePlugin : IScrollingTextPlugin
 {
     private readonly ILogger<PrinterStatePlugin> _logger;
+    private readonly PrinterVariableReplacer _replacer;
 
-    public PrinterStatePlugin(ILogger<PrinterStatePlugin> logger)
+    public PrinterStatePlugin(ILogger<PrinterStatePlugin> logger, PrinterVariableReplacer replacer)
     {
         _logger = logger;
+        _replacer = replacer;
     }
 
     public async Task<string> GetTextToDisplay(string payload = null, object state = null)
     {
         if (state is null) return null;
-        var printer = state as PrusaLinkPrinter;
+        var printer = state as PrusaLinkInstance;
         _logger.LogInformation("Updating Printer State: {payload}...", payload);
 
-        var replacer = new PrinterVariableReplacer();
-        return replacer.Replace(payload, printer);
+        return _replacer.Replace(payload, printer);
     }
 }
 
 public class PrinterVariableReplacer
 {
-    public string Replace(string text, PrusaLinkPrinter state)
+    private readonly ILogger<PrinterVariableReplacer> _log;
+
+    public PrinterVariableReplacer(ILogger<PrinterVariableReplacer> log)
+    {
+        _log = log;
+    }
+
+    public string Replace(string text, PrusaLinkInstance state)
     {
         if (state is null) return null;
 
         var t = Handlebars.Compile(text);
-        var result = t(state.Instance);
+        var result = t(state);
+        _log.LogInformation("Printer State Will change to: '{result}'", result);
         return result;
     }
 }

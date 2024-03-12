@@ -6,6 +6,7 @@ using Coravel;
 using Coravel.Invocable;
 using ImageGeneration;
 using Microsoft.Extensions.DependencyInjection;
+using ScrollingTextPlugins;
 using SixLabors.ImageSharp.Processing.Processors.Transforms;
 using WLEDAnimated.Animation;
 using WLEDAnimated.API.Invocables;
@@ -166,6 +167,7 @@ public class Program
         services.AddTransient<ThreeDPrinterConfiguration, ThreeDPrinterConfiguration>();
         services.AddSingleton<PrinterEventAnimation, PrinterEventAnimation>();
         services.AddKeyedTransient<I3DPrinter, PrusaLinkPrinter>("PrusaLink");
+        services.AddTransient<PrinterVariableReplacer, PrinterVariableReplacer>();
     }
 
     private static void Configure3DPrinters(IServiceProvider services)

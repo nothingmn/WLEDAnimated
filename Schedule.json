@@ -7,10 +7,11 @@
       "Enabled": true
     },
     {
-      "Invocable": "WLEDAnimated.API.Invocables.AnimationInvocer",
-      "Cron": "0 * * * *",
-      "Animation": "Weather Animation",
-      "Enabled": false
+      "Invocable": "WLEDAnimated.API.Invocables.PrinterAnimationInvocer",
+      "Cron": "* * * * *",
+      "Animation": "16x16rig Printer State Animation",
+      "Enabled": true,
+      "PrinterId": "PrusaMK4"
     }
   ]
 }
