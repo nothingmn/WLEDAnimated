@@ -4,6 +4,7 @@ using System.Runtime.CompilerServices;
 using System.Text.Json.Serialization;
 using Coravel;
 using Coravel.Invocable;
+using HandlebarsTemplating;
 using ImageGeneration;
 using Microsoft.Extensions.DependencyInjection;
 using ScrollingTextPlugins;
@@ -54,6 +55,7 @@ public class Program
         //builder.Services.AddTransient<IBasicTemplatedImage, BasicTemplatedImage>();
         //builder.Services.AddTransient<IBasicTemplatedImage, CoreTemplatedImage>();
         builder.Services.AddTransient<IBasicTemplatedImage, HtmlTemplatedImage>();
+        builder.Services.AddTransient<ITemplateService, HandleBarsTemplateService>();
 
         builder.Services.AddSingleton<Version>();
         builder.Services.AddSingleton<DeviceDiscovery>();
@@ -167,7 +169,6 @@ public class Program
         services.AddTransient<ThreeDPrinterConfiguration, ThreeDPrinterConfiguration>();
         services.AddSingleton<PrinterEventAnimation, PrinterEventAnimation>();
         services.AddKeyedTransient<I3DPrinter, PrusaLinkPrinter>("PrusaLink");
-        services.AddTransient<PrinterVariableReplacer, PrinterVariableReplacer>();
     }
 
     private static void Configure3DPrinters(IServiceProvider services)

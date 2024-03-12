@@ -4433,7 +4433,24 @@ namespace PrusaLink
         {
             get
             {
-                return $"{TimeRemaining.Days}d, {TimeRemaining.Hours}h, {TimeRemaining.Minutes}m";
+
+                var text = "";
+                if (TimeRemaining.Days > 0)
+                {
+                    text += $"{TimeRemaining.Days}d";
+                }
+                if (TimeRemaining.Hours > 0)
+                {
+                    if(!string.IsNullOrWhiteSpace(text)) text += ", ";
+                    text += $"{TimeRemaining.Hours}h";
+                }
+                if (TimeRemaining.Minutes > 0)
+                {
+                    if (!string.IsNullOrWhiteSpace(text)) text += ", ";
+                    text += $"{TimeRemaining.Minutes}m";
+                }
+
+                return text;
             }
         }
 

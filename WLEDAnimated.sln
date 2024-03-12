@@ -27,7 +27,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImageGeneration", "ImageGen
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DDP", "DDP\DDP.csproj", "{A7591034-6EEE-4651-8A7B-D31CC622EA29}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WLEDAnimated.Printing", "WLEDAnimated.Printing\WLEDAnimated.Printing.csproj", "{47673092-FEED-49D5-9A4F-68F2F15CA426}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WLEDAnimated.Printing", "WLEDAnimated.Printing\WLEDAnimated.Printing.csproj", "{47673092-FEED-49D5-9A4F-68F2F15CA426}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HandlebarsTemplating", "HandlebarsTemplating\HandlebarsTemplating.csproj", "{90C1B1AC-418A-4D70-88A3-DF70BF8B1D03}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -71,6 +73,10 @@ Global
 		{47673092-FEED-49D5-9A4F-68F2F15CA426}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{47673092-FEED-49D5-9A4F-68F2F15CA426}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{47673092-FEED-49D5-9A4F-68F2F15CA426}.Release|Any CPU.Build.0 = Release|Any CPU
+		{90C1B1AC-418A-4D70-88A3-DF70BF8B1D03}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{90C1B1AC-418A-4D70-88A3-DF70BF8B1D03}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{90C1B1AC-418A-4D70-88A3-DF70BF8B1D03}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{90C1B1AC-418A-4D70-88A3-DF70BF8B1D03}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

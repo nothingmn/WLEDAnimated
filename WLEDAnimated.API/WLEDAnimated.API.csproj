@@ -18,6 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\HandlebarsTemplating\HandlebarsTemplating.csproj" />
     <ProjectReference Include="..\ImageGeneration\ImageGeneration.csproj" />
     <ProjectReference Include="..\ScrollingTextPlugins\ScrollingTextPlugins.csproj" />
     <ProjectReference Include="..\WLEDAnimated\WLEDAnimated.csproj" />
