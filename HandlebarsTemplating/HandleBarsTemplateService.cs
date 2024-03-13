@@ -77,6 +77,7 @@ public class HandleBarsTemplateService : ITemplateService
             _logger.LogInformation("Compiling our template:{text}", text);
             var t = Handlebars.Compile(text);
             var result = t(state);
+            result = result.Replace("\t", "").Replace("\r", "").Replace("\n", "").Trim();
             _logger.LogInformation("Template compiled and executed: '{result}'", result);
             return result;
         }
