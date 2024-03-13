@@ -1,4 +1,5 @@
 ﻿using System.Security.Cryptography;
+using System.Text.RegularExpressions;
 using AnimationCore.Interfaces;
 using HandlebarsDotNet;
 using Microsoft.Extensions.Logging;
@@ -10,6 +11,7 @@ namespace HandlebarsTemplating;
 public class HandleBarsTemplateService : ITemplateService
 {
     private readonly ILogger<HandleBarsTemplateService> _logger;
+    private static Regex regex = new Regex(@"[\s\r\n\t]+", RegexOptions.Compiled);
 
     public HandleBarsTemplateService(ILogger<HandleBarsTemplateService> logger)
     {
@@ -77,7 +79,7 @@ public class HandleBarsTemplateService : ITemplateService
             _logger.LogInformation("Compiling our template:{text}", text);
             var t = Handlebars.Compile(text);
             var result = t(state);
-            result = result.Replace("\t", "").Replace("\r", "").Replace("\n", "").Trim();
+            result = regex.Replace(result, " ").Trim();
             _logger.LogInformation("Template compiled and executed: '{result}'", result);
             return result;
         }
