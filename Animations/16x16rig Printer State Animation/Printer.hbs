@@ -1,0 +1,6 @@
+{{#if Printer.Job}}
+	{{Printer.Job.ProgressPercent}}
+{{else}}
+	{{Printer.Status.Printer.State}}
+{{/if}}
+{{Version.FullVersion}}

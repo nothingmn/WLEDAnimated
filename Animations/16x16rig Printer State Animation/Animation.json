@@ -9,7 +9,7 @@
         "TypeName": "DisplayTextStep",
         "Description": "Display Printer State",
         "ScrollingTextPluginName" : "PrinterStatePlugin",
-        "ScrollingTextPluginPayload": "16x16rig Printer State Animation/Printer.tmpl",
+        "ScrollingTextPluginPayload": "16x16rig Printer State Animation/Printer.hbs",
         "IPAddress": "16x16rig.local",
         "Brightness": 128,
         "Trail": 0,

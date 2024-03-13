@@ -3,19 +3,23 @@ using System.Text.RegularExpressions;
 using AnimationCore.Interfaces;
 using HandlebarsDotNet;
 using Microsoft.Extensions.Logging;
+using WLEDAnimated;
 using WLEDAnimated.Animation;
 using WLEDAnimated.Interfaces.Services;
+using Version = WLEDAnimated.Version;
 
 namespace HandlebarsTemplating;
 
 public class HandleBarsTemplateService : ITemplateService
 {
     private readonly ILogger<HandleBarsTemplateService> _logger;
+    private readonly Version _version;
     private static Regex regex = new Regex(@"[\s\r\n\t]+", RegexOptions.Compiled);
 
-    public HandleBarsTemplateService(ILogger<HandleBarsTemplateService> logger)
+    public HandleBarsTemplateService(ILogger<HandleBarsTemplateService> logger, Version version)
     {
         _logger = logger;
+        _version = version;
     }
 
     //"ScrollingTextPluginPayload": "16x16rig Printer State Animation\\Printer.tmpl",
@@ -42,7 +46,9 @@ public class HandleBarsTemplateService : ITemplateService
                     {
                         System.IO.Directory.CreateDirectory(parentFolder);
                     }
-                    var file = System.IO.Path.Combine(parentFolder, BitConverter.ToString(hash).Replace("-", "") + ".tmpl");
+
+                    var file = System.IO.Path.Combine(parentFolder,
+                        BitConverter.ToString(hash).Replace("-", "") + ".tmpl");
 
                     _logger.LogInformation("Local file will be:{file}", file);
 
@@ -62,23 +68,31 @@ public class HandleBarsTemplateService : ITemplateService
                         _logger.LogInformation("Downloading template over http.  Destination:{file} already exists. Use it.", file);
                         text = System.IO.File.ReadAllText(file);
                     }
-                };
+                }
             }
             else
             {
                 var animationsFolder = System.IO.Path.Combine(AppContext.BaseDirectory, "Animations");
                 var filePath = System.IO.Path.Combine(animationsFolder, text);
                 _logger.LogInformation("Attempting to load our template from disk:{filePath}", filePath);
-
                 if (System.IO.File.Exists(filePath))
                 {
                     text = System.IO.File.ReadAllText(filePath);
                     _logger.LogInformation("Template file loaded from disk:{filePath}", filePath);
                 }
             }
+
             _logger.LogInformation("Compiling our template:{text}", text);
             var t = Handlebars.Compile(text);
-            var result = t(state);
+
+            var templateBinder = new
+            {
+                TimeStamp = DateTime.Now.ToLocalTime(),
+                Version = _version,
+                Printer = state
+            };
+
+            var result = t(templateBinder);
             result = regex.Replace(result, " ").Trim();
             _logger.LogInformation("Template compiled and executed: '{result}'", result);
             return result;
