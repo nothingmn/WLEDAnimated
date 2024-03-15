@@ -127,16 +127,25 @@ public class Program
 
         foreach (var schedulerConfig in schedules?.Where(schedulerConfig => schedulerConfig.Enabled))
         {
+            logger.LogInformation("Setting up Scheduler:Animation:{animation}, Cron:{cron}", schedulerConfig.Animation, schedulerConfig.Cron);
             var type = schedulerConfig.Invocable;
+            if (string.IsNullOrEmpty(type))
+            {
+                type = typeof(AnimationInvocer).FullName; //intelligent default
+                logger.LogInformation("Scheduler invocer was not explicity specified, defaulted to AnimationInvocer:Animation:{animation}, Cron:{cron}", schedulerConfig.Animation, schedulerConfig.Cron);
+            }
+
             var invocer = typeof(Program).Assembly.GetTypes().Where(x => x.FullName.Equals(type, StringComparison.InvariantCultureIgnoreCase))?.FirstOrDefault();
             if (invocer != null)
             {
+                logger.LogInformation("Scheduler invocer resolved:Animation:{animation}, Cron:{cron}", schedulerConfig.Animation, schedulerConfig.Cron);
                 var instance = app.Services.GetService(invocer) as IInvocable;
                 var animationInvocer = instance as AnimationInvocer;
 
                 if (animationInvocer != null)
                 {
                     animationInvocer.Animation = schedulerConfig.Animation;
+                    logger.LogInformation("Animation scheduler invocer set up:Animation:{animation}, Cron:{cron}", schedulerConfig.Animation, schedulerConfig.Cron);
                 }
                 var printerInvocer = instance as PrinterAnimationInvocer;
 
@@ -144,6 +153,7 @@ public class Program
                 {
                     printerInvocer.Animation = schedulerConfig.Animation;
                     printerInvocer.PrinterId = schedulerConfig.PrinterId;
+                    logger.LogInformation("Printer scheduler invocer set up:Animation:{animation}, Cron:{cron}", schedulerConfig.Animation, schedulerConfig.Cron);
                 }
 
                 logger.LogInformation($"Adding animation {schedulerConfig.Animation} with cron {schedulerConfig.Cron}");
@@ -153,13 +163,15 @@ public class Program
     });
 
         var version = app.Services.GetService<Version>();
-        logger.LogInformation(version.FullVersion);
+        logger.LogInformation("Version:{version}", version.FullVersion);
 
         var dd = app.Services.GetService<WledDeviceDiscovery>();
         var discover = app.Services.GetService<DeviceDiscovery>();
+        logger.LogInformation("Starting Device Discovery");
         dd.Start(discover);
 
         app.Run();
+        logger.LogInformation("App Running");
     }
 
     private static void RegisterPrinterServices(IServiceCollection services)

@@ -1,7 +1,6 @@
 {
   "Scheduler": [
     {
-      "Invocable": "WLEDAnimated.API.Invocables.AnimationInvocer",
       "Cron": "* * * * *",
       "Animation": "Clock Animation",
       "Enabled": true
